@@ -3,7 +3,7 @@ import {
   InMemoryEventSink,
   WorkflowEngine,
   type WorkflowDefinition,
-} from '../../packages/automation-runtime/src/index.ts';
+} from '../packages/automation-runtime/src/index.ts';
 
 const linear = (overrides: Partial<WorkflowDefinition> = {}): WorkflowDefinition => ({
   id: 'demo',
