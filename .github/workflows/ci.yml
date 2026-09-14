@@ -47,7 +47,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add packages/ai-gateway/src/routing.ts tests/integration/stage4.test.ts
             git commit -m "style(stage-4): apply repository formatting"
-            git push
+            git push origin "HEAD:${{ github.head_ref }}"
           fi
       - name: Lint
         run: pnpm lint
