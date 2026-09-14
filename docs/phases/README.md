@@ -18,25 +18,11 @@ The repository pre-coding audit is:
 
 **Pre-implementation gate: CLOSED.**
 
-Stage 0 — architecture/audit gate is complete.
+**Stages 0–8: COMPLETE and merged into `main`.**
 
-**Stage 1 — Engineering Foundation: COMPLETE and merged into `main`.**
+**Stage 9 — Verification + Browser/Visual QA: COMPLETE and merged into `main`; final post-merge CI verified.**
 
-**Stage 2 — Identity / Persistence / Events: COMPLETE and merged into `main`.**
-
-**Stage 3 — AI Gateway / Providers / Credentials: COMPLETE and merged into `main`.**
-
-**Stage 4 — Model Registry / Routing / Failover / Usage: COMPLETE and merged into `main`; post-merge verification passed.**
-
-**Stage 5 — Execution Fabric / Sandbox Abstraction: COMPLETE and merged into `main`; post-merge verification passed.**
-
-**Stage 6 — Agent Runtime / AI Workforce: COMPLETE and merged into `main`; final branch CI and repository verification passed.**
-
-**Stage 7 — Automation Fabric / Durable Workflows: COMPLETE and merged into `main`; post-merge CI verification passed.**
-
-**Stage 8 — Project Brain + Context + Knowledge: COMPLETE and merged into `main`; post-merge CI and final documentation synchronization are verified.**
-
-**Stage 9 — Verification + Browser/Visual QA: IMPLEMENTATION IN PROGRESS on `stage-9-verification-browser-visual-qa`.**
+**Stage 10 — Core Web/PWA Product UX: NEXT.**
 
 Detailed status is tracked in the phase files below.
 
@@ -45,15 +31,15 @@ Detailed status is tracked in the phase files below.
 ```text
 0  Architecture / audit gate                 COMPLETE
 1  Repository + contracts + CI               COMPLETE
-2  Identity + persistence + events            COMPLETE
-3  AI Gateway + providers + credentials       COMPLETE
-4  Model registry + routing + failover        COMPLETE
-5  Execution Fabric + sandbox abstraction     COMPLETE
-6  Agent Runtime + AI Workforce               COMPLETE
-7  Automation Fabric + durable workflows      COMPLETE
-8  Project Brain + Context + Knowledge        COMPLETE
-9  Verification + Browser/Visual QA           IN PROGRESS
-10 Core Web/PWA product UX                    TODO
+2  Identity + persistence + events           COMPLETE
+3  AI Gateway + providers + credentials      COMPLETE
+4  Model registry + routing + failover       COMPLETE
+5  Execution Fabric + sandbox abstraction    COMPLETE
+6  Agent Runtime + AI Workforce              COMPLETE
+7  Automation Fabric + durable workflows     COMPLETE
+8  Project Brain + Context + Knowledge       COMPLETE
+9  Verification + Browser/Visual QA          COMPLETE
+10 Core Web/PWA product UX                    NEXT
 11 Heavy Application Builder                  TODO
 12 GitHub + Deployment + OPERATE              TODO
 13 Multiplatform packaging                    TODO
@@ -64,20 +50,10 @@ Detailed status is tracked in the phase files below.
 
 A stage is not complete because code was written or a UI screen renders.
 
-Use the strongest applicable sequence:
-
 ```text
-inspect
-→ implement
-→ lint/typecheck
-→ unit tests
-→ integration tests
-→ build
-→ E2E/runtime verification
-→ security verification
-→ regression check
-→ documentation update
-→ final repository/CI verification
+inspect → implement → lint/typecheck → unit tests → integration tests
+→ build → E2E/runtime verification → security → regression
+→ documentation → final repository/CI verification
 ```
 
 Additional domain checks:
