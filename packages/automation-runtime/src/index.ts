@@ -21,8 +21,8 @@ export type WorkflowContext = Readonly<Record<string, unknown>>;
 export interface WorkflowNode {
   id: string;
   kind: NodeKind;
-  next?: string;
-  onFalse?: string;
+  next?: string | undefined;
+  onFalse?: string | undefined;
   action?: (ctx: WorkflowContext) => Promise<unknown> | unknown;
   agent?: (ctx: WorkflowContext) => Promise<unknown>;
   condition?: (ctx: WorkflowContext) => boolean | Promise<boolean>;
@@ -47,14 +47,14 @@ export interface WorkflowRun {
   workflowId: string;
   workflowVersion: number;
   status: WorkflowStatus;
-  currentNodeId?: string;
+  currentNodeId?: string | undefined;
   completedNodes: readonly string[];
   outputs: Readonly<Record<string, unknown>>;
   attempts: Readonly<Record<string, number>>;
   idempotencyKeys: readonly string[];
   checkpoint: number;
-  waitingUntil?: string;
-  error?: string;
+  waitingUntil?: string | undefined;
+  error?: string | undefined;
   createdAt: string;
   updatedAt: string;
 }
@@ -71,7 +71,7 @@ export interface WorkflowEvent {
     | 'run.resumed';
   runId: string;
   workflowId: string;
-  nodeId?: string;
+  nodeId?: string | undefined;
   occurredAt: string;
   metadata: Readonly<Record<string, unknown>>;
 }
