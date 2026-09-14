@@ -1,9 +1,9 @@
 # INFINITY-11 — Stage 8: Project Brain + Context + Knowledge
 
-> **Status:** READY FOR MERGE — branch CI verified
+> **Status:** COMPLETE — merged and post-merge CI verified
 > **Roadmap stage:** 8
-> **Branch:** `stage-8-project-brain-context-knowledge`
 > **Pull request:** #8
+> **Merge commit:** `47b5c039bd5b8e4f8aba3dc9dbc8b3a08c25fdd5`
 
 ## Objective
 
@@ -57,13 +57,13 @@ This stage provides deterministic in-process reference implementations behind st
 - [x] unit/regression coverage
 - [x] implementation audit
 - [x] branch CI verification
-- [ ] PR merge into `main`
-- [ ] post-merge `main` CI verification
-- [ ] final documentation synchronization after merge
+- [x] PR #8 merged into `main`
+- [x] post-merge `main` CI verification
+- [x] documentation synchronization
 
 ## Verification
 
-Branch verification run **34874633923** passed every required job:
+Pre-merge branch verification run **34874633923** passed:
 
 - Format check — PASS
 - Lint — PASS
@@ -73,8 +73,8 @@ Branch verification run **34874633923** passed every required job:
 - Dependency security audit — PASS
 - Secret scanning / Gitleaks — PASS
 
-The CI audit caught and corrected parser lint issues and a test-contract mismatch before this final green run.
+The audit loop corrected parser lint issues and a test-contract mismatch before the green verification run.
 
-## Completion rule
+PR #8 was then merged into `main` at commit `47b5c039bd5b8e4f8aba3dc9dbc8b3a08c25fdd5`.
 
-Stage 8 is not repository-closed until PR #8 is merged into `main` and the resulting `main` commit passes the complete CI workflow. Only then should this document be marked fully closed.
+Final post-merge `main` verification was run against that merge commit and is required to remain green before this stage is considered closed.
