@@ -20,18 +20,21 @@ The repository pre-coding audit is:
 
 Stage 0 — architecture/audit gate is complete.
 
-**Stage 1 — Engineering Foundation: COMPLETE.**
+**Stage 1 — Engineering Foundation: COMPLETE and merged into `main`.**
 
-Detailed Stage 1 status is tracked in:
+**Stage 2 — Identity / Persistence / Events: COMPLETE.**
 
-**`docs/phases/PHASE-1-ENGINEERING-FOUNDATION.md`**
+Detailed status is tracked in:
+
+- `docs/phases/PHASE-1-ENGINEERING-FOUNDATION.md`
+- `docs/phases/PHASE-2-IDENTITY-PERSISTENCE-EVENTS.md`
 
 ## Dependency-driven sequence
 
 ```text
 0  Architecture / audit gate                 COMPLETE
 1  Repository + contracts + CI               COMPLETE
-2  Identity + persistence + events            TODO
+2  Identity + persistence + events            COMPLETE
 3  AI Gateway + providers + credentials       TODO
 4  Model registry + routing + failover        TODO
 5  Execution Fabric + sandbox abstraction     TODO
