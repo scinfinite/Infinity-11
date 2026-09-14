@@ -524,7 +524,11 @@ export class CredentialService {
     return this.db.getCredential(id, workspaceId);
   }
   list(workspaceId: string): Array<Omit<CredentialRecord, 'ciphertext'>> {
-    return this.db.listCredentials(workspaceId).map(({ ciphertext: _ciphertext, ...safe }) => safe);
+    return this.db.listCredentials(workspaceId).map((credential) => {
+      const { ciphertext, ...safe } = credential;
+      void ciphertext;
+      return safe;
+    });
   }
   reveal(workspaceId: string, id: string): ProviderCredential {
     const record = this.db.getCredential(id, workspaceId);
