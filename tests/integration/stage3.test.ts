@@ -77,7 +77,12 @@ describe('stage 3 AI gateway', () => {
     });
     vi.stubGlobal('fetch', fetchMock);
     const response = await gateway.complete(
-      { workspaceId, credentialId: record.id, model: 'test-model', messages: [{ role: 'user', content: 'hello' }] },
+      {
+        workspaceId,
+        credentialId: record.id,
+        model: 'test-model',
+        messages: [{ role: 'user', content: 'hello' }],
+      },
       { correlationId: 'corr-1', workspaceId },
     );
     expect(response.text).toBe('world');
@@ -133,7 +138,12 @@ describe('stage 3 AI gateway', () => {
     vi.stubGlobal('fetch', fetchMock);
     await expect(
       new OpenAIAdapter('https://example.test/openai').complete(
-        { workspaceId: 'ws', credentialId: 'cred', model: 'test-model', messages: [{ role: 'user', content: 'hello' }] },
+        {
+          workspaceId: 'ws',
+          credentialId: 'cred',
+          model: 'test-model',
+          messages: [{ role: 'user', content: 'hello' }],
+        },
         credential,
       ),
     ).rejects.toMatchObject({
