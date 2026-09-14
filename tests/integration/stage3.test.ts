@@ -12,12 +12,6 @@ import {
 
 const key = new Uint8Array(32).fill(7);
 const credential = { apiKey: 'x'.repeat(32) };
-const request = {
-  workspaceId: 'ws-1',
-  credentialId: 'cred-1',
-  model: 'test-model',
-  messages: [{ role: 'user' as const, content: 'hello' }],
-};
 
 function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -25,17 +19,22 @@ function jsonResponse(body: unknown, status = 200): Response {
     headers: { 'content-type': 'application/json' },
   });
 }
+function workspace(db: SqliteDatabaseProvider): string {
+  const user = db.createUser(`test-${crypto.randomUUID()}@example.invalid`, 'hash');
+  return db.createWorkspace('test-workspace', user.id).id;
+}
 
 describe('stage 3 AI gateway', () => {
   it('encrypts credentials and never exposes ciphertext through list', () => {
     const db = new SqliteDatabaseProvider();
+    const workspaceId = workspace(db);
     const service = new CredentialService(db, new CredentialCipher(key));
-    const record = service.create('ws-1', 'openai', 'primary', credential);
+    const record = service.create(workspaceId, 'openai', 'primary', credential);
     expect(record.ciphertext).not.toContain(credential.apiKey);
-    expect(service.list('ws-1')).toEqual([
+    expect(service.list(workspaceId)).toEqual([
       {
         id: record.id,
-        workspaceId: 'ws-1',
+        workspaceId,
         provider: 'openai',
         label: 'primary',
         enabled: true,
@@ -43,23 +42,25 @@ describe('stage 3 AI gateway', () => {
         updatedAt: record.updatedAt,
       },
     ]);
-    expect(service.reveal('ws-1', record.id)).toEqual(credential);
+    expect(service.reveal(workspaceId, record.id)).toEqual(credential);
     db.close();
   });
 
   it('isolates credential reads by workspace', () => {
     const db = new SqliteDatabaseProvider();
+    const workspaceId = workspace(db);
     const service = new CredentialService(db, new CredentialCipher(key));
-    const record = service.create('ws-1', 'openai', 'primary', credential);
-    expect(service.get('ws-2', record.id)).toBeUndefined();
-    expect(() => service.reveal('ws-2', record.id)).toThrow('CREDENTIAL_UNAVAILABLE');
+    const record = service.create(workspaceId, 'openai', 'primary', credential);
+    expect(service.get('other-workspace', record.id)).toBeUndefined();
+    expect(() => service.reveal('other-workspace', record.id)).toThrow('CREDENTIAL_UNAVAILABLE');
     db.close();
   });
 
   it('normalizes OpenAI responses and records usage without storing secrets', async () => {
     const db = new SqliteDatabaseProvider();
+    const workspaceId = workspace(db);
     const service = new CredentialService(db, new CredentialCipher(key));
-    const record = service.create('ws-1', 'openai', 'primary', credential);
+    const record = service.create(workspaceId, 'openai', 'primary', credential);
     const registry = new ProviderRegistry();
     registry.register(new OpenAIAdapter('https://example.test/openai'));
     const sink = new InMemoryUsageSink();
@@ -76,8 +77,8 @@ describe('stage 3 AI gateway', () => {
     });
     vi.stubGlobal('fetch', fetchMock);
     const response = await gateway.complete(
-      { ...request, credentialId: record.id },
-      { correlationId: 'corr-1', workspaceId: 'ws-1' },
+      { workspaceId, credentialId: record.id, model: 'test-model', messages: [{ role: 'user', content: 'hello' }] },
+      { correlationId: 'corr-1', workspaceId },
     );
     expect(response.text).toBe('world');
     expect(response.usage?.totalTokens).toBe(5);
@@ -89,8 +90,9 @@ describe('stage 3 AI gateway', () => {
 
   it('maps Anthropic system messages separately and normalizes output', async () => {
     const db = new SqliteDatabaseProvider();
+    const workspaceId = workspace(db);
     const service = new CredentialService(db, new CredentialCipher(key));
-    const record = service.create('ws-1', 'anthropic', 'primary', credential);
+    const record = service.create(workspaceId, 'anthropic', 'primary', credential);
     const adapter = new AnthropicAdapter('https://example.test/anthropic');
     const fetchMock = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
       const body = JSON.parse(String(init?.body)) as {
@@ -110,8 +112,9 @@ describe('stage 3 AI gateway', () => {
     vi.stubGlobal('fetch', fetchMock);
     const response = await adapter.complete(
       {
-        ...request,
+        workspaceId,
         credentialId: record.id,
+        model: 'test-model',
         messages: [
           { role: 'system', content: 'system prompt' },
           { role: 'user', content: 'question' },
@@ -129,7 +132,10 @@ describe('stage 3 AI gateway', () => {
     const fetchMock = vi.fn(async () => jsonResponse({ error: 'nope' }, 401));
     vi.stubGlobal('fetch', fetchMock);
     await expect(
-      new OpenAIAdapter('https://example.test/openai').complete(request, credential),
+      new OpenAIAdapter('https://example.test/openai').complete(
+        { workspaceId: 'ws', credentialId: 'cred', model: 'test-model', messages: [{ role: 'user', content: 'hello' }] },
+        credential,
+      ),
     ).rejects.toMatchObject({
       code: 'AUTHENTICATION_FAILED',
       retryable: false,
