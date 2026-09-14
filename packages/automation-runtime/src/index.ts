@@ -159,8 +159,7 @@ export class WorkflowRegistry {
         throw new Error(`PARALLEL_NODE_NOT_FOUND:${node.id}`);
       }
     }
-    const versions =
-      this.definitions.get(definition.id) ?? new Map<number, WorkflowDefinition>();
+    const versions = this.definitions.get(definition.id) ?? new Map<number, WorkflowDefinition>();
     if (versions.has(definition.version)) {
       throw new Error(`WORKFLOW_VERSION_EXISTS:${definition.id}:${definition.version}`);
     }
@@ -474,8 +473,8 @@ export class ManualTrigger implements Trigger {
   }
 }
 
-export const workflowNode = (
-  id: string,
-  kind: NodeKind,
-  next?: string,
-): WorkflowNode => ({ id, kind, ...(next ? { next } : {}) });
+export const workflowNode = (id: string, kind: NodeKind, next?: string): WorkflowNode => ({
+  id,
+  kind,
+  ...(next ? { next } : {}),
+});
