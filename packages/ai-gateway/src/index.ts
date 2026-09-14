@@ -17,17 +17,17 @@ export interface AIRequest {
   stream?: boolean;
 }
 export interface AIUsage {
-  inputTokens?: number;
-  outputTokens?: number;
-  totalTokens?: number;
+  inputTokens?: number | undefined;
+  outputTokens?: number | undefined;
+  totalTokens?: number | undefined;
 }
 export interface AIResponse {
   id: string;
   provider: string;
   model: string;
   text: string;
-  usage?: AIUsage;
-  finishReason?: string;
+  usage?: AIUsage | undefined;
+  finishReason?: string | undefined;
 }
 export interface AIStreamChunk {
   id: string;
@@ -35,7 +35,7 @@ export interface AIStreamChunk {
   model: string;
   delta: string;
   done: boolean;
-  usage?: AIUsage;
+  usage?: AIUsage | undefined;
 }
 export interface ProviderCredential {
   apiKey: string;

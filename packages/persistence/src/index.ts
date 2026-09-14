@@ -99,7 +99,11 @@ export interface DatabaseProvider {
   updateCredential(
     id: string,
     workspaceId: string,
-    patch: { label?: string; ciphertext?: string; enabled?: boolean },
+    patch: {
+      label?: string | undefined;
+      ciphertext?: string | undefined;
+      enabled?: boolean | undefined;
+    },
   ): CredentialRecord;
   deleteCredential(id: string, workspaceId: string): void;
 }
@@ -340,11 +344,21 @@ CREATE INDEX IF NOT EXISTS idx_memberships_user ON memberships(user_id);CREATE I
   updateCredential(
     id: string,
     workspaceId: string,
-    patch: { label?: string; ciphertext?: string; enabled?: boolean },
+    patch: {
+      label?: string | undefined;
+      ciphertext?: string | undefined;
+      enabled?: boolean | undefined;
+    },
   ): CredentialRecord {
     const current = this.getCredential(id, workspaceId);
     if (!current) throw new Error('CREDENTIAL_NOT_FOUND');
-    const next = { ...current, ...patch, updatedAt: now() };
+    const next = {
+      ...current,
+      label: patch.label ?? current.label,
+      ciphertext: patch.ciphertext ?? current.ciphertext,
+      enabled: patch.enabled ?? current.enabled,
+      updatedAt: now(),
+    };
     this.db
       .prepare(
         'UPDATE credentials SET label=?,ciphertext=?,enabled=?,updated_at=? WHERE id=? AND workspace_id=?',
