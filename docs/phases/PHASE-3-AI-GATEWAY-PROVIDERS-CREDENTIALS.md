@@ -1,7 +1,8 @@
 # INFINITY-11 — Stage 3: AI Gateway / Providers / Credentials
 
-> **Status:** IN FINAL VERIFICATION
+> **Status:** COMPLETE
 > **Started:** 2026-09-14
+> **Completed:** 2026-09-14
 > **Roadmap stage:** 3 — AI Gateway, provider adapters, and credential security
 > **Prerequisite:** Stage 2 merged into `main` and verified
 
@@ -23,6 +24,7 @@ Create one normalized, provider-independent inference boundary with secure crede
 - Provider registry that keeps provider-specific behavior inside adapters.
 - Usage-event sink contract with normalized `ai.usage.recorded` events.
 - Integration, security, and regression tests for credential secrecy, isolation, provider normalization, streaming, and error handling.
+- Vitest workspace-source aliases so package-level integration tests exercise current source contracts instead of requiring pre-existing build artifacts.
 
 ## Acceptance checklist
 
@@ -38,11 +40,12 @@ Create one normalized, provider-independent inference boundary with secure crede
 - [x] normalized provider error taxonomy exists
 - [x] usage capture contract exists
 - [x] provider-specific request mapping remains inside adapters
-- [x] repository formatting and secret scanning pass on the current implementation snapshot
-- [ ] final lint/typecheck/tests/build/security verification
-- [ ] final CI verification on final implementation commit
-- [ ] post-merge `main` CI verification
-- [ ] final repository inspection
+- [x] repository formatting and secret scanning pass
+- [x] final lint/typecheck/tests/build/security verification passes
+- [x] final branch CI verification passes
+- [x] PR merged into `main`
+- [x] post-merge `main` CI verification passes
+- [x] final repository inspection completed
 
 ## Security decisions
 
@@ -55,7 +58,7 @@ Create one normalized, provider-independent inference boundary with secure crede
 
 ## Verification record
 
-During verification, CI caught and the implementation corrected:
+CI failures were treated as engineering defects and fixed from their actual logs. Corrections included:
 
 1. secret-like test literals detected by Gitleaks;
 2. workspace lockfile drift after adding the new workspace package;
@@ -63,6 +66,39 @@ During verification, CI caught and the implementation corrected:
 4. an unused credential destructuring variable rejected by ESLint;
 5. the new AI gateway package missing from the root TypeScript project graph;
 6. exact-optional-property-type violations in normalized usage and credential update contracts;
-7. workspace foreign-key setup gaps in the new credential tests.
+7. workspace foreign-key setup gaps in the new credential tests;
+8. workspace package resolution in Vitest, corrected with absolute source aliases;
+9. final test formatting normalized before closure.
 
-The current branch is intentionally left unchanged after this trigger while the final formatting workflow and then the full CI pipeline validate the corrected test fixtures. No completion claim is made until the final implementation commit passes the full CI pipeline and the post-merge `main` verification.
+### Final branch verification
+
+- PR: **#3**
+- Final implementation branch CI: **run #125 / `34852369430`**
+- Secret scanning: PASS
+- Format check: PASS
+- Lint: PASS
+- Typecheck: PASS
+- Unit/integration/security/regression tests: PASS
+- Build: PASS
+- Dependency security audit: PASS
+
+### Merge
+
+- Squash merge commit: **`661f93b67c954ee3ba4d0d723f37178121a9eec5`**
+
+### Post-merge `main` verification
+
+- Main CI: **run #134 / `34852552286`**
+- Secret scanning: PASS
+- Format check: PASS
+- Lint: PASS
+- Typecheck: PASS
+- Unit/integration/security/regression tests: PASS
+- Build: PASS
+- Dependency security audit: PASS
+
+## Completion decision
+
+**Stage 3 is complete.** The implementation is merged into `main`, and the final post-merge `main` CI pipeline passed all required quality, security, test, build, and audit checks.
+
+Next dependency: **Stage 4 — Model Registry / Routing / Failover / Usage.**
