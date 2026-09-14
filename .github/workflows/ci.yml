@@ -7,13 +7,14 @@ on:
       - stage-1-engineering-foundation
       - stage-2-identity-persistence-events
       - stage-3-ai-gateway-providers-credentials
+      - stage-4-model-registry-routing-failover
   pull_request:
     branches:
       - main
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -39,18 +40,8 @@ jobs:
           pnpm --version
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Format check and normalize
-        run: |
-          if ! pnpm format:check; then
-            git fetch origin "${{ github.head_ref }}"
-            git checkout -B "${{ github.head_ref }}" "origin/${{ github.head_ref }}"
-            pnpm format
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add packages/ai-gateway/src/routing.ts tests/integration/stage4.test.ts
-            git commit -m "style(stage-4): apply repository formatting"
-            git push origin "HEAD:${{ github.head_ref }}"
-          fi
+      - name: Format check
+        run: pnpm format:check
       - name: Lint
         run: pnpm lint
       - name: Typecheck
