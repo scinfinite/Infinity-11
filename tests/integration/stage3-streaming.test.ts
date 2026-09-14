@@ -1,5 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
-import { AIGateway, CredentialCipher, CredentialService, InMemoryUsageSink, OpenAIAdapter, ProviderRegistry } from '@infinity-11/ai-gateway';
+import {
+  AIGateway,
+  CredentialCipher,
+  CredentialService,
+  InMemoryUsageSink,
+  OpenAIAdapter,
+  ProviderRegistry,
+} from '@infinity-11/ai-gateway';
 import { SqliteDatabaseProvider } from '@infinity-11/persistence';
 
 const makeStream = (chunks: string[]): ReadableStream<Uint8Array> => {
@@ -21,13 +28,30 @@ describe('stage 3 streaming', () => {
     registry.register(new OpenAIAdapter('https://example.test/openai'));
     const sink = new InMemoryUsageSink();
     const gateway = new AIGateway(registry, credentials, sink);
-    vi.stubGlobal('fetch', vi.fn(async () => new Response(makeStream([
-      'data: {"id":"stream-1","model":"test-model","choices":[{"delta":{"content":"hel"},"finish_reason":null}]}\n\n',
-      'data: {"id":"stream-1","model":"test-model","choices":[{"delta":{"content":"lo"},"finish_reason":"stop"}],"usage":{"prompt_tokens":2,"completion_tokens":2,"total_tokens":4}}\n\n',
-      'data: [DONE]\n\n',
-    ]))));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        async () =>
+          new Response(
+            makeStream([
+              'data: {"id":"stream-1","model":"test-model","choices":[{"delta":{"content":"hel"},"finish_reason":null}]}\n\n',
+              'data: {"id":"stream-1","model":"test-model","choices":[{"delta":{"content":"lo"},"finish_reason":"stop"}],"usage":{"prompt_tokens":2,"completion_tokens":2,"total_tokens":4}}\n\n',
+              'data: [DONE]\n\n',
+            ]),
+          ),
+      ),
+    );
     const chunks = [];
-    for await (const chunk of gateway.stream({ workspaceId: 'ws-1', credentialId: record.id, model: 'test-model', messages: [{ role: 'user', content: 'hi' }] }, { correlationId: 'corr-stream', workspaceId: 'ws-1' })) chunks.push(chunk);
+    for await (const chunk of gateway.stream(
+      {
+        workspaceId: 'ws-1',
+        credentialId: record.id,
+        model: 'test-model',
+        messages: [{ role: 'user', content: 'hi' }],
+      },
+      { correlationId: 'corr-stream', workspaceId: 'ws-1' },
+    ))
+      chunks.push(chunk);
     expect(chunks.map((chunk) => chunk.delta).join('')).toBe('hello');
     expect(chunks.at(-1)?.done).toBe(true);
     expect(sink.events[0]?.payload.usage.totalTokens).toBe(4);
