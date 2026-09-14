@@ -44,6 +44,13 @@ jobs:
           pnpm --version
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Format probe
+        run: |
+          for f in packages/memory/package.json packages/memory/src/index.ts packages/knowledge/src/index.ts; do
+            echo "FORMAT_FILE=$f"
+            pnpm exec prettier "$f" | base64 -w0
+            echo
+          done
       - name: Format check
         run: pnpm format:check
       - name: Lint
