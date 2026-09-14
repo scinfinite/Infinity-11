@@ -64,4 +64,4 @@ During verification, CI caught and the implementation corrected:
 5. the new AI gateway package missing from the root TypeScript project graph;
 6. exact-optional-property-type violations in normalized usage and credential update contracts.
 
-Those issues were fixed using evidence from the CI logs and rerun through the affected checks. The repository is now at the final full-pipeline verification gate. Stage 3 must not be declared complete until the current final commit passes lint, typecheck, tests, build, dependency security audit, Gitleaks, and the post-merge `main` verification.
+The current branch contains the corresponding fixes. A fresh full CI run is required now; no completion claim is made until that run and the post-merge `main` verification both pass.
