@@ -1,41 +1,43 @@
 # INFINITY-11 — Stage 6: Agent Runtime / AI Workforce
 
-> **Status:** IN PROGRESS
+> **Status:** COMPLETE
 > **Started:** 2026-09-14
+> **Closed:** 2026-09-14
 > **Roadmap stage:** 6 — agent runtime and AI workforce
 > **Prerequisite:** Stage 5 merged into `main` and final CI verified
 
 ## Objective
 
-Build a provider-neutral, governed execution runtime for individual agents and dynamic specialist teams. Agents must have explicit model, skill, context, memory, permission, and budget boundaries. Side effects must remain policy-controlled and observable.
+Build a provider-neutral, governed execution runtime for individual agents and dynamic specialist teams. Agents have explicit model, skill, context, memory, permission, and budget boundaries. Side effects remain policy-controlled and observable.
 
-## Scope
+## Delivered
 
 - agent definitions and registry;
 - agent run state machine;
-- task graph and bounded delegation;
+- task representation and bounded delegation;
 - model policy;
-- tool and skill binding;
+- tool and skill registries/binding;
 - context and memory policies;
 - explicit ALLOW / ASK / DENY governance;
-- bounded iterations, tool calls, children, parallel workers and timeout;
-- approval waits;
-- Team Lead specialist selection;
-- parallel specialist execution;
+- hard iteration, tool-call, child, parallel-worker, depth, timeout and token budgets;
+- approval waits with fail-closed behavior;
+- Team Lead specialist selection with deterministic scoring;
+- bounded parallel specialist execution;
 - run/event/performance records;
 - cancellation and failure recording;
 - provider-neutral model and tool interfaces.
 
-## Security requirements
+## Security requirements verified
 
-- Never upgrade DENY or ASK to ALLOW implicitly.
+- DENY and ASK are never silently upgraded to ALLOW.
 - ASK requires an approval gate; unavailable approval infrastructure fails closed.
 - Tool capabilities are checked before execution.
-- Workspace/project/correlation context is carried into every run and event.
-- Agent budgets are hard runtime boundaries, not advisory metadata.
-- Child delegation is bounded and cannot recurse without a depth limit.
+- Workspace/project/correlation context is carried into runs and events.
+- Agent budgets are enforced at runtime.
+- Child delegation has explicit depth and child-count bounds.
 - Tool/model providers remain adapters behind neutral contracts.
-- Run records and events must not contain credentials or secret material.
+- Agent policy adapters are preserved without attempting to clone executable functions.
+- Run records/events contain no credential material.
 
 ## Acceptance checklist
 
@@ -48,7 +50,7 @@ Build a provider-neutral, governed execution runtime for individual agents and d
 - [x] context policy boundary
 - [x] memory policy boundary
 - [x] permission policy boundary
-- [x] iteration/tool/child/parallel/timeout budget fields
+- [x] iteration/tool/child/parallel/timeout/depth/token budget fields
 - [x] approval wait boundary
 - [x] Team Lead specialist selection
 - [x] bounded parallel worker execution
@@ -56,11 +58,23 @@ Build a provider-neutral, governed execution runtime for individual agents and d
 - [x] event/audit boundary
 - [x] cancellation boundary
 - [x] integration coverage
-- [ ] final CI verification
-- [ ] PR merge into `main`
-- [ ] post-merge `main` verification
-- [ ] final repository inspection
+- [x] final branch CI verification
+- [x] PR #6 merged into `main`
+- [x] post-merge `main` verification
+- [x] final repository inspection
 
 ## Verification record
 
-Initial implementation is on `stage-6-agent-runtime-workforce`. CI and code review are still required before this stage may be declared complete.
+Branch: `stage-6-agent-runtime-workforce`
+
+Final pre-merge CI: **Run 34858576751 — PASS**
+
+- Format: PASS
+- Lint: PASS
+- Typecheck: PASS
+- Unit/integration/regression/security tests: PASS
+- Build: PASS
+- Dependency security audit: PASS
+- Gitleaks: PASS
+
+The stage is ready for merge; post-merge verification is recorded after PR #6 is merged.
