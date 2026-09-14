@@ -9,7 +9,7 @@ import {
   RoutedAIGateway,
   type CredentialRouteState,
   type ModelMetadata,
-} from '@infinity-11/ai-gateway/routing';
+} from '../../packages/ai-gateway/src/routing.js';
 
 const model = (overrides: Partial<ModelMetadata> = {}): ModelMetadata => ({
   id: 'model-a',
