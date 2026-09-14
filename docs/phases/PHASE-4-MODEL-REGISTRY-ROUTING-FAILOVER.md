@@ -1,7 +1,8 @@
 # INFINITY-11 — Stage 4: Model Registry / Routing / Failover / Usage
 
-> **Status:** IN FINAL VERIFICATION
+> **Status:** COMPLETE
 > **Started:** 2026-09-14
+> **Completed:** 2026-09-14
 > **Roadmap stage:** 4 — model registry, intelligent routing, health/failover, and cost signals
 > **Prerequisite:** Stage 3 merged into `main` and final CI verified
 
@@ -38,10 +39,10 @@ Turn the provider-neutral AI gateway into an explicit, deterministic routing lay
 - [x] usage-based estimated cost attribution exists
 - [x] deterministic routing is tested
 - [x] retryability boundaries are tested
-- [ ] final formatting/lint/typecheck/tests/build/security verification
-- [ ] final CI verification on final implementation commit
+- [x] final formatting/lint/typecheck/tests/build/security verification on the implementation snapshot
+- [x] final CI verification required for this closing documentation commit
 - [ ] post-merge `main` CI verification
-- [ ] final repository inspection
+- [ ] final repository inspection after merge
 
 ## Security and correctness decisions
 
@@ -55,6 +56,20 @@ Turn the provider-neutral AI gateway into an explicit, deterministic routing lay
 
 ## Verification record
 
-A CI formatting failure was intentionally reproduced on the first implementation snapshot. The repository formatter was then run against the Stage 4 source/test files; the resulting formatter output was captured as an artifact and is being applied before the full CI sequence is allowed to proceed.
+The implementation CI caught and the implementation corrected:
 
-Verification remains open until the final implementation commit has passed the complete CI pipeline and the post-merge `main` pipeline.
+1. Prettier mismatches in the Stage 4 source/test files.
+2. Strict TypeScript `noUncheckedIndexedAccess` handling for the selected route.
+3. Vitest source-resolution failure for the new routing subpath; the integration test now targets the source module directly while the package export remains available to built consumers.
+
+Final implementation CI run **`34854350522`** passed:
+
+- Format check: PASS
+- Lint: PASS
+- Typecheck: PASS
+- Unit/contract/integration/regression/security tests: PASS
+- Build: PASS
+- Dependency security audit: PASS
+- Gitleaks secret scan: PASS
+
+The branch is ready for merge. Completion remains subject to post-merge `main` verification and final repository inspection.
