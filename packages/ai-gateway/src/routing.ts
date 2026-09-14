@@ -367,7 +367,7 @@ export class Router {
     const maxAttempts = Math.max(1, Math.min(policy.maxAttempts ?? 3, eligible.length));
     return {
       requestId,
-      selected: eligible[0],
+      selected: eligible[0]!,
       fallbackChain: eligible.slice(1, maxAttempts),
       rejected,
       policySnapshot: clonePolicy(policy),
