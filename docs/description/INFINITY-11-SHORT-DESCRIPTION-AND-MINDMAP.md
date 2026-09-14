@@ -1,123 +1,273 @@
-# INFINITY-11 — Short Description and Mindmap
+# INFINITY-11 — Product Summary & Technical Mindmap
 
-## Short description
+> **Purpose:** Fast technical orientation for anyone entering the INFINITY-11 repository.
 
-INFINITY-11 is a premium BYOK-first multimodal AI operating system for builders. It provides one workspace for connecting multiple AI providers and models, intelligently routing requests, managing quotas and failover, chatting, coding, researching, designing, generating media, creating agents, running parallel agent tasks, connecting MCP tools and services, building applications in isolated E2B sandboxes, working with GitHub repositories, using Supabase and Vercel, automating workflows, managing files and knowledge, and observing AI execution.
+## 1. What is INFINITY-11?
 
-The platform is designed to remain provider-agnostic, secure, extensible, observable, and PWA-ready. Users retain control over their API credentials and policies while INFINITY-11 provides the orchestration layer.
+INFINITY-11 is a premium, BYOK-first, multimodal AI application platform for builders. It provides a unified workspace where users can connect their own AI provider credentials, select or automatically route across models, create and run agents, use tools and MCP servers, work with repositories, execute generated code in isolated E2B sandboxes, build applications, generate media, research, automate workflows, and deploy projects.
 
-## North-star flow
+INFINITY-11 is not intended to become a single-provider wrapper. Its core value is **orchestration**: translating user intent into a safe, observable execution plan across models, credentials, tools, agents, sandboxes, repositories, and deployment targets.
+
+## 2. North-star promise
+
+> **Bring your AI keys. Bring your tools. Bring your repositories. Build anything.**
+
+The product should make advanced AI engineering accessible without hiding important decisions from power users.
+
+## 3. Core product equation
 
 ```text
-Idea
- ↓
-Intent
- ↓
-Research / Context
- ↓
-Architecture
- ↓
-Agents + Skills + Tools
- ↓
-E2B / Code / Build
- ↓
-Test / Review / Verify
- ↓
-GitHub
- ↓
-Deploy
- ↓
-Observe
- ↓
-Iterate
+INFINITY-11
+=
+AI Providers
++ Model Registry
++ Intelligent Router
++ BYOK Credential Pool
++ Agents
++ Skills
++ Tools / MCP
++ Sandboxed Execution
++ Projects
++ Knowledge / Memory
++ GitHub
++ Workflows
++ Deployment
++ Observability
++ Security
 ```
 
-## Mindmap
+## 4. North-star execution loop
+
+```text
+┌──────────┐
+│   Idea   │
+└────┬─────┘
+     ↓
+┌──────────┐
+│  Intent  │
+└────┬─────┘
+     ↓
+┌────────────────┐
+│ Context/Research│
+└────┬───────────┘
+     ↓
+┌──────────────┐
+│ Architecture │
+└────┬─────────┘
+     ↓
+┌──────────────────┐
+│ Agents + Skills  │
+│ + Tools + Policy │
+└────┬─────────────┘
+     ↓
+┌────────────────┐
+│ E2B / Execution │
+└────┬───────────┘
+     ↓
+┌──────────────────┐
+│ Test / Review /  │
+│ Verify           │
+└────┬─────────────┘
+     ↓
+┌──────────┐
+│ GitHub   │
+└────┬─────┘
+     ↓
+┌──────────┐
+│ Deploy   │
+└────┬─────┘
+     ↓
+┌──────────────┐
+│ Observe      │
+└────┬─────────┘
+     ↓
+└── Iterate ──→
+```
+
+## 5. Technical mindmap
 
 ```text
 INFINITY-11
 │
-├── AI
-│   ├── Providers
-│   ├── Models
-│   ├── BYOK
-│   ├── Router
-│   ├── Quotas
-│   ├── Failover
-│   └── Multimodal
-│
-├── Workspace
-│   ├── Home
+├── EXPERIENCE
+│   ├── Web Application
+│   ├── PWA
+│   ├── Responsive Workspace
 │   ├── Chat
+│   ├── Code IDE
+│   ├── Build Studio
+│   ├── Design Studio
+│   ├── Media Studio
+│   ├── Research Workspace
+│   ├── Library
+│   ├── Command Palette
+│   └── Context Inspector
+│
+├── IDENTITY & TENANCY
+│   ├── Users
+│   ├── Sessions
+│   ├── Workspaces
 │   ├── Projects
-│   ├── History
-│   └── Library
+│   ├── Membership
+│   └── Authorization
 │
-├── Creation
-│   ├── Code
-│   ├── Build
-│   ├── Design
-│   ├── Media
-│   └── Research
+├── AI PLATFORM
+│   ├── AI Gateway
+│   ├── Provider SDK
+│   ├── Provider Adapters
+│   ├── Model Registry
+│   ├── Capability Metadata
+│   ├── Streaming
+│   ├── Error Normalization
+│   └── Usage Accounting
 │
-├── Agents
+├── BYOK & ROUTING
+│   ├── Multiple Providers
+│   ├── Multiple Keys / Provider
+│   ├── Credential Health
+│   ├── Quota Signals
+│   ├── Rate-Limit State
+│   ├── Manual Routing
+│   ├── Auto Routing
+│   ├── Best / Fastest / Cheapest
+│   ├── Free-only Routing
+│   ├── Custom Policy
+│   └── Bounded Failover
+│
+├── MULTIMODAL AI
+│   ├── Text
+│   ├── Vision
+│   ├── Image Generation
+│   ├── Image Editing
+│   ├── Audio
+│   ├── Speech / Voice
+│   ├── Video
+│   ├── Documents
+│   ├── Embeddings
+│   └── Capability-aware Selection
+│
+├── AGENT SYSTEM
+│   ├── Agent Definitions
 │   ├── Agent Runtime
+│   ├── Planning
 │   ├── Parallel Tasks
+│   ├── Task Graphs
 │   ├── Skills
-│   ├── Memory
-│   ├── Tools
-│   └── Permissions
+│   ├── Memory Policy
+│   ├── Tool Policy
+│   ├── Budgets
+│   ├── Approvals
+│   ├── Verification
+│   └── Run Traces
 │
-├── Development
-│   ├── E2B
-│   ├── GitHub
-│   ├── Testing
+├── TOOLS & MCP
+│   ├── Tool Registry
+│   ├── JSON Schemas
+│   ├── MCP Servers
+│   ├── Discovery
+│   ├── Permission Gates
+│   ├── Timeouts
+│   ├── Retry Policy
+│   ├── Tool Observations
+│   └── Execution Audit
+│
+├── BUILD & CODE
+│   ├── Code Workspace
+│   ├── File Explorer
+│   ├── Editor
+│   ├── Diff Review
+│   ├── Terminal
+│   ├── Tests
+│   ├── Diagnostics
 │   ├── Preview
-│   └── Deployment
+│   ├── E2B Sandbox
+│   ├── Artifact Collection
+│   └── Verification
 │
-├── Integrations
-│   ├── MCP
+├── KNOWLEDGE & MEMORY
+│   ├── Project Knowledge
+│   ├── Documents
+│   ├── Retrieval
+│   ├── Source Lineage
+│   ├── Memory
+│   ├── Context Assembly
+│   └── Context Inspection
+│
+├── DEVELOPMENT INTEGRATIONS
+│   ├── GitHub
+│   │   ├── Repositories
+│   │   ├── Branches
+│   │   ├── Files
+│   │   ├── Commits
+│   │   ├── Issues
+│   │   ├── Pull Requests
+│   │   └── CI
 │   ├── Supabase
 │   ├── Vercel
-│   ├── GitHub
-│   └── External Providers
+│   └── Future Integration Adapters
 │
-├── Automation
+├── AUTOMATION
 │   ├── Workflows
 │   ├── Triggers
-│   ├── Scheduled Tasks
+│   ├── Conditions
+│   ├── Agents
+│   ├── Tools
+│   ├── Schedules
 │   ├── Webhooks
-│   └── Background Jobs
+│   ├── Background Jobs
+│   ├── Retry / Resume
+│   └── Execution History
 │
-├── Intelligence
-│   ├── Memory
-│   ├── Knowledge
-│   ├── Context
-│   ├── Prompt Lab
-│   └── Evaluations
-│
-├── Operations
+├── OPERATIONS
 │   ├── Usage
-│   ├── Cost
+│   ├── Cost Estimates
+│   ├── Latency
 │   ├── Provider Health
-│   ├── Audit
-│   └── Observability
+│   ├── Model Health
+│   ├── Errors
+│   ├── Fallbacks
+│   ├── Audit Events
+│   └── Distributed Traces
 │
-├── Security
-│   ├── Secrets
-│   ├── Permissions
-│   ├── Approvals
-│   ├── Policy
-│   └── Privacy
+├── SECURITY
+│   ├── Secret Isolation
+│   ├── Encryption
+│   ├── Least Privilege
+│   ├── RBAC / Policies
+│   ├── Tool Permissions
+│   ├── MCP Permissions
+│   ├── Sandbox Isolation
+│   ├── Approval Gates
+│   ├── Data Retention
+│   ├── Privacy
+│   └── Security Center
 │
-└── Platform
-    ├── PWA
-    ├── Mobile
-    ├── Extensions
+└── EXTENSIBILITY
+    ├── Provider Adapters
+    ├── Tool Adapters
+    ├── MCP
+    ├── Skills
+    ├── Agents
+    ├── Integration Adapters
+    ├── Deployment Adapters
+    ├── Local AI
     ├── Marketplace
-    └── Local AI
+    └── Future Extensions
 ```
 
-## Product identity
+## 6. Architectural principles
 
-**INFINITY-11 = models + agents + tools + sandboxes + repositories + workflows + knowledge + deployment, unified by an intelligent orchestration layer.**
+1. **BYOK-first:** users own and control provider credentials.
+2. **Provider-agnostic:** provider-specific behavior stays behind adapters.
+3. **Capability-aware:** routing must use real model capabilities.
+4. **Policy-driven:** automated actions are constrained by explicit policies.
+5. **Observable:** important execution decisions are traceable.
+6. **Secure by boundary:** secrets, tools, sandboxes, and external writes have separate controls.
+7. **Evidence-oriented:** source-backed knowledge retains provenance.
+8. **Fail safely:** retries and failover are bounded and state-aware.
+9. **Extensible:** new providers and integrations should not require rewriting the core.
+10. **Human-controlled:** privileged actions can require explicit approval.
+
+## 7. One-sentence definition
+
+**INFINITY-11 is a secure, provider-agnostic AI orchestration platform that turns user intent into observable work across models, agents, tools, sandboxes, repositories, workflows, and deployment environments.**
