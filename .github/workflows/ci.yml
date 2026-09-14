@@ -48,7 +48,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Normalize Stage 9 formatting once
-        if: github.ref_name == 'stage-9-verification-browser-visual-qa'
+        if: github.event_name == 'pull_request'
         run: |
           pnpm exec prettier --write packages/verification/src/index.ts tests/stage-9-verification.test.ts
           if git diff --quiet; then
@@ -58,7 +58,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add packages/verification/src/index.ts tests/stage-9-verification.test.ts
             git commit -m "chore(stage-9): normalize verification formatting"
-            git push origin "HEAD:${{ github.ref_name }}"
+            git push origin "HEAD:${{ github.head_ref }}"
           fi
       - name: Format check
         run: pnpm format:check
