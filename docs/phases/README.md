@@ -28,7 +28,7 @@ Stage 0 — architecture/audit gate is complete.
 
 **Stage 4 — Model Registry / Routing / Failover / Usage: COMPLETE and merged into `main`; post-merge verification passed.**
 
-**Stage 5 — Execution Fabric / Sandbox Abstraction: IN PROGRESS on `stage-5-execution-fabric-sandbox`.**
+**Stage 5 — Execution Fabric / Sandbox Abstraction: COMPLETE and merged into `main`; post-merge verification passed.**
 
 Detailed status is tracked in:
 
@@ -46,7 +46,7 @@ Detailed status is tracked in:
 2  Identity + persistence + events            COMPLETE
 3  AI Gateway + providers + credentials       COMPLETE
 4  Model registry + routing + failover        COMPLETE
-5  Execution Fabric + sandbox abstraction     IN PROGRESS
+5  Execution Fabric + sandbox abstraction     COMPLETE
 6  Agent Runtime + AI Workforce               TODO
 7  Automation Fabric + durable workflows      TODO
 8  Project Brain + Context + Knowledge        TODO
