@@ -1,7 +1,8 @@
 # INFINITY-11 — Stage 5: Execution Fabric / Sandbox Abstraction
 
-> **Status:** IN PROGRESS
+> **Status:** COMPLETE
 > **Started:** 2026-09-14
+> **Completed:** 2026-09-14
 > **Roadmap stage:** 5 — execution fabric and sandbox abstraction
 > **Prerequisite:** Stage 4 merged into `main` and verified
 
@@ -16,7 +17,7 @@ Provide a provider-independent execution boundary for project workloads. Executi
 - `LocalExecutionProvider` reference adapter suitable for local development/Termux-style environments.
 - Workspace-root path containment checks before process execution.
 - `shell: false` process spawning; commands are argv arrays rather than shell strings.
-- Explicit permission decision before execution, defaulting to the existing execution capability boundary.
+- Explicit permission decision before execution using the dedicated `execution.execute` capability.
 - Environment-variable allowlist.
 - Bounded execution timeout and captured stdout/stderr size.
 - Deterministic execution IDs, duration, exit status, signal, and correlation metadata.
@@ -41,6 +42,7 @@ Provide a provider-independent execution boundary for project workloads. Executi
 - [x] local reference execution provider
 - [x] workspace filesystem containment
 - [x] explicit permission integration boundary
+- [x] dedicated `execution.execute` capability
 - [x] non-shell argv execution
 - [x] timeout enforcement
 - [x] bounded output capture
@@ -50,13 +52,39 @@ Provide a provider-independent execution boundary for project workloads. Executi
 - [x] lifecycle cleanup contract
 - [x] conservative network isolation behavior
 - [x] integration/security coverage
-- [ ] final branch CI verification
-- [ ] PR merge into `main`
-- [ ] post-merge `main` CI verification
-- [ ] final repository inspection
+- [x] final branch CI verification
+- [x] PR #5 merged into `main`
+- [x] post-merge `main` CI verification
+- [x] final repository inspection
 
 ## Verification record
 
-Initial CI caught formatting issues in the three Stage 5 files. A temporary formatter workflow was used only to apply the repository's pinned Prettier version; it was then removed from the branch. Secret scanning passed during the first CI attempts.
+CI found and the implementation corrected:
 
-The final completion gate remains open until the permanent CI workflow passes on the final branch snapshot, the PR is merged, and post-merge `main` verification passes.
+1. Prettier mismatches in the initial Stage 5 source/package/test files. The repository's pinned Prettier was used to normalize them.
+2. An unused `join` import caught by ESLint.
+3. Integration-test assertion issues: empty `node -e` arguments violated the command validation contract, and a throwing provider lookup needed to be wrapped in an assertion callback.
+
+Final Stage 5 branch CI run **`34856265392`** passed:
+
+- Format check: PASS
+- Lint: PASS
+- Typecheck: PASS
+- Unit/integration/regression/security tests: PASS (33 tests)
+- Build: PASS
+- Dependency security audit: PASS
+- Gitleaks secret scan: PASS
+
+PR #5 was merged into `main` as merge commit **`2027cd0019098f4ab1a557315ef69cbaa7559d11`**.
+
+Post-merge `main` CI run **`34856370730`** passed:
+
+- Format check: PASS
+- Lint: PASS
+- Typecheck: PASS
+- Unit/integration/regression/security tests: PASS
+- Build: PASS
+- Dependency security audit: PASS
+- Gitleaks secret scan: PASS
+
+The Stage 5 implementation is therefore closed. This documentation update is the final repository-state record and receives one final `main` CI verification before the phase is considered fully closed.
