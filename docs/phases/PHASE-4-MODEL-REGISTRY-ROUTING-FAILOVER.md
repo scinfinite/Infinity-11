@@ -40,9 +40,10 @@ Turn the provider-neutral AI gateway into an explicit, deterministic routing lay
 - [x] deterministic routing is tested
 - [x] retryability boundaries are tested
 - [x] final formatting/lint/typecheck/tests/build/security verification on the implementation snapshot
-- [x] final CI verification required for this closing documentation commit
-- [ ] post-merge `main` CI verification
-- [ ] final repository inspection after merge
+- [x] final branch CI verification
+- [x] PR #4 merged into `main`
+- [x] post-merge `main` CI verification
+- [x] final repository inspection
 
 ## Security and correctness decisions
 
@@ -62,7 +63,7 @@ The implementation CI caught and the implementation corrected:
 2. Strict TypeScript `noUncheckedIndexedAccess` handling for the selected route.
 3. Vitest source-resolution failure for the new routing subpath; the integration test now targets the source module directly while the package export remains available to built consumers.
 
-Final implementation CI run **`34854350522`** passed:
+Final branch CI run **`34854748460`** passed:
 
 - Format check: PASS
 - Lint: PASS
@@ -72,4 +73,16 @@ Final implementation CI run **`34854350522`** passed:
 - Dependency security audit: PASS
 - Gitleaks secret scan: PASS
 
-The branch is ready for merge. Completion remains subject to post-merge `main` verification and final repository inspection.
+PR #4 was merged into `main` as merge commit **`6c99b2bf1fdd3c226362870cf60f4d012f5d7bd8`**.
+
+Post-merge `main` CI run **`34854859020`** passed:
+
+- Format check: PASS
+- Lint: PASS
+- Typecheck: PASS
+- Unit/contract/integration/regression/security tests: PASS
+- Build: PASS
+- Dependency security audit: PASS
+- Gitleaks secret scan: PASS
+
+This document is being finalized on `main`; the resulting documentation commit receives one final `main` CI verification before Stage 4 is considered fully closed.
