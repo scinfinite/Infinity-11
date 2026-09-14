@@ -375,8 +375,32 @@ export class WorkflowEngine {
       return 'ok';
     }
     if (node.kind === 'approval') {
-      if (!node.approval) return 'waiting';
-      return (await node.approval(context)) ? 'ok' : 'waiting';
+      if (!node.approval) {
+        this.runs.update(run.id, { status: 'waiting' });
+        await this.events.publish({
+          type: 'run.waiting',
+          runId: run.id,
+          workflowId: run.workflowId,
+          nodeId: node.id,
+          occurredAt: now(),
+          metadata: { reason: 'approval-handler-missing' },
+        });
+        return 'waiting';
+      }
+      const approved = await node.approval(context);
+      if (!approved) {
+        this.runs.update(run.id, { status: 'waiting' });
+        await this.events.publish({
+          type: 'run.waiting',
+          runId: run.id,
+          workflowId: run.workflowId,
+          nodeId: node.id,
+          occurredAt: now(),
+          metadata: { reason: 'approval-required' },
+        });
+        return 'waiting';
+      }
+      return 'ok';
     }
     if (node.kind === 'condition') {
       return node.condition && (await node.condition(context)) ? 'ok' : 'skip-next';
