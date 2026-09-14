@@ -8,6 +8,8 @@ on:
       - stage-2-identity-persistence-events
       - stage-3-ai-gateway-providers-credentials
       - stage-4-model-registry-routing-failover
+      - stage-5-execution-fabric-sandbox
+      - stage-6-agent-runtime-workforce
   pull_request:
     branches:
       - main
