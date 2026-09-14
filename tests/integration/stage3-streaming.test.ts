@@ -22,8 +22,10 @@ const makeStream = (chunks: string[]): ReadableStream<Uint8Array> => {
 describe('stage 3 streaming', () => {
   it('normalizes OpenAI SSE chunks and records final usage', async () => {
     const db = new SqliteDatabaseProvider();
+    const user = db.createUser(`stream-${crypto.randomUUID()}@example.invalid`, 'hash');
+    const workspaceId = db.createWorkspace('stream-workspace', user.id).id;
     const credentials = new CredentialService(db, new CredentialCipher(new Uint8Array(32).fill(9)));
-    const record = credentials.create('ws-1', 'openai', 'stream', { apiKey: 'x'.repeat(32) });
+    const record = credentials.create(workspaceId, 'openai', 'stream', { apiKey: 'x'.repeat(32) });
     const registry = new ProviderRegistry();
     registry.register(new OpenAIAdapter('https://example.test/openai'));
     const sink = new InMemoryUsageSink();
@@ -44,12 +46,12 @@ describe('stage 3 streaming', () => {
     const chunks = [];
     for await (const chunk of gateway.stream(
       {
-        workspaceId: 'ws-1',
+        workspaceId,
         credentialId: record.id,
         model: 'test-model',
         messages: [{ role: 'user', content: 'hi' }],
       },
-      { correlationId: 'corr-stream', workspaceId: 'ws-1' },
+      { correlationId: 'corr-stream', workspaceId },
     ))
       chunks.push(chunk);
     expect(chunks.map((chunk) => chunk.delta).join('')).toBe('hello');
