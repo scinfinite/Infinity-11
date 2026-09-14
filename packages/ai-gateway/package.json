@@ -1,0 +1,12 @@
+{
+  "name": "@infinity-11/ai-gateway",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./dist/index.js" },
+  "scripts": { "build": "tsc -b", "test": "vitest run" },
+  "dependencies": {
+    "@infinity-11/persistence": "workspace:*",
+    "@infinity-11/types": "workspace:*"
+  }
+}
