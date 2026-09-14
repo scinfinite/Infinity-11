@@ -1,12 +1,13 @@
 # INFINITY-11 — Stage 8: Project Brain + Context + Knowledge
 
-> **Status:** IMPLEMENTATION COMPLETE — pending merge and post-merge CI
+> **Status:** READY FOR MERGE — branch CI verified
 > **Roadmap stage:** 8
 > **Branch:** `stage-8-project-brain-context-knowledge`
+> **Pull request:** #8
 
 ## Objective
 
-Give every project durable, inspectable engineering intelligence without dumping an entire repository into prompts. The implementation must support repository indexing, language/framework awareness, symbol and dependency maps, knowledge retrieval, bounded context assembly, provenance, and governed project memory.
+Give every project durable, inspectable engineering intelligence without dumping an entire repository into prompts. The implementation supports repository indexing, language awareness, symbol and dependency maps, knowledge retrieval, bounded context assembly, provenance, and governed project memory.
 
 ## Delivered
 
@@ -27,7 +28,7 @@ Give every project durable, inspectable engineering intelligence without dumping
 
 ## Design boundaries
 
-This stage deliberately provides deterministic in-process reference implementations behind stable contracts. It does not hard-code a vector database, embedding vendor, repository provider, or model provider. Future adapters can add semantic/vector retrieval without changing Project Brain or Context Engine consumers.
+This stage provides deterministic in-process reference implementations behind stable contracts. It does not hard-code a vector database, embedding vendor, repository provider, or model provider. Future adapters can add semantic/vector retrieval without changing Project Brain or Context Engine consumers.
 
 ## Security / reliability
 
@@ -35,7 +36,7 @@ This stage deliberately provides deterministic in-process reference implementati
 - Context assembly is bounded by explicit item and character budgets.
 - Provenance is returned with every assembled context pack.
 - No secrets or private chain-of-thought are represented by these contracts.
-- Stable hashes allow future incremental indexing and change detection.
+- Stable hashes enable future incremental indexing and change detection.
 - Memory expiry is explicit rather than implicit data loss.
 
 ## Acceptance checklist
@@ -49,17 +50,31 @@ This stage deliberately provides deterministic in-process reference implementati
 - [x] knowledge source representation
 - [x] memory types
 - [x] ranked retrieval
-- [x] context compression/budget boundary
+- [x] context budget boundary
 - [x] context provenance
 - [x] project-scoped memory
 - [x] expiry/pruning
 - [x] unit/regression coverage
 - [x] implementation audit
-- [ ] final CI verification
+- [x] branch CI verification
 - [ ] PR merge into `main`
 - [ ] post-merge `main` CI verification
-- [ ] documentation synchronization after merge
+- [ ] final documentation synchronization after merge
+
+## Verification
+
+Branch verification run **34874633923** passed every required job:
+
+- Format check — PASS
+- Lint — PASS
+- Typecheck — PASS
+- Unit and contract tests — PASS
+- Build — PASS
+- Dependency security audit — PASS
+- Secret scanning / Gitleaks — PASS
+
+The CI audit caught and corrected parser lint issues and a test-contract mismatch before this final green run.
 
 ## Completion rule
 
-Stage 8 is not repository-closed until the branch passes the complete CI workflow, the PR is merged into `main`, and the resulting `main` commit passes CI again.
+Stage 8 is not repository-closed until PR #8 is merged into `main` and the resulting `main` commit passes the complete CI workflow. Only then should this document be marked fully closed.
