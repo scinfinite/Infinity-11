@@ -1,12 +1,12 @@
 # INFINITY-11
 
-**INFINITY-11 is a FREE-FIRST, BYOK-first multimodal AI engineering operating system and application builder.**
+**INFINITY-11 is a FREE-FIRST, BYOK-first multimodal AI engineering, creation, and automation operating system and application builder.**
 
-It is designed to bring multiple AI providers and models, intelligent routing, agentic coding, browser-based application development, remote execution, GitHub workflows, MCP tools, integrations, research, design, media generation, automation, memory, knowledge, observability, and deployment into one premium web/PWA workspace.
+It is designed to bring multiple AI providers and models, intelligent routing, agentic coding, dynamic AI workforces, browser-based application development, remote execution, GitHub workflows, MCP tools, integrations, research, design, media generation, visual automation, memory, knowledge, observability, verification, and deployment into one premium web/PWA workspace.
 
 ## Vision
 
-> **Bring your AI keys. Bring your tools. Bring your repositories. Build anything.**
+> **Bring your AI keys. Bring your tools. Bring your repositories. Build, engineer, automate, and operate anything.**
 
 INFINITY-11 is intentionally provider-agnostic and free-first. The initial product must not require a paid INFINITY-11 subscription. Users can connect their own AI credentials, optional compute/sandbox credentials, free-tier services, or local resources. Paid infrastructure may be supported later, but it must not be a prerequisite for the architecture.
 
@@ -20,20 +20,29 @@ INFINITY-11 is intentionally provider-agnostic and free-first. The initial produ
 - **Device-light experience:** the phone/laptop is primarily the control, editing, visualization, and interaction surface rather than the heavy compute machine.
 - **Heavy-app capable:** the architecture must target real multi-service applications, not only small prompt-to-demo projects.
 - **Multiplatform capable:** the product must be designed to generate and manage web, mobile, desktop, backend, and shared-service projects from one product specification.
+- **Best-possible-output:** the system must not stop at a decent first output; it should research, test, critique, improve, and verify meaningful work.
+- **Automation-native:** deterministic workflows, autonomous agents, and hybrid workflows are first-class capabilities.
 
 ## Core capabilities
 
 - Multimodal chat for text, images, audio, video, files, and other supported modalities.
 - BYOK management with multiple credentials per provider.
 - Quota/usage visibility where providers expose reliable information, plus INFINITY-11 observed usage.
-- Intelligent model routing, including manual, automatic, best, fastest, cheapest, free-only, and custom policies.
+- Intelligent model routing, including manual, automatic, best-quality, fastest, cheapest, free-only, local-only, and custom policies.
 - Provider/key/model failover with normalized error classification rather than blind retries.
-- Agent runtime with memory, skills, tools, permissions, budgets, approvals, and lifecycle controls.
-- Parallel multi-agent execution and dependency-aware task graphs.
+- Agent runtime with memory, skills, tools, permissions, budgets, approvals, schedules, and lifecycle controls.
+- Dynamic parallel multi-agent workforces and dependency-aware task graphs.
+- Team Lead/orchestrator patterns for specialist AI teams.
 - Browser-based coding and application building using an execution-provider abstraction.
 - Remote sandbox execution for generated code, dependency installation, builds, tests, runtime services, and browser/visual verification.
 - GitHub repository analysis, coding workflows, commits, pull requests, issues, reviews, and CI visibility subject to permissions.
 - MCP runtime and integration architecture for external tools and services.
+- Visual automation canvas plus natural-language workflow generation.
+- Scheduled, recurring, webhook, event-driven, long-running, resumable, parallel, and human-approved workflows.
+- Deterministic, autonomous, and hybrid workflow execution.
+- Bounded workflow recovery and self-healing where policy permits.
+- Project Brain, engineering memory, knowledge, codebase intelligence, and context inspection.
+- Verification engine covering tests, builds, static analysis, security, performance, browser/visual QA, UX/accessibility, and human review where appropriate.
 - Supabase-oriented authentication and data services with database-provider abstraction.
 - Vercel-oriented web hosting and deployment workflows with deployment-provider abstraction.
 - Web application generation across supported frameworks.
@@ -42,10 +51,107 @@ INFINITY-11 is intentionally provider-agnostic and free-first. The initial produ
 - Backend/service generation including Java and other supported languages.
 - Design, image, video, audio, voice, and media workspaces based on provider capabilities.
 - Research, files, library, knowledge, memory, semantic retrieval, and context inspection.
-- Workflow automation, scheduled tasks, webhooks, and event-driven execution.
 - Usage, cost, provider health, audit logs, security controls, and execution observability.
 - PWA installation and responsive desktop/mobile experiences.
-- Future-ready extension, skills, agent, workflow, MCP, local-model, and marketplace architecture.
+- Future-ready extension, skills, agent, workflow, MCP, local-model, integration, and marketplace architecture.
+
+## Best-possible-output model
+
+INFINITY-11 should behave as an iterative engineering system, not a one-shot generator:
+
+```text
+Understand
+ ↓
+Research
+ ↓
+Plan
+ ↓
+Execute
+ ↓
+Test
+ ↓
+Critique
+ ↓
+Improve
+ ↓
+Verify
+ ↓
+Deliver
+```
+
+Verification state must be explicit:
+
+```text
+VERIFIED
+PARTIALLY VERIFIED
+UNVERIFIED
+BLOCKED
+```
+
+A successful build alone is not proof of a high-quality application.
+
+## Automation Fabric
+
+INFINITY-11 incorporates the strongest general automation patterns from modern platforms such as Make, while extending them with engineering-native actions and AI workforces.
+
+```text
+Trigger
+ ↓
+Workflow
+ ↓
+Agent / Tool
+ ↓
+Decision
+ ↓
+Action
+ ↓
+Verify
+ ↓
+Recover if needed
+ ↓
+Resume / Complete
+ ↓
+Audit
+```
+
+Workflow nodes may include triggers, actions, conditions, loops, parallel branches, waits, approvals, agents, sub-agents, models, tools, MCP, code, browser actions, GitHub, databases, sandboxes, verification, retry, and recovery.
+
+## AI Workforce
+
+INFINITY-11 treats agents as governed software workers rather than simple personas.
+
+```text
+Project
+ ↓
+Workforce Planner
+ ↓
+Team Lead / Orchestrator
+ ↓
+Specialist Agents
+ ↓
+Tools / MCP / Sandbox
+ ↓
+Verification
+ ↓
+Result
+```
+
+Teams are dynamically composed according to project needs. A SaaS application, mobile application, Java backend, security audit, or research workflow can receive different specialist combinations.
+
+## Deterministic + autonomous orchestration
+
+```text
+DETERMINISTIC
+  exact order / state / policies
+
+AUTONOMOUS
+  goal-driven agent behavior
+
+HYBRID
+  deterministic control + agent judgment
+```
+
+Hybrid execution is the preferred target for serious production automation.
 
 ## Heavy application and remote execution model
 
@@ -60,7 +166,7 @@ Control Plane
    ├── AI Gateway / Router
    ├── Agent Workforce
    ├── Project Brain / Context
-   └── Workflow Engine
+   └── Automation / Workflow Engine
    ↓
 Execution Manager
    ├── User-provided sandbox
@@ -68,7 +174,7 @@ Execution Manager
    ├── Local/self-hosted execution
    └── Future managed execution
    ↓
-Build → Test → Run → Browser QA → Artifact / Preview
+Build → Test → Run → Browser QA → Verification → Artifact / Preview
 ```
 
 Remote compute is not assumed to be free. The architecture must keep compute ownership explicit so INFINITY-11 does not silently become responsible for unlimited third-party compute costs.
@@ -103,8 +209,8 @@ User
   -> Workspace
       -> Projects
           -> Chat / Code / Build / Design / Research / Media
-          -> Agents / Skills / Tools / MCP
-          -> Files / Knowledge / Memory
+          -> Agents / Teams / Skills / Tools / MCP
+          -> Files / Knowledge / Memory / Project Brain
           -> GitHub / Sandbox / Database / Deployment
           -> Workflows / Automation
 
@@ -116,28 +222,43 @@ AI request
   -> Provider Adapter
   -> AI Provider
 
-Build request
+Build / automation request
+  -> Orchestrator
+  -> Workflow / Agent runtime
   -> Execution Manager
   -> Sandbox Provider
   -> Build/Test/Run/QA
-  -> Artifact / Preview
+  -> Verification
+  -> Artifact / Preview / Action
 ```
 
-Provider-specific behavior belongs in adapters. Secrets belong behind secure server-side boundaries. Agent capabilities belong behind explicit permissions. Long-running work belongs in observable execution systems. Generated code is not considered verified until the relevant build/test/runtime checks succeed.
+Provider-specific behavior belongs in adapters. Secrets belong behind secure server-side boundaries. Agent capabilities belong behind explicit permissions. Long-running work belongs in observable execution systems. Generated code is not considered verified until the relevant checks succeed.
+
+## Research direction incorporated
+
+The latest design now incorporates:
+
+- **Make:** visual automation, agents inside workflows, reusable automation, transparency, MCP, and broad integrations.
+- **cto.new:** persistent AI teams, Team Lead delegation, specialist members, model assignment, scoped tools, approvals, cloud execution, and reusable teams.
+- **CrewAI:** deterministic Flows, autonomous Crews, hybrid orchestration, governed runtime, tracing, approvals, policies, checkpoint/resume, and evaluation.
+- **SI-Agents patterns:** engineering intelligence, Project Brain, skills, verification, codebase intelligence, security, memory, and controlled improvement.
+
+These are generalized architectural patterns, not copied implementations.
 
 ## Documentation
 
-- [`docs/README.md`](docs/README.md) — documentation index, scope, and current product status.
-- [`docs/description/INFINITY-11-DETAILED-DESCRIPTION.md`](docs/description/INFINITY-11-DETAILED-DESCRIPTION.md) — detailed product description and requirement catalog.
+- [`docs/README.md`](docs/README.md) — documentation index and current product status.
+- [`docs/description/INFINITY-11-DETAILED-DESCRIPTION.md`](docs/description/INFINITY-11-DETAILED-DESCRIPTION.md) — detailed product and architecture specification.
 - [`docs/description/INFINITY-11-ARCHITECTURE-AND-SCREENS.md`](docs/description/INFINITY-11-ARCHITECTURE-AND-SCREENS.md) — architecture and UI/screen specification.
 - [`docs/description/INFINITY-11-SHORT-DESCRIPTION-AND-MINDMAP.md`](docs/description/INFINITY-11-SHORT-DESCRIPTION-AND-MINDMAP.md) — concise product definition and mindmap.
-- [`docs/architecture/README.md`](docs/architecture/README.md) — architecture principles, execution model, and subsystem boundaries.
-- [`docs/phases/README.md`](docs/phases/README.md) — implementation-planning boundary; coding has not started.
-- [`AGENTS.md`](AGENTS.md) — repository-wide instructions for AI coding agents and contributors.
+- [`docs/description/INFINITY-11-LATEST-RESEARCH-AMENDMENTS.md`](docs/description/INFINITY-11-LATEST-RESEARCH-AMENDMENTS.md) — latest Make/cto.new/CrewAI/automation/workforce/best-output amendments.
+- [`docs/architecture/README.md`](docs/architecture/README.md) — architecture principles and subsystem boundaries.
+- [`docs/phases/README.md`](docs/phases/README.md) — implementation-planning boundary.
+- [`AGENTS.md`](AGENTS.md) — repository-wide engineering instructions.
 
 ## Current repository intent
 
-This repository is still in the **pre-implementation product-definition and architecture stage**. No application implementation is intentionally included yet. The current work is to make the product, architecture, free-first economics, execution model, multiplatform strategy, security boundaries, and documentation internally consistent before coding begins.
+This repository is still in the **pre-implementation product-definition and architecture stage**. No application implementation is intentionally included yet. The current work is to make the product, architecture, free-first economics, execution model, automation fabric, AI workforce, verification system, multiplatform strategy, security boundaries, and documentation internally consistent before coding begins.
 
 ## Engineering principles
 
@@ -155,17 +276,5 @@ This repository is still in the **pre-implementation product-definition and arch
 12. Explicit separation of INFINITY-11 platform costs, user BYOK costs, user compute, and optional managed services.
 13. Remote execution for heavy workloads wherever feasible.
 14. Design for serious web/mobile/desktop/backend applications rather than demo-only generation.
-
-## Status
-
-**Product definition:** research-aligned and continuously refined
-
-**Architecture:** defined at design level; free-first, remote-execution-first, and multiplatform requirements incorporated
-
-**Repository structure:** established
-
-**Application implementation:** not started
-
-**Implementation roadmap/phases:** not started; phase planning will begin only when explicitly requested
-
-**Launch economics:** $0 INFINITY-11 subscription target; BYOK/free/open-source/local-first strategy
+15. Best-possible-output by default; meaningful defects should trigger critique and improvement.
+16. Automation and agent autonomy must remain policy-controlled and observable.
