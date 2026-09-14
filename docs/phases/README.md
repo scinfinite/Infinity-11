@@ -34,7 +34,7 @@ Stage 0 — architecture/audit gate is complete.
 
 **Stage 7 — Automation Fabric / Durable Workflows: COMPLETE and merged into `main`; post-merge CI verification passed.**
 
-**Next: Stage 8 — Project Brain + Context + Knowledge.**
+**Stage 8 — Project Brain + Context + Knowledge: READY FOR MERGE; branch CI verified.**
 
 Detailed status is tracked in:
 
@@ -45,6 +45,7 @@ Detailed status is tracked in:
 - `docs/phases/PHASE-5-EXECUTION-FABRIC-SANDBOX.md`
 - `docs/phases/PHASE-6-AGENT-RUNTIME-WORKFORCE.md`
 - `docs/phases/PHASE-7-AUTOMATION-FABRIC-DURABLE-WORKFLOWS.md`
+- `docs/phases/PHASE-8-PROJECT-BRAIN-CONTEXT-KNOWLEDGE.md`
 
 ## Dependency-driven sequence
 
@@ -57,7 +58,7 @@ Detailed status is tracked in:
 5  Execution Fabric + sandbox abstraction     COMPLETE
 6  Agent Runtime + AI Workforce               COMPLETE
 7  Automation Fabric + durable workflows      COMPLETE
-8  Project Brain + Context + Knowledge        NEXT
+8  Project Brain + Context + Knowledge        READY FOR MERGE
 9  Verification + Browser/Visual QA           TODO
 10 Core Web/PWA product UX                    TODO
 11 Heavy Application Builder                  TODO
@@ -94,6 +95,7 @@ Applications     → browser, visual, accessibility, performance
 Providers        → capability, error taxonomy, failover, secret safety
 Execution        → isolation, limits, cleanup, artifacts
 Deployments      → revision identity, approval, rollback
+Knowledge       → provenance, project isolation, context budgets, freshness
 ```
 
 Never claim a stage is fully complete without evidence.
