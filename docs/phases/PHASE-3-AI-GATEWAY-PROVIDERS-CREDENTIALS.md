@@ -62,6 +62,7 @@ During verification, CI caught and the implementation corrected:
 3. repository formatting mismatches;
 4. an unused credential destructuring variable rejected by ESLint;
 5. the new AI gateway package missing from the root TypeScript project graph;
-6. exact-optional-property-type violations in normalized usage and credential update contracts.
+6. exact-optional-property-type violations in normalized usage and credential update contracts;
+7. workspace foreign-key setup gaps in the new credential tests.
 
-The branch is now intentionally left unchanged while the final verification workflow applies and validates the corresponding contract fixes. No completion claim is made until the final implementation commit passes the full CI pipeline and the post-merge `main` verification.
+The current branch is intentionally left unchanged after this trigger while the final formatting workflow and then the full CI pipeline validate the corrected test fixtures. No completion claim is made until the final implementation commit passes the full CI pipeline and the post-merge `main` verification.
