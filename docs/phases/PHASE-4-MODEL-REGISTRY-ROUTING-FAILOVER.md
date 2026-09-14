@@ -55,4 +55,6 @@ Turn the provider-neutral AI gateway into an explicit, deterministic routing lay
 
 ## Verification record
 
-Verification is intentionally left open until the final implementation commit has passed the complete CI pipeline and the post-merge `main` pipeline.
+A CI formatting failure was intentionally reproduced on the first implementation snapshot. The repository formatter was then run against the Stage 4 source/test files; the resulting formatter output was captured as an artifact and is being applied before the full CI sequence is allowed to proceed.
+
+Verification remains open until the final implementation commit has passed the complete CI pipeline and the post-merge `main` pipeline.
