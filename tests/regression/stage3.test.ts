@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { AIGateway, CredentialCipher, CredentialService, OpenAIAdapter, ProviderRegistry } from '@infinity-11/ai-gateway';
+import {
+  AIGateway,
+  CredentialCipher,
+  CredentialService,
+  OpenAIAdapter,
+  ProviderRegistry,
+} from '@infinity-11/ai-gateway';
 import { SqliteDatabaseProvider } from '@infinity-11/persistence';
 
 describe('stage 3 regression', () => {
@@ -10,7 +16,12 @@ describe('stage 3 regression', () => {
     const adapter = new OpenAIAdapter('https://example.test');
     registry.register(adapter);
     const gateway = new AIGateway(registry, service);
-    await expect(gateway.complete({ workspaceId: '', credentialId: '', model: 'bad model', messages: [] }, { correlationId: 'c' })).rejects.toMatchObject({ code: 'INVALID_REQUEST' });
+    await expect(
+      gateway.complete(
+        { workspaceId: '', credentialId: '', model: 'bad model', messages: [] },
+        { correlationId: 'c' },
+      ),
+    ).rejects.toMatchObject({ code: 'INVALID_REQUEST' });
     db.close();
   });
 
