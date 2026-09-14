@@ -34,7 +34,9 @@ Stage 0 — architecture/audit gate is complete.
 
 **Stage 7 — Automation Fabric / Durable Workflows: COMPLETE and merged into `main`; post-merge CI verification passed.**
 
-**Stage 8 — Project Brain + Context + Knowledge: READY FOR MERGE; branch CI verified.**
+**Stage 8 — Project Brain + Context + Knowledge: COMPLETE and merged into `main`; post-merge verification in progress for the documentation-closure commit.**
+
+**Next: Stage 9 — Verification + Browser/Visual QA.**
 
 Detailed status is tracked in:
 
@@ -58,8 +60,8 @@ Detailed status is tracked in:
 5  Execution Fabric + sandbox abstraction     COMPLETE
 6  Agent Runtime + AI Workforce               COMPLETE
 7  Automation Fabric + durable workflows      COMPLETE
-8  Project Brain + Context + Knowledge        READY FOR MERGE
-9  Verification + Browser/Visual QA           TODO
+8  Project Brain + Context + Knowledge        COMPLETE
+9  Verification + Browser/Visual QA           NEXT
 10 Core Web/PWA product UX                    TODO
 11 Heavy Application Builder                  TODO
 12 GitHub + Deployment + OPERATE              TODO
