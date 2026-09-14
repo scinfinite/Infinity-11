@@ -22,7 +22,7 @@ Stage 0 — architecture/audit gate is complete.
 
 **Stage 1 — Engineering Foundation: COMPLETE and merged into `main`.**
 
-**Stage 2 — Identity / Persistence / Events: IN PROGRESS.**
+**Stage 2 — Identity / Persistence / Events: COMPLETE.**
 
 Detailed status is tracked in:
 
@@ -34,7 +34,7 @@ Detailed status is tracked in:
 ```text
 0  Architecture / audit gate                 COMPLETE
 1  Repository + contracts + CI               COMPLETE
-2  Identity + persistence + events            IN PROGRESS
+2  Identity + persistence + events            COMPLETE
 3  AI Gateway + providers + credentials       TODO
 4  Model registry + routing + failover        TODO
 5  Execution Fabric + sandbox abstraction     TODO
