@@ -20,7 +20,7 @@ The repository pre-coding audit is:
 
 Stage 0 — architecture/audit gate is complete.
 
-**Stage 1 — Engineering Foundation: IN PROGRESS — final CI verification pending.**
+**Stage 1 — Engineering Foundation: COMPLETE.**
 
 Detailed Stage 1 status is tracked in:
 
@@ -30,7 +30,7 @@ Detailed Stage 1 status is tracked in:
 
 ```text
 0  Architecture / audit gate                 COMPLETE
-1  Repository + contracts + CI               IN PROGRESS
+1  Repository + contracts + CI               COMPLETE
 2  Identity + persistence + events            TODO
 3  AI Gateway + providers + credentials       TODO
 4  Model registry + routing + failover        TODO
