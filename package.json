@@ -10,7 +10,7 @@
     "build": "pnpm -r --if-present build",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm security",
     "format": "prettier --write .",
-    "format:check": "prettier --check package.json tsconfig*.json eslint.config.mjs prettier.config.json vitest.config.ts packages/**/*.json packages/**/*.ts apps/**/*.json apps/**/*.ts tests/**/*.ts .github/workflows/**/*.yml",
+    "format:check": "prettier --check package.json tsconfig*.json eslint.config.mjs .prettierrc.json vitest.config.ts packages/**/*.json packages/**/*.ts apps/**/*.json apps/**/*.ts tests/**/*.ts .github/workflows/**/*.yml",
     "lint": "eslint packages apps tests",
     "typecheck": "tsc -b",
     "test": "vitest run",
