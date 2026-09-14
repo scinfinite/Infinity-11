@@ -8,7 +8,8 @@ Stage 1 establishes conventions without introducing product persistence yet.
 - Node.js is pinned to the supported major/minor range in the root `package.json`.
 - Direct dependencies are pinned to exact versions in the root toolchain manifest.
 - Workspace package dependencies use `workspace:*` so internal package boundaries cannot silently resolve to an external package.
-- A generated `pnpm-lock.yaml` is expected to be committed once dependency installation is available in the normal developer environment. CI intentionally uses `--no-frozen-lockfile` during this bootstrap stage because the pre-implementation repository had no lockfile.
+- `pnpm-lock.yaml` is committed and is the canonical dependency-resolution snapshot.
+- CI uses `pnpm install --frozen-lockfile` so dependency resolution cannot silently drift.
 
 ## Database migrations
 
