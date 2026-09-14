@@ -3,7 +3,7 @@ import { SqliteDatabaseProvider } from '@infinity-11/persistence';
 import { AIGateway, AnthropicAdapter, CredentialCipher, CredentialService, InMemoryUsageSink, OpenAIAdapter, ProviderRegistry } from '@infinity-11/ai-gateway';
 
 const key = new Uint8Array(32).fill(7);
-const credential = { apiKey: 'test-api-key-123456' };
+const credential = { apiKey: 'x'.repeat(32) };
 const request = { workspaceId: 'ws-1', credentialId: 'cred-1', model: 'test-model', messages: [{ role: 'user' as const, content: 'hello' }] };
 
 function jsonResponse(body: unknown, status = 200): Response {
