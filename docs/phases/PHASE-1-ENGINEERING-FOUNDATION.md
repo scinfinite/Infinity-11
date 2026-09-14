@@ -58,7 +58,7 @@ The final CI run for the completed Stage 1 implementation passed all foundation 
 - [x] dependency security audit
 - [x] secret scan — Gitleaks passed
 - [x] regression coverage included in the test suite
-- [x] final CI run — GitHub Actions run `34847334580` passed both verification and secret scanning jobs
+- [x] final CI run on the completed branch state passed both verification and secret scanning jobs
 - [x] final repository inspection — expected Stage 1 foundation files present; temporary lockfile bootstrap workflow removed
 
 ## Dependency reproducibility
