@@ -1,8 +1,9 @@
 # INFINITY-11 — Stage 9: Verification + Browser / Visual QA
 
-> **Status:** IMPLEMENTED — awaiting CI verification and merge gate
+> **Status:** COMPLETE — merged into `main` and post-merge CI verified
 > **Roadmap stage:** 9
-> **Branch:** `stage-9-verification-browser-visual-qa`
+> **PR:** #9
+> **Merge commit:** `1a23987be00eb1d5e1eaedab1fc8fae5ca6c83e9`
 
 ## Objective
 
@@ -25,7 +26,7 @@ Turn generated work into evidence-backed completion. Stage 9 establishes a provi
 
 ## Architecture boundary
 
-The verification package does not hard-code Playwright, a browser vendor, screenshot storage, scanner, or model provider. A real browser implementation can satisfy `BrowserSession` without changing the orchestrator/check contracts. This makes browser/DOM/console/network observations first-class evidence while keeping execution replaceable.
+The verification package does not hard-code Playwright, a browser vendor, screenshot storage, scanner, or model provider. A real browser implementation can satisfy `BrowserSession` without changing the orchestrator/check contracts. Browser/DOM/console/network observations are first-class evidence while execution remains replaceable.
 
 The repository currently has only a minimal web boundary, so Stage 9 validates the browser infrastructure with deterministic browser contracts rather than pretending that a production UI already exists. Live product UX remains Stage 10.
 
@@ -65,17 +66,17 @@ Failed non-critical checks can be handed to an improvement callback, bounded by 
 - [x] deterministic browser test harness
 - [x] unit/regression coverage
 - [x] implementation audit
-- [ ] branch CI verification
-- [ ] PR merge
-- [ ] post-merge `main` CI verification
-- [ ] final documentation synchronization
+- [x] branch CI verification
+- [x] PR merge
+- [x] post-merge `main` CI verification
+- [x] final documentation synchronization
 
-## Verification gate
+## Final verification evidence
 
-The final stage gate must pass the repository CI sequence:
+PR #9 passed the full verification pipeline before merge, and the merge commit `1a23987be00eb1d5e1eaedab1fc8fae5ca6c83e9` received a green `main` CI run (`34899190651`):
 
 ```text
 format → lint → typecheck → tests → build → dependency security audit → secret scanning
 ```
 
-Stage 9 is not complete until CI is green on the merged `main` tree.
+All jobs completed successfully. The repository is therefore Stage 9 closed.
