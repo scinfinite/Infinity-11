@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, readFile, rm } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
-import { isAbsolute, join, relative, resolve } from 'node:path';
+import { isAbsolute, relative, resolve } from 'node:path';
 
 export type PermissionDecision = 'ALLOW' | 'ASK' | 'DENY';
 export type NetworkPolicy = 'deny' | 'allow';
@@ -139,7 +139,7 @@ export class LocalExecutionProvider implements ExecutionProvider {
   async execute(request: ExecutionRequest): Promise<ExecutionResult> {
     validateRequest(request);
     const permission = this.policy.permission.decide({
-      capability: this.policy.capability ?? 'shell.execute',
+      capability: this.policy.capability ?? 'execution.execute',
       resource: request.workingDirectory,
       reason: request.reason,
     });
