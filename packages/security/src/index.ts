@@ -5,6 +5,7 @@ export type Capability =
   | 'filesystem.write'
   | 'filesystem.delete'
   | 'shell.execute'
+  | 'execution.execute'
   | 'network.request'
   | 'github.read'
   | 'github.write'

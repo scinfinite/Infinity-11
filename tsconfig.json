@@ -10,6 +10,7 @@
     { "path": "packages/events/tsconfig.json" },
     { "path": "packages/storage/tsconfig.json" },
     { "path": "packages/ai-gateway/tsconfig.json" },
+    { "path": "packages/execution/tsconfig.json" },
     { "path": "apps/web/tsconfig.json" },
     { "path": "apps/worker/tsconfig.json" }
   ]
