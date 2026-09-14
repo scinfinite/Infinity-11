@@ -30,7 +30,9 @@ Stage 0 — architecture/audit gate is complete.
 
 **Stage 5 — Execution Fabric / Sandbox Abstraction: COMPLETE and merged into `main`; post-merge verification passed.**
 
-**Stage 6 — Agent Runtime / AI Workforce: READY FOR MERGE on `stage-6-agent-runtime-workforce`; final branch CI passed.**
+**Stage 6 — Agent Runtime / AI Workforce: COMPLETE and merged into `main`; final branch CI and repository verification passed.**
+
+**Stage 7 — Automation Fabric / Durable Workflows: IN PROGRESS on `stage-7-automation-fabric`.**
 
 Detailed status is tracked in:
 
@@ -40,6 +42,7 @@ Detailed status is tracked in:
 - `docs/phases/PHASE-4-MODEL-REGISTRY-ROUTING-FAILOVER.md`
 - `docs/phases/PHASE-5-EXECUTION-FABRIC-SANDBOX.md`
 - `docs/phases/PHASE-6-AGENT-RUNTIME-WORKFORCE.md`
+- `docs/phases/PHASE-7-AUTOMATION-FABRIC-DURABLE-WORKFLOWS.md`
 
 ## Dependency-driven sequence
 
@@ -50,8 +53,8 @@ Detailed status is tracked in:
 3  AI Gateway + providers + credentials       COMPLETE
 4  Model registry + routing + failover        COMPLETE
 5  Execution Fabric + sandbox abstraction     COMPLETE
-6  Agent Runtime + AI Workforce               READY FOR MERGE
-7  Automation Fabric + durable workflows      TODO
+6  Agent Runtime + AI Workforce               COMPLETE
+7  Automation Fabric + durable workflows      IN PROGRESS
 8  Project Brain + Context + Knowledge        TODO
 9  Verification + Browser/Visual QA           TODO
 10 Core Web/PWA product UX                    TODO
@@ -87,7 +90,7 @@ Additional domain checks:
 Agents/workflows → permissions, budgets, retries, recovery, idempotency, audit
 Applications     → browser, visual, accessibility, performance
 Providers        → capability, error taxonomy, failover, secret safety
-Execution       → isolation, limits, cleanup, artifacts
+Execution        → isolation, limits, cleanup, artifacts
 Deployments      → revision identity, approval, rollback
 ```
 
