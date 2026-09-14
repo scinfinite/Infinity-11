@@ -1,6 +1,6 @@
 # INFINITY-11 — Stage 3: AI Gateway / Providers / Credentials
 
-> **Status:** IN PROGRESS
+> **Status:** IN FINAL VERIFICATION
 > **Started:** 2026-09-14
 > **Roadmap stage:** 3 — AI Gateway, provider adapters, and credential security
 > **Prerequisite:** Stage 2 merged into `main` and verified
@@ -22,7 +22,7 @@ Create one normalized, provider-independent inference boundary with secure crede
 - Workspace-scoped credential access, enable/disable, update, list, reveal, and deletion.
 - Provider registry that keeps provider-specific behavior inside adapters.
 - Usage-event sink contract with normalized `ai.usage.recorded` events.
-- Integration, security, and regression tests for credential secrecy, isolation, provider normalization, and error handling.
+- Integration, security, and regression tests for credential secrecy, isolation, provider normalization, streaming, and error handling.
 
 ## Acceptance checklist
 
@@ -38,6 +38,7 @@ Create one normalized, provider-independent inference boundary with secure crede
 - [x] normalized provider error taxonomy exists
 - [x] usage capture contract exists
 - [x] provider-specific request mapping remains inside adapters
+- [x] repository formatting and secret scanning pass on the current implementation snapshot
 - [ ] final lint/typecheck/tests/build/security verification
 - [ ] final CI verification on final implementation commit
 - [ ] post-merge `main` CI verification
@@ -54,4 +55,11 @@ Create one normalized, provider-independent inference boundary with secure crede
 
 ## Verification record
 
-Verification is intentionally left open until the complete repository quality pipeline passes. Any CI failure will be treated as an engineering defect: inspect logs, identify the root cause, apply the smallest maintainable fix, rerun the affected checks, and repeat the full pipeline before closure.
+During verification, CI caught and the implementation corrected:
+
+1. secret-like test literals detected by Gitleaks;
+2. workspace lockfile drift after adding the new workspace package;
+3. repository formatting mismatches;
+4. an unused credential destructuring variable rejected by ESLint.
+
+Those issues were fixed using evidence from the CI logs and rerun through the affected checks. The repository is now at the final full-pipeline verification gate. Stage 3 must not be declared complete until the current final commit passes lint, typecheck, tests, build, dependency security audit, Gitleaks, and the post-merge `main` verification.
