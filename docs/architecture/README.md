@@ -2,14 +2,16 @@
 
 ## Architectural objective
 
-INFINITY-11 is designed as a modular orchestration platform rather than a provider-specific chat frontend or a Replit clone. It separates presentation, identity, projects, AI access, model routing, credentials, agents, tools, MCP, remote execution, knowledge, workflows, integrations, deployments, security, and observability.
+INFINITY-11 is designed as a modular orchestration platform rather than a provider-specific chat frontend or a Replit clone. It separates presentation, identity, projects, AI access, model routing, credentials, agents, teams, tools, MCP, remote execution, knowledge, workflows, automation, integrations, deployments, security, verification, and observability.
 
-The architecture has four non-negotiable characteristics:
+The architecture has six non-negotiable characteristics:
 
 1. **FREE-FIRST:** the initial product must not require a paid INFINITY-11 subscription.
 2. **BYOK-FIRST:** user-controlled AI/provider credentials are first-class.
 3. **REMOTE-EXECUTION-FIRST:** heavy build/test/run work should not depend on the user's device.
 4. **MULTIPLATFORM:** the system must be capable of producing and managing web, mobile, desktop, and backend application targets.
+5. **BEST-POSSIBLE-OUTPUT:** the system must iteratively test, critique, improve, and verify meaningful work rather than stopping at the first acceptable result.
+6. **AUTOMATION-NATIVE:** deterministic workflows, autonomous agents, and hybrid workflows are first-class runtime primitives.
 
 ## System layers
 
@@ -28,8 +30,9 @@ Control Plane
   ├── Tool Runtime
   ├── MCP Runtime
   ├── Context / Project Brain
-  ├── Workflow Engine
+  ├── Automation / Workflow Engine
   ├── Security & Policy
+  ├── Verification / Quality Engine
   └── Observability
   ↓
 Execution Plane
@@ -38,10 +41,11 @@ Execution Plane
   ├── Browser / Visual QA
   ├── Build / Test / Run
   ├── Artifact / Preview
+  ├── Background Jobs
   └── Packaging
   ↓
 Provider / Infrastructure Adapters
-  ├── AI providers
+  ├── AI providers / local models
   ├── GitHub
   ├── E2B / Vercel Sandbox / Docker / local
   ├── Supabase / PostgreSQL / future DB providers
@@ -60,6 +64,8 @@ Web / PWA
    ↓
 Control Plane
    ↓
+Orchestrator
+   ↓
 Execution Manager
    ↓
 Remote Execution Environment
@@ -68,10 +74,149 @@ Build → Test → Run → Browser QA
    ↓
 Artifact / Preview / Logs
    ↓
+Verification
+   ↓
 User Device
 ```
 
 The user's device is primarily a control, interaction, editor, streaming, and visualization surface. Remote execution is preferred for heavy workloads, while local/self-hosted execution remains an optional provider.
+
+## Core orchestration model
+
+INFINITY-11 unifies deterministic workflows and autonomous agents.
+
+```text
+                 ORCHESTRATOR
+                      │
+          ┌───────────┼───────────┐
+          ↓           ↓           ↓
+     DETERMINISTIC  AUTONOMOUS   HYBRID
+       WORKFLOW       AGENTS     WORKFLOW
+          │           │           │
+          └───────────┼───────────┘
+                      ↓
+                  VERIFICATION
+```
+
+### Deterministic
+
+Exact execution order, conditions, state, retries, timeouts, approvals, and side-effect boundaries.
+
+### Autonomous
+
+Goal-driven agents can plan, delegate, use tools, and adapt within explicit policies.
+
+### Hybrid
+
+A deterministic workflow provides the safety/control structure while agents provide judgment at selected steps. Hybrid execution is the preferred architecture for serious production automation.
+
+## Automation Fabric
+
+```text
+Automation Fabric
+├── Visual workflow builder
+├── Natural-language workflow generation
+├── Triggers
+├── Actions
+├── Conditions
+├── Loops
+├── Parallel branches
+├── Wait / timers
+├── Approvals
+├── Agents / sub-agents
+├── Tools / MCP
+├── Browser / GitHub / database / sandbox nodes
+├── Retry
+├── Recovery
+├── Resume
+├── Durable state
+└── Audit / observability
+```
+
+The workflow engine must support manual, scheduled, recurring, webhook-driven, event-driven, long-running, resumable, and human-approved execution.
+
+Automation is not restricted to SaaS API plumbing. Agents, sandboxes, code execution, verification, GitHub operations, browser actions, and deployment are workflow primitives subject to policy.
+
+## Best-Possible-Output architecture
+
+The quality engine sits after execution and can trigger additional improvement cycles.
+
+```text
+Request
+ ↓
+Plan
+ ↓
+Execute
+ ↓
+Test
+ ↓
+Critique
+ ↓
+Security / Performance / UX checks
+ ↓
+Improve
+ ↓
+Retest
+ ↓
+Final quality gate
+ ↓
+Verified result
+```
+
+The platform must not equate a successful build with a high-quality application.
+
+Verification status must distinguish:
+
+```text
+VERIFIED
+PARTIALLY VERIFIED
+UNVERIFIED
+BLOCKED
+```
+
+## AI Workforce architecture
+
+```text
+Project
+ ↓
+Workforce Planner
+ ↓
+Team Lead / Orchestrator
+ ↓
+Specialist Agents
+ ↓
+Tools / MCP / Sandbox
+ ↓
+Parallel work
+ ↓
+Synthesis
+ ↓
+Verification
+```
+
+An agent has:
+
+```text
+identity
+role
+goal
+capabilities
+skills
+tools
+model policy
+context policy
+memory policy
+permission policy
+execution profile
+verification policy
+budget policy
+schedule
+workspace
+performance history
+approval policy
+```
+
+Teams are dynamically composed according to the task rather than being limited to fixed personas.
 
 ## Cost ownership model
 
@@ -131,7 +276,7 @@ Chooses a model/provider/key candidate according to user policy, task requiremen
 Owns secure storage, masking, validation, lifecycle, and retrieval of provider credentials. Raw secrets must not leak into application logs or client code.
 
 ### Agent runtime
-Executes agents with explicit model, tool, memory, permission, timeout, iteration, budget, and approval policies.
+Executes agents with explicit model, tool, memory, permission, timeout, iteration, budget, approval, and verification policies.
 
 ### Tool/MCP runtime
 Provides a permission-controlled execution boundary for tools and external MCP servers.
@@ -143,27 +288,26 @@ Owns the lifecycle of heavy and untrusted workloads. It selects an execution pro
 Expose a common execution contract so E2B, Vercel Sandbox, Docker, local/self-hosted runners, and future providers can be added or replaced without redesigning the product.
 
 ### Workflow engine
-Coordinates scheduled, webhook-driven, event-driven, and manual tasks with durable state, retries, timeouts, cancellation, and idempotency.
+Coordinates deterministic and agentic tasks with durable state, retries, timeouts, cancellation, approvals, idempotency, and bounded recovery.
 
-## Core data ownership
-
-Supabase is an intended primary backend option for identity, relational application state, project metadata, usage metadata, audit information, and supported file/storage metadata. Database access must remain behind a provider abstraction so PostgreSQL or another supported backend can replace it later.
-
-Sensitive credentials require dedicated encryption/secrets handling rather than ordinary plaintext fields.
+### Verification engine
+Runs the strongest applicable tests and quality checks and records evidence. It can request another improvement cycle when meaningful defects remain.
 
 ## Execution lifecycle
 
 ```text
 intent
-→ policy
+→ identity / policy
 → context
 → routing
+→ workforce / workflow
 → credential
-→ agent/tool/sandbox execution
-→ observation
+→ tool / agent / sandbox execution
+→ critique
 → verification
-→ artifact/result
+→ artifact / result
 → persistence
+→ observation
 ```
 
 ## Generated-application lifecycle
@@ -175,7 +319,7 @@ idea
 → specification
 → architecture
 → plan
-→ agent team
+→ dynamic agent team
 → code generation
 → dependency installation
 → build
@@ -183,7 +327,8 @@ idea
 → run
 → browser/visual QA
 → security verification
-→ review
+→ quality critique
+→ improvement
 → GitHub
 → preview
 → deploy
@@ -215,9 +360,11 @@ Default deny applies to privileged agent capabilities. Important permissions inc
 
 Execution environments must be isolated according to workload risk. Autonomous code must never be treated as trusted merely because an AI agent generated it.
 
-## Reliability model
+## Reliability and recovery model
 
-External operations are failure-prone. Normalize errors, use bounded retries, fail over only when the error class allows it, preserve correlation identifiers, expose execution state, support cancellation, and maintain idempotency for side effects.
+External operations are failure-prone. Normalize errors, use bounded retries, fail over only when the error class allows it, preserve correlation identifiers, expose execution state, support cancellation, maintain idempotency for side effects, and resume recoverable workflows.
+
+Self-healing is allowed only for policy-approved, bounded recovery paths.
 
 ## Observability
 
@@ -225,7 +372,9 @@ Execution should carry correlation identifiers across user requests, agent runs,
 
 ## UI architecture
 
-The product is organized around a persistent application shell with purpose-built surfaces for Chat, Projects, Code, Build, Design, Research, Media, Agents, Skills, Workflows, Models, Router, API Keys, MCP, Integrations, GitHub, Deployments, Library, History, Usage, Security, Settings, and future Labs/Marketplace capabilities.
+The product is organized around a persistent application shell with purpose-built surfaces for Chat, Projects, Code, Build, Design, Research, Media, Agents, Teams, Skills, Workflows, Models, Router, API Keys, MCP, Integrations, GitHub, Deployments, Library, History, Usage, Security, and future Labs/Marketplace capabilities.
+
+The Automation workspace is a first-class visual canvas. It must show nodes, dependencies, agent participation, permissions, execution state, retries, approvals, and verification status.
 
 The Build workspace must make remote execution visible through environment status, logs, build/test state, preview, artifacts, and resource/ownership information.
 
@@ -235,4 +384,4 @@ Vercel is an intended primary web/application hosting target, not a mandatory de
 
 ## Architectural quality bar
 
-New features must preserve modularity, security, testability, observability, provider neutrality, free-first economics, and execution portability. A feature is not production-ready solely because its UI exists; the underlying contracts, failure handling, tests, security controls, documentation, and verification must also exist.
+New features must preserve modularity, security, testability, observability, provider neutrality, free-first economics, execution portability, automation reliability, and best-output verification. A feature is not production-ready solely because its UI exists; the underlying contracts, failure handling, tests, security controls, documentation, and verification must also exist.
