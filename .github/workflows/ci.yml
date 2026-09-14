@@ -10,6 +10,7 @@ on:
       - stage-4-model-registry-routing-failover
       - stage-5-execution-fabric-sandbox
       - stage-6-agent-runtime-workforce
+      - stage-7-automation-fabric
   pull_request:
     branches:
       - main
