@@ -15,10 +15,12 @@ describe('stage 3 security boundaries', () => {
 
   it('rejects disabled credentials before provider access', async () => {
     const db = new SqliteDatabaseProvider();
+    const user = db.createUser(`security-${crypto.randomUUID()}@example.invalid`, 'hash');
+    const workspaceId = db.createWorkspace('security-workspace', user.id).id;
     const service = new CredentialService(db, new CredentialCipher(new Uint8Array(32).fill(1)));
-    const record = service.create('ws-1', 'openai', 'primary', { apiKey: 'x'.repeat(32) });
-    service.update('ws-1', record.id, { enabled: false });
-    expect(() => service.reveal('ws-1', record.id)).toThrow('CREDENTIAL_UNAVAILABLE');
+    const record = service.create(workspaceId, 'openai', 'primary', { apiKey: 'x'.repeat(32) });
+    service.update(workspaceId, record.id, { enabled: false });
+    expect(() => service.reveal(workspaceId, record.id)).toThrow('CREDENTIAL_UNAVAILABLE');
     db.close();
   });
 
