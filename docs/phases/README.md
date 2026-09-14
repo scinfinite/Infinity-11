@@ -32,7 +32,7 @@ Stage 0 — architecture/audit gate is complete.
 
 **Stage 6 — Agent Runtime / AI Workforce: COMPLETE and merged into `main`; final branch CI and repository verification passed.**
 
-**Stage 7 — Automation Fabric / Durable Workflows: IN PROGRESS on `stage-7-automation-fabric`.**
+**Stage 7 — Automation Fabric / Durable Workflows: IMPLEMENTATION COMPLETE; PR #7 awaiting merge and post-merge `main` verification.**
 
 Detailed status is tracked in:
 
@@ -54,8 +54,8 @@ Detailed status is tracked in:
 4  Model registry + routing + failover        COMPLETE
 5  Execution Fabric + sandbox abstraction     COMPLETE
 6  Agent Runtime + AI Workforce               COMPLETE
-7  Automation Fabric + durable workflows      IN PROGRESS
-8  Project Brain + Context + Knowledge        TODO
+7  Automation Fabric + durable workflows      IMPLEMENTATION COMPLETE
+8  Project Brain + Context + Knowledge        NEXT
 9  Verification + Browser/Visual QA           TODO
 10 Core Web/PWA product UX                    TODO
 11 Heavy Application Builder                  TODO
