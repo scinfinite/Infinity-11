@@ -88,7 +88,11 @@ export interface ModelPolicy {
   select(task: AgentTask, candidates: readonly string[]): string;
 }
 export interface PermissionPolicy {
-  decide(request: { capability: string; resource?: string | undefined; reason: string }): PermissionDecision;
+  decide(request: {
+    capability: string;
+    resource?: string | undefined;
+    reason: string;
+  }): PermissionDecision;
 }
 export interface AgentModelRequest {
   agent: AgentDefinition;
