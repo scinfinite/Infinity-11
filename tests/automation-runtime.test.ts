@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
   InMemoryEventSink,
-  InMemoryRunStore,
   WorkflowEngine,
   type WorkflowDefinition,
 } from '../../packages/automation-runtime/src/index';
