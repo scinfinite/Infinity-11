@@ -45,11 +45,6 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Format check
         run: pnpm format:check
-      - name: Temporary Prettier diagnostic
-        if: failure()
-        run: |
-          pnpm exec prettier packages/automation-runtime/src/index.ts --write
-          git diff -- packages/automation-runtime/src/index.ts
       - name: Lint
         run: pnpm lint
       - name: Typecheck
