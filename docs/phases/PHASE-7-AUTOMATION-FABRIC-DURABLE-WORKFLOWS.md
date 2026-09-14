@@ -5,7 +5,8 @@
 > **Completed:** 2026-09-14
 > **Roadmap stage:** 7 — automation fabric and durable workflow runtime
 > **Implementation branch:** `stage-7-automation-fabric`
-> **Pull request:** #7
+> **Pull request:** #7 — MERGED
+> **Merge commit:** `5a64888a92545bf73b77a0fabdf9089d3b41b3ec`
 
 ## Objective
 
@@ -47,7 +48,9 @@ A duplicate side effect is guarded through an explicit idempotency key and share
 
 The implementation was audited on `stage-7-automation-fabric` and exercised through repository CI.
 
-Final verified CI run before merge: **Run 34870482828 — SUCCESS**.
+Final pre-merge CI: **Run 34870626576 — SUCCESS**.
+
+Post-merge `main` CI: **Run 34870700421 — SUCCESS**.
 
 - Format check: PASS
 - Lint: PASS
@@ -57,7 +60,7 @@ Final verified CI run before merge: **Run 34870482828 — SUCCESS**.
 - Dependency security audit: PASS
 - Secret scanning / Gitleaks: PASS
 
-The CI cycle also exposed and corrected two implementation defects before completion: an incorrect test import path and an approval node that returned `waiting` without durably changing the run status. The corrected implementation was re-run through the full CI pipeline.
+The CI cycle exposed and corrected implementation defects before closure: formatter drift, an incorrect test import path, exact-optional TypeScript typing, and an approval node that returned `waiting` without durably changing the run status. The corrected implementation was re-run through the full CI pipeline before merge.
 
 ## Security and reliability requirements
 
@@ -96,9 +99,9 @@ The CI cycle also exposed and corrected two implementation defects before comple
 - [x] implementation audit
 - [x] final CI verification
 - [x] documentation synchronization
-- [ ] PR #7 merged into `main`
-- [ ] post-merge `main` CI verification
+- [x] PR #7 merged into `main`
+- [x] post-merge `main` CI verification
 
-## Closure rule
+## Closure
 
-Stage 7 is implementation-complete and may be declared repository-closed only after PR #7 is merged and the resulting `main` commit passes the full CI workflow. Until then, the remaining closure items above are intentionally unchecked.
+**Stage 7 is fully closed.** The implementation is merged into `main`, and the resulting `main` commit passed the complete CI workflow. The next roadmap stage is **Stage 8 — Project Brain + Context + Knowledge**.
