@@ -39,8 +39,9 @@ Establish durable product state and authorization boundaries without coupling th
 - [x] background job primitive exists with durable state transitions
 - [x] object storage abstraction exists without vendor coupling
 - [x] security boundary tests exist
-- [x] final CI verification on final implementation commit
-- [x] final repository inspection after CI
+- [x] final pre-merge CI verification
+- [x] post-merge `main` CI verification
+- [x] final repository inspection
 
 ## Security decisions
 
@@ -61,25 +62,18 @@ CI failures were inspected and corrected rather than ignored:
 4. typecheck failures were resolved by making SQLite row conversions explicit, honoring exact optional correlation fields, and using a callback for `structuredClone` history mapping.
 5. integration failure was resolved by normalizing filesystem reads to `Uint8Array` instead of returning Node `Buffer` objects.
 
-### Final CI evidence
+### Pre-merge CI evidence
 
-Final verification run:
+GitHub Actions run `34849349361` verified implementation commit `788d8f62f9c8c87bee60d7ca70ab3fef0f591c6d` with frozen dependency install, format check, lint, typecheck, tests, build, dependency audit, and Gitleaks all passing.
 
-- GitHub Actions run: `34849349361`
-- Final implementation commit verified by the run: `788d8f62f9c8c87bee60d7ca70ab3fef0f591c6d`
-- frozen dependency install: PASS
-- format check: PASS
-- lint: PASS
-- typecheck: PASS
-- unit/contract/integration/security/regression tests: PASS
-- build: PASS
-- dependency security audit: PASS
-- Gitleaks secret scan: PASS
+### Post-merge `main` CI evidence
 
-The final workflow has restored least-privilege `contents: read` permissions and frozen-lockfile installation. The temporary CI bootstrap/auto-commit mechanism used only to establish the Stage 2 lockfile and formatting snapshot is no longer present.
+Stage 2 was merged by PR #2 as merge commit `4686e463f97ac445fd5544c8f4ef849d93bfe578`. GitHub Actions run `34849540106` then verified that exact `main` merge commit with every foundation gate passing: frozen install, format, lint, typecheck, unit/contract/integration/security/regression tests, build, dependency audit, and Gitleaks.
+
+The permanent workflow uses least-privilege `contents: read` permissions and frozen-lockfile installation. The temporary CI bootstrap/auto-commit mechanism used only to establish the Stage 2 lockfile and formatting snapshot is no longer present.
 
 ## Completion decision
 
-**Stage 2 is complete.** The identity, persistence, event, audit, storage, and durable-job foundations are implemented behind provider boundaries, security-tested, reproducibly installed, and verified by final CI.
+**Stage 2 is complete.** The identity, persistence, event, audit, storage, and durable-job foundations are implemented behind provider boundaries, security-tested, reproducibly installed, merged into `main`, and verified after merge.
 
 The repository is ready to proceed to Stage 3 — AI Gateway / Providers / Credentials.
