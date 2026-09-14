@@ -1,7 +1,8 @@
 # INFINITY-11 — Stage 1: Engineering Foundation
 
-> **Status:** IN PROGRESS — final CI verification pending
+> **Status:** COMPLETE
 > **Started:** 2026-09-14
+> **Completed:** 2026-09-14
 > **Roadmap stage:** 1 — Repository, contracts, and CI foundation
 > **Baseline:** Stage 0 architecture/audit gate complete
 
@@ -45,9 +46,9 @@ Turn the frozen architecture into a real, testable engineering foundation withou
 
 ## Verification evidence
 
-The latest substantive CI run passed every engineering check before the lockfile/documentation changes:
+The final CI run for the completed Stage 1 implementation passed all foundation gates:
 
-- [x] clean dependency install
+- [x] clean dependency install with frozen lockfile
 - [x] format check
 - [x] lint
 - [x] typecheck
@@ -57,15 +58,13 @@ The latest substantive CI run passed every engineering check before the lockfile
 - [x] dependency security audit
 - [x] secret scan — Gitleaks passed
 - [x] regression coverage included in the test suite
-- [ ] final CI run for the final branch state
-- [ ] final repository inspection
+- [x] final CI run — GitHub Actions run `34847334580` passed both verification and secret scanning jobs
+- [x] final repository inspection — expected Stage 1 foundation files present; temporary lockfile bootstrap workflow removed
 
-## Lockfile bootstrap
+## Dependency reproducibility
 
-The repository originally had no lockfile. A temporary, least-scope GitHub Actions bootstrap job generated the lockfile with pnpm 10.15.0 and committed it. The temporary write-enabled workflow was then removed.
+`pnpm-lock.yaml` is committed and CI enforces `pnpm install --frozen-lockfile`. Direct toolchain dependencies are exact-pinned and the supported Node.js range is explicitly declared.
 
-The permanent CI workflow now has read-only repository permissions and enforces `pnpm install --frozen-lockfile`.
+## Completion decision
 
-## Completion rule
-
-Stage 1 remains open until the final branch state has a successful CI run and the repository tree has been inspected after that run. Only then may this document be changed to `COMPLETE`.
+**Stage 1 is complete.** The repository now has a verified engineering foundation and is ready to proceed to Stage 2 — Identity / Persistence / Events, without bypassing the architectural provider and security boundaries established here.
