@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": { "build": "tsc -p tsconfig.json" },
-  "dependencies": { "@infinity-11/types": "workspace:*" }
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@infinity-11/types": "workspace:*"
+  }
 }
