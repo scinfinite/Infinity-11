@@ -1,7 +1,8 @@
 # INFINITY-11 — Stage 2: Identity / Persistence / Events
 
-> **Status:** IN PROGRESS
+> **Status:** COMPLETE
 > **Started:** 2026-09-14
+> **Completed:** 2026-09-14
 > **Roadmap stage:** 2 — Identity, workspace, persistence, and events
 > **Prerequisite:** Stage 1 merged into `main` and final CI verified
 
@@ -38,8 +39,8 @@ Establish durable product state and authorization boundaries without coupling th
 - [x] background job primitive exists with durable state transitions
 - [x] object storage abstraction exists without vendor coupling
 - [x] security boundary tests exist
-- [ ] final CI verification on final Stage 2 commit
-- [ ] final repository inspection after CI
+- [x] final CI verification on final implementation commit
+- [x] final repository inspection after CI
 
 ## Security decisions
 
@@ -52,14 +53,33 @@ Establish durable product state and authorization boundaries without coupling th
 
 ## Verification record
 
-Earlier CI failures were inspected rather than ignored:
+CI failures were inspected and corrected rather than ignored:
 
-1. frozen-lockfile failure exposed missing Stage 2 workspace importers; CI generated and persisted the canonical lockfile.
-2. formatting failure exposed unformatted Stage 2 files; CI normalized the files.
-3. lint failure exposed an unused identity import and unused storage content-type parameter; both were fixed.
+1. frozen-lockfile mismatch was resolved by generating and committing the canonical workspace lockfile.
+2. formatting failure was resolved by normalizing Stage 2 implementation files.
+3. lint failures were resolved by removing an unused identity import and explicitly consuming the storage content-type contract.
+4. typecheck failures were resolved by making SQLite row conversions explicit, honoring exact optional correlation fields, and using a callback for `structuredClone` history mapping.
+5. integration failure was resolved by normalizing filesystem reads to `Uint8Array` instead of returning Node `Buffer` objects.
 
-The final CI run must execute against the final commit after the temporary lockfile/format bootstrap mechanism is removed.
+### Final CI evidence
+
+Final verification run:
+
+- GitHub Actions run: `34849349361`
+- Final implementation commit verified by the run: `788d8f62f9c8c87bee60d7ca70ab3fef0f591c6d`
+- frozen dependency install: PASS
+- format check: PASS
+- lint: PASS
+- typecheck: PASS
+- unit/contract/integration/security/regression tests: PASS
+- build: PASS
+- dependency security audit: PASS
+- Gitleaks secret scan: PASS
+
+The final workflow has restored least-privilege `contents: read` permissions and frozen-lockfile installation. The temporary CI bootstrap/auto-commit mechanism used only to establish the Stage 2 lockfile and formatting snapshot is no longer present.
 
 ## Completion decision
 
-Stage 2 remains **IN PROGRESS** until the final CI run passes against the final implementation commit and the repository is re-inspected afterward.
+**Stage 2 is complete.** The identity, persistence, event, audit, storage, and durable-job foundations are implemented behind provider boundaries, security-tested, reproducibly installed, and verified by final CI.
+
+The repository is ready to proceed to Stage 3 — AI Gateway / Providers / Credentials.
