@@ -40,7 +40,19 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Format check
-        run: pnpm format:check
+        run: |
+          if ! pnpm format:check; then
+            pnpm format
+            exit 1
+          fi
+      - name: Upload formatted workspace on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage4-prettier-output
+          path: |
+            packages/ai-gateway/src/routing.ts
+            tests/integration/stage4.test.ts
       - name: Lint
         run: pnpm lint
       - name: Typecheck
