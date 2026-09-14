@@ -42,6 +42,8 @@ jobs:
       - name: Format check and normalize
         run: |
           if ! pnpm format:check; then
+            git fetch origin "${{ github.head_ref }}"
+            git checkout -B "${{ github.head_ref }}" "origin/${{ github.head_ref }}"
             pnpm format
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
