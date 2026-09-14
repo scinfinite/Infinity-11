@@ -26,7 +26,7 @@ Stage 0 — architecture/audit gate is complete.
 
 **Stage 3 — AI Gateway / Providers / Credentials: COMPLETE and merged into `main`.**
 
-**Stage 4 — Model Registry / Routing / Failover / Usage: COMPLETE pending post-merge `main` verification.**
+**Stage 4 — Model Registry / Routing / Failover / Usage: COMPLETE and merged into `main`; post-merge verification passed.**
 
 Detailed status is tracked in:
 
