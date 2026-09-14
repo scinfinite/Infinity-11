@@ -11,44 +11,39 @@
 0 Architecture/audit → 1 Foundation → 2 Identity/persistence → 3 AI Gateway → 4 Routing/failover → 5 Execution → 6 Agents → 7 Automation → 8 Project Brain → 9 Verification/Browser QA → 10 Core Web/PWA → 11 Builder → 12 GitHub/Deploy → 13 Multiplatform → 14 Ecosystem
 ```
 
-Stages 0–8 are complete and repository-closed. Stage 9 is the active implementation stage.
+Stages 0–9 are complete and repository-closed. Stage 10 is the next implementation stage.
 
 ## Stage 9 — Verification, evaluation, and browser/visual QA
 
 ### Objective
 
-Turn “generated” into evidence-backed completion.
+Turn generated work into evidence-backed completion.
 
-### Work
+### Delivered
 
-- verification record schema;
-- test orchestration;
-- static analysis;
-- security checks;
-- performance checks;
-- accessibility checks;
-- browser automation contract;
-- DOM/console/network inspection;
-- screenshot/visual evaluation;
-- quality dimensions and scoring;
-- critique/improvement loop;
+- verification record schema and explicit terminal states;
+- static, security, performance and accessibility check contracts;
+- browser session and flow contracts with DOM/console/network/accessibility observations;
+- screenshot/visual baseline comparison;
 - regression comparison;
-- verification state machine.
+- bounded critique/improvement loop;
+- critical-security blocking;
+- deterministic browser harness;
+- unit/regression coverage.
 
 ### Acceptance
 
 The system can detect a meaningful defect, route it back for improvement, rerun relevant checks, and record evidence showing whether the final state is verified, partially verified, unverified, or blocked.
 
-### Implementation boundary
+### Architecture boundary
 
-Stage 9 owns verification contracts and orchestration. It does not build the product UI or force a specific browser engine. Real browser engines can implement the `BrowserSession` contract; the current repository's minimal web boundary is tested through a deterministic browser harness. Stage 10 owns the production web/PWA experience.
+Stage 9 owns verification contracts and orchestration. It does not build the product UI or force a specific browser engine. Real browser engines can implement `BrowserSession`; the current minimal web boundary is tested through a deterministic harness. Stage 10 owns the production web/PWA experience.
 
 ## Cross-stage completion gate
 
-Every stage must pass the strongest applicable sequence:
-
 ```text
-inspect → implement → lint/typecheck → unit tests → integration tests → build → E2E/runtime → security → regression → documentation → final CI
+inspect → implement → lint/typecheck → unit tests → integration tests
+→ build → E2E/runtime → security → regression → documentation → final CI
 ```
 
 A stage is not complete until the merged `main` tree has green CI evidence.
@@ -65,8 +60,8 @@ STAGE 5  Execution Fabric                       COMPLETE
 STAGE 6  Agent Runtime + Workforce              COMPLETE
 STAGE 7  Automation Fabric                      COMPLETE
 STAGE 8  Project Brain + Context                COMPLETE
-STAGE 9  Verification + Browser QA              IN PROGRESS
-STAGE 10 Core Web/PWA UX                         TODO
+STAGE 9  Verification + Browser QA              COMPLETE
+STAGE 10 Core Web/PWA UX                         NEXT
 STAGE 11 Heavy Application Builder               TODO
 STAGE 12 GitHub + Deployment + OPERATE           TODO
 STAGE 13 Multiplatform                           TODO
