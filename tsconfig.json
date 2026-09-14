@@ -15,6 +15,7 @@
     { "path": "packages/automation-runtime/tsconfig.json" },
     { "path": "packages/knowledge/tsconfig.json" },
     { "path": "packages/memory/tsconfig.json" },
+    { "path": "packages/verification/tsconfig.json" },
     { "path": "apps/web/tsconfig.json" },
     { "path": "apps/worker/tsconfig.json" }
   ]

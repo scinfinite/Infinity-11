@@ -34,20 +34,11 @@ Stage 0 — architecture/audit gate is complete.
 
 **Stage 7 — Automation Fabric / Durable Workflows: COMPLETE and merged into `main`; post-merge CI verification passed.**
 
-**Stage 8 — Project Brain + Context + Knowledge: COMPLETE and merged into `main`; merged implementation passed post-merge CI run 274, with this final documentation-only synchronization covered by the next CI run.**
+**Stage 8 — Project Brain + Context + Knowledge: COMPLETE and merged into `main`; post-merge CI and final documentation synchronization are verified.**
 
-**Next: Stage 9 — Verification + Browser/Visual QA.**
+**Stage 9 — Verification + Browser/Visual QA: IMPLEMENTATION IN PROGRESS on `stage-9-verification-browser-visual-qa`.**
 
-Detailed status is tracked in:
-
-- `docs/phases/PHASE-1-ENGINEERING-FOUNDATION.md`
-- `docs/phases/PHASE-2-IDENTITY-PERSISTENCE-EVENTS.md`
-- `docs/phases/PHASE-3-AI-GATEWAY-PROVIDERS-CREDENTIALS.md`
-- `docs/phases/PHASE-4-MODEL-REGISTRY-ROUTING-FAILOVER.md`
-- `docs/phases/PHASE-5-EXECUTION-FABRIC-SANDBOX.md`
-- `docs/phases/PHASE-6-AGENT-RUNTIME-WORKFORCE.md`
-- `docs/phases/PHASE-7-AUTOMATION-FABRIC-DURABLE-WORKFLOWS.md`
-- `docs/phases/PHASE-8-PROJECT-BRAIN-CONTEXT-KNOWLEDGE.md`
+Detailed status is tracked in the phase files below.
 
 ## Dependency-driven sequence
 
@@ -61,7 +52,7 @@ Detailed status is tracked in:
 6  Agent Runtime + AI Workforce               COMPLETE
 7  Automation Fabric + durable workflows      COMPLETE
 8  Project Brain + Context + Knowledge        COMPLETE
-9  Verification + Browser/Visual QA           NEXT
+9  Verification + Browser/Visual QA           IN PROGRESS
 10 Core Web/PWA product UX                    TODO
 11 Heavy Application Builder                  TODO
 12 GitHub + Deployment + OPERATE              TODO
