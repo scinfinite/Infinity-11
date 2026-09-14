@@ -193,10 +193,9 @@ describe('stage 6 agent runtime', () => {
     agents.register(agent('backend', ['backend']));
     agents.register(agent('frontend', ['frontend']));
     agents.register(agent('generalist', ['backend', 'frontend']));
-    expect(new TeamLead(agents).selectSpecialists(['backend', 'frontend'], 2).map((a) => a.id)).toEqual([
-      'generalist',
-      'backend',
-    ]);
+    expect(
+      new TeamLead(agents).selectSpecialists(['backend', 'frontend'], 2).map((a) => a.id),
+    ).toEqual(['generalist', 'backend']);
   });
 
   it('isolates duplicate run IDs in the run store', () => {
