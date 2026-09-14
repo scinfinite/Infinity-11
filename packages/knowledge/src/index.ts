@@ -1,38 +1,150 @@
 export type Language =
-  | 'typescript' | 'javascript' | 'python' | 'java' | 'go' | 'rust'
-  | 'c' | 'cpp' | 'csharp' | 'php' | 'ruby' | 'kotlin' | 'swift'
-  | 'dart' | 'sql' | 'shell' | 'html' | 'css' | 'unknown';
+  | 'typescript'
+  | 'javascript'
+  | 'python'
+  | 'java'
+  | 'go'
+  | 'rust'
+  | 'c'
+  | 'cpp'
+  | 'csharp'
+  | 'php'
+  | 'ruby'
+  | 'kotlin'
+  | 'swift'
+  | 'dart'
+  | 'sql'
+  | 'shell'
+  | 'html'
+  | 'css'
+  | 'unknown';
 
 export type KnowledgeCategory =
-  | 'requirement' | 'architecture' | 'decision' | 'convention' | 'dependency'
-  | 'symbol' | 'test' | 'bug' | 'security' | 'deployment' | 'agent'
-  | 'lesson' | 'document' | 'source';
+  | 'requirement'
+  | 'architecture'
+  | 'decision'
+  | 'convention'
+  | 'dependency'
+  | 'symbol'
+  | 'test'
+  | 'bug'
+  | 'security'
+  | 'deployment'
+  | 'agent'
+  | 'lesson'
+  | 'document'
+  | 'source';
 
-export interface SourceRef { sourceId: string; path?: string; lineStart?: number; lineEnd?: number; }
-export interface KnowledgeItem { id: string; category: KnowledgeCategory; title: string; content: string; source: SourceRef; tags: string[]; importance: number; updatedAt: string; }
-export interface SymbolRecord {
-  id: string; name: string; kind: 'function' | 'class' | 'interface' | 'type' | 'method' | 'variable' | 'unknown';
-  path: string; language: Language; line: number; exported: boolean;
+export interface SourceRef {
+  sourceId: string;
+  path?: string;
+  lineStart?: number;
+  lineEnd?: number;
 }
-export interface DependencyEdge { from: string; to: string; kind: 'import' | 'require' | 'extends' | 'implements' | 'package'; }
-export interface FileRecord { path: string; language: Language; size: number; hash: string; imports: string[]; symbols: SymbolRecord[]; tests: boolean; }
+export interface KnowledgeItem {
+  id: string;
+  category: KnowledgeCategory;
+  title: string;
+  content: string;
+  source: SourceRef;
+  tags: string[];
+  importance: number;
+  updatedAt: string;
+}
+export interface SymbolRecord {
+  id: string;
+  name: string;
+  kind: 'function' | 'class' | 'interface' | 'type' | 'method' | 'variable' | 'unknown';
+  path: string;
+  language: Language;
+  line: number;
+  exported: boolean;
+}
+export interface DependencyEdge {
+  from: string;
+  to: string;
+  kind: 'import' | 'require' | 'extends' | 'implements' | 'package';
+}
+export interface FileRecord {
+  path: string;
+  language: Language;
+  size: number;
+  hash: string;
+  imports: string[];
+  symbols: SymbolRecord[];
+  tests: boolean;
+}
 export interface RepositoryIndex {
-  repositoryId: string; revision: string; files: FileRecord[]; symbols: SymbolRecord[]; dependencies: DependencyEdge[];
-  detectedLanguages: Array<{ language: Language; files: number }>; generatedAt: string;
+  repositoryId: string;
+  revision: string;
+  files: FileRecord[];
+  symbols: SymbolRecord[];
+  dependencies: DependencyEdge[];
+  detectedLanguages: Array<{ language: Language; files: number }>;
+  generatedAt: string;
 }
 export interface ProjectBrain {
-  projectId: string; revision: string; summary: string; requirements: KnowledgeItem[]; decisions: KnowledgeItem[];
-  lessons: KnowledgeItem[]; risks: KnowledgeItem[]; conventions: KnowledgeItem[]; index: RepositoryIndex; updatedAt: string;
+  projectId: string;
+  revision: string;
+  summary: string;
+  requirements: KnowledgeItem[];
+  decisions: KnowledgeItem[];
+  lessons: KnowledgeItem[];
+  risks: KnowledgeItem[];
+  conventions: KnowledgeItem[];
+  index: RepositoryIndex;
+  updatedAt: string;
 }
-export interface RetrievalQuery { text: string; categories?: KnowledgeCategory[]; paths?: string[]; limit?: number; }
-export interface RetrievalResult { item: KnowledgeItem; score: number; matchedTerms: string[]; }
-export interface ContextBudget { maxItems: number; maxCharacters: number; }
-export interface ContextPack { items: RetrievalResult[]; includedCharacters: number; omittedCount: number; provenance: Array<{ sourceId: string; categories: KnowledgeCategory[] }>; }
+export interface RetrievalQuery {
+  text: string;
+  categories?: KnowledgeCategory[];
+  paths?: string[];
+  limit?: number;
+}
+export interface RetrievalResult {
+  item: KnowledgeItem;
+  score: number;
+  matchedTerms: string[];
+}
+export interface ContextBudget {
+  maxItems: number;
+  maxCharacters: number;
+}
+export interface ContextPack {
+  items: RetrievalResult[];
+  includedCharacters: number;
+  omittedCount: number;
+  provenance: Array<{ sourceId: string; categories: KnowledgeCategory[] }>;
+}
 
 const EXTENSIONS: Record<string, Language> = {
-  '.ts':'typescript','.tsx':'typescript','.js':'javascript','.jsx':'javascript','.mjs':'javascript', '.py':'python','.java':'java','.go':'go','.rs':'rust',
-  '.c':'c','.h':'c','.cc':'cpp','.cpp':'cpp','.hpp':'cpp','.cs':'csharp','.php':'php','.rb':'ruby','.kt':'kotlin','.kts':'kotlin',
-  '.swift':'swift','.dart':'dart','.sql':'sql','.sh':'shell','.bash':'shell','.zsh':'shell','.html':'html','.css':'css'
+  '.ts': 'typescript',
+  '.tsx': 'typescript',
+  '.js': 'javascript',
+  '.jsx': 'javascript',
+  '.mjs': 'javascript',
+  '.py': 'python',
+  '.java': 'java',
+  '.go': 'go',
+  '.rs': 'rust',
+  '.c': 'c',
+  '.h': 'c',
+  '.cc': 'cpp',
+  '.cpp': 'cpp',
+  '.hpp': 'cpp',
+  '.cs': 'csharp',
+  '.php': 'php',
+  '.rb': 'ruby',
+  '.kt': 'kotlin',
+  '.kts': 'kotlin',
+  '.swift': 'swift',
+  '.dart': 'dart',
+  '.sql': 'sql',
+  '.sh': 'shell',
+  '.bash': 'shell',
+  '.zsh': 'shell',
+  '.html': 'html',
+  '.css': 'css',
 };
 
 export function detectLanguage(path: string): Language {
@@ -42,85 +154,209 @@ export function detectLanguage(path: string): Language {
 
 function stableHash(input: string): string {
   let hash = 0x811c9dc5;
-  for (let i = 0; i < input.length; i++) { hash ^= input.charCodeAt(i); hash = Math.imul(hash, 0x01000193); }
+  for (let i = 0; i < input.length; i++) {
+    hash ^= input.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
   return (hash >>> 0).toString(16).padStart(8, '0');
 }
-function lineNumber(text: string, offset: number): number { return text.slice(0, offset).split('\n').length; }
+function lineNumber(text: string, offset: number): number {
+  return text.slice(0, offset).split('\n').length;
+}
 
 function extractSymbols(path: string, text: string, language: Language): SymbolRecord[] {
-  const patterns: RegExp[] = language === 'python'
-    ? [/^(?:\s*)(?:async\s+)?def\s+([A-Za-z_$][\w$]*)/gm, /^(?:\s*)class\s+([A-Za-z_$][\w$]*)/gm]
-    : language === 'java'
-      ? [/\bclass\s+([A-Za-z_$][\w$]*)/g, /\binterface\s+([A-Za-z_$][\w$]*)/g, /(?:public|private|protected|static|final|abstract|synchronized|native|\s)+[\w<>\[\], ?]+\s+([A-Za-z_$][\w$]*)\s*\(/g]
-      : [/(?:export\s+)?(?:async\s+)?function\s+([A-Za-z_$][\w$]*)/g, /(?:export\s+)?class\s+([A-Za-z_$][\w$]*)/g, /(?:export\s+)?interface\s+([A-Za-z_$][\w$]*)/g, /(?:export\s+)?type\s+([A-Za-z_$][\w$]*)\s*=/g];
+  const patterns: RegExp[] =
+    language === 'python'
+      ? [/^(?:\s*)(?:async\s+)?def\s+([A-Za-z_$][\w$]*)/gm, /^(?:\s*)class\s+([A-Za-z_$][\w$]*)/gm]
+      : language === 'java'
+        ? [
+            /\bclass\s+([A-Za-z_$][\w$]*)/g,
+            /\binterface\s+([A-Za-z_$][\w$]*)/g,
+            /(?:public|private|protected|static|final|abstract|synchronized|native|\s)+[\w<>\[\], ?]+\s+([A-Za-z_$][\w$]*)\s*\(/g,
+          ]
+        : [
+            /(?:export\s+)?(?:async\s+)?function\s+([A-Za-z_$][\w$]*)/g,
+            /(?:export\s+)?class\s+([A-Za-z_$][\w$]*)/g,
+            /(?:export\s+)?interface\s+([A-Za-z_$][\w$]*)/g,
+            /(?:export\s+)?type\s+([A-Za-z_$][\w$]*)\s*=/g,
+          ];
   const out: SymbolRecord[] = [];
   for (const pattern of patterns) {
     let match: RegExpExecArray | null;
     while ((match = pattern.exec(text))) {
-      const name = match[1]; if (!name) continue;
-      const kind: SymbolRecord['kind'] = pattern.source.includes('class') ? 'class' : pattern.source.includes('interface') ? 'interface' : pattern.source.includes('type') ? 'type' : 'function';
-      out.push({ id:`${path}:${lineNumber(text,match.index)}:${name}`, name, kind, path, language, line:lineNumber(text,match.index), exported:/export/.test(text.slice(Math.max(0,match.index-12),match.index+12)) });
+      const name = match[1];
+      if (!name) continue;
+      const kind: SymbolRecord['kind'] = pattern.source.includes('class')
+        ? 'class'
+        : pattern.source.includes('interface')
+          ? 'interface'
+          : pattern.source.includes('type')
+            ? 'type'
+            : 'function';
+      out.push({
+        id: `${path}:${lineNumber(text, match.index)}:${name}`,
+        name,
+        kind,
+        path,
+        language,
+        line: lineNumber(text, match.index),
+        exported: /export/.test(text.slice(Math.max(0, match.index - 12), match.index + 12)),
+      });
     }
   }
   return out;
 }
 
 function extractImports(text: string, language: Language): string[] {
-  const patterns: RegExp[] = language === 'python'
-    ? [/^\s*import\s+([^\s#]+)/gm,/^\s*from\s+([^\s]+)\s+import/gm]
-    : language === 'java' ? [/^\s*import\s+([^;]+);/gm]
-    : language === 'go' ? [/^\s*import\s+"([^"]+)"/gm]
-    : [/\bimport\s+(?:[^'\"]+from\s+)?['\"]([^'\"]+)['\"]/g,/\brequire\(\s*['\"]([^'\"]+)['\"]\s*\)/g];
+  const patterns: RegExp[] =
+    language === 'python'
+      ? [/^\s*import\s+([^\s#]+)/gm, /^\s*from\s+([^\s]+)\s+import/gm]
+      : language === 'java'
+        ? [/^\s*import\s+([^;]+);/gm]
+        : language === 'go'
+          ? [/^\s*import\s+"([^"]+)"/gm]
+          : [
+              /\bimport\s+(?:[^'\"]+from\s+)?['\"]([^'\"]+)['\"]/g,
+              /\brequire\(\s*['\"]([^'\"]+)['\"]\s*\)/g,
+            ];
   const result: string[] = [];
-  for (const pattern of patterns) { let match: RegExpExecArray | null; while ((match = pattern.exec(text))) if (match[1]) result.push(match[1]); }
+  for (const pattern of patterns) {
+    let match: RegExpExecArray | null;
+    while ((match = pattern.exec(text))) if (match[1]) result.push(match[1]);
+  }
   return [...new Set(result)];
 }
 
-export function indexRepository(repositoryId: string, revision: string, files: Array<{path:string; content:string}>): RepositoryIndex {
-  const records: FileRecord[] = [], symbols: SymbolRecord[] = [], dependencies: DependencyEdge[] = [];
+export function indexRepository(
+  repositoryId: string,
+  revision: string,
+  files: Array<{ path: string; content: string }>,
+): RepositoryIndex {
+  const records: FileRecord[] = [],
+    symbols: SymbolRecord[] = [],
+    dependencies: DependencyEdge[] = [];
   for (const file of files) {
-    const language = detectLanguage(file.path), imports = extractImports(file.content, language), fileSymbols = extractSymbols(file.path, file.content, language);
-    records.push({path:file.path, language, size:file.content.length, hash:stableHash(file.content), imports, symbols:fileSymbols, tests:/(^|[/_.-])(test|tests|spec|specs)([/_.-]|$)/i.test(file.path)});
+    const language = detectLanguage(file.path),
+      imports = extractImports(file.content, language),
+      fileSymbols = extractSymbols(file.path, file.content, language);
+    records.push({
+      path: file.path,
+      language,
+      size: file.content.length,
+      hash: stableHash(file.content),
+      imports,
+      symbols: fileSymbols,
+      tests: /(^|[/_.-])(test|tests|spec|specs)([/_.-]|$)/i.test(file.path),
+    });
     symbols.push(...fileSymbols);
-    for (const target of imports) dependencies.push({from:file.path,to:target,kind:'import'});
+    for (const target of imports)
+      dependencies.push({ from: file.path, to: target, kind: 'import' });
   }
-  const counts = new Map<Language,number>();
-  for (const file of records) if (file.language !== 'unknown') counts.set(file.language,(counts.get(file.language) ?? 0)+1);
-  return {repositoryId,revision,files:records,symbols,dependencies,detectedLanguages:[...counts].map(([language,files])=>({language,files})).sort((a,b)=>b.files-a.files),generatedAt:new Date().toISOString()};
+  const counts = new Map<Language, number>();
+  for (const file of records)
+    if (file.language !== 'unknown')
+      counts.set(file.language, (counts.get(file.language) ?? 0) + 1);
+  return {
+    repositoryId,
+    revision,
+    files: records,
+    symbols,
+    dependencies,
+    detectedLanguages: [...counts]
+      .map(([language, files]) => ({ language, files }))
+      .sort((a, b) => b.files - a.files),
+    generatedAt: new Date().toISOString(),
+  };
 }
 
 export class KnowledgeStore {
   private readonly items = new Map<string, KnowledgeItem>();
-  upsert(item: KnowledgeItem): void { this.items.set(item.id,{...item,tags:[...new Set(item.tags)]}); }
-  remove(id: string): boolean { return this.items.delete(id); }
-  get(id: string): KnowledgeItem | undefined { return this.items.get(id); }
-  all(): KnowledgeItem[] { return [...this.items.values()]; }
+  upsert(item: KnowledgeItem): void {
+    this.items.set(item.id, { ...item, tags: [...new Set(item.tags)] });
+  }
+  remove(id: string): boolean {
+    return this.items.delete(id);
+  }
+  get(id: string): KnowledgeItem | undefined {
+    return this.items.get(id);
+  }
+  all(): KnowledgeItem[] {
+    return [...this.items.values()];
+  }
   search(query: RetrievalQuery): RetrievalResult[] {
-    const terms = query.text.toLowerCase().split(/[^a-z0-9_$.-]+/).filter(t=>t.length>1), results: RetrievalResult[] = [];
+    const terms = query.text
+        .toLowerCase()
+        .split(/[^a-z0-9_$.-]+/)
+        .filter((t) => t.length > 1),
+      results: RetrievalResult[] = [];
     for (const item of this.items.values()) {
       if (query.categories && !query.categories.includes(item.category)) continue;
-      if (query.paths && !query.paths.some(path=>item.source.path?.startsWith(path))) continue;
-      const hay = `${item.title} ${item.content} ${item.tags.join(' ')}`.toLowerCase(), matchedTerms = terms.filter(term=>hay.includes(term));
+      if (query.paths && !query.paths.some((path) => item.source.path?.startsWith(path))) continue;
+      const hay = `${item.title} ${item.content} ${item.tags.join(' ')}`.toLowerCase(),
+        matchedTerms = terms.filter((term) => hay.includes(term));
       if (!matchedTerms.length) continue;
-      results.push({item,matchedTerms,score:(matchedTerms.length/Math.max(1,terms.length))*0.75 + item.importance*0.25});
+      results.push({
+        item,
+        matchedTerms,
+        score: (matchedTerms.length / Math.max(1, terms.length)) * 0.75 + item.importance * 0.25,
+      });
     }
-    return results.sort((a,b)=>b.score-a.score).slice(0,query.limit ?? 10);
+    return results.sort((a, b) => b.score - a.score).slice(0, query.limit ?? 10);
   }
 }
 
-export function buildContextPack(store: KnowledgeStore, query: RetrievalQuery, budget: ContextBudget): ContextPack {
-  const ranked = store.search({...query,limit:Math.max(query.limit ?? budget.maxItems,budget.maxItems*2)}), items: RetrievalResult[] = [];
+export function buildContextPack(
+  store: KnowledgeStore,
+  query: RetrievalQuery,
+  budget: ContextBudget,
+): ContextPack {
+  const ranked = store.search({
+      ...query,
+      limit: Math.max(query.limit ?? budget.maxItems, budget.maxItems * 2),
+    }),
+    items: RetrievalResult[] = [];
   let chars = 0;
   for (const result of ranked) {
     if (items.length >= budget.maxItems) break;
     if (chars + result.item.content.length > budget.maxCharacters) continue;
-    items.push(result); chars += result.item.content.length;
+    items.push(result);
+    chars += result.item.content.length;
   }
-  const sourceIds = [...new Set(items.map(result=>result.item.source.sourceId))];
-  const provenance = sourceIds.map(sourceId=>({sourceId,categories:[...new Set(items.filter(result=>result.item.source.sourceId===sourceId).map(result=>result.item.category))]}));
-  return {items,includedCharacters:chars,omittedCount:Math.max(0,ranked.length-items.length),provenance};
+  const sourceIds = [...new Set(items.map((result) => result.item.source.sourceId))];
+  const provenance = sourceIds.map((sourceId) => ({
+    sourceId,
+    categories: [
+      ...new Set(
+        items
+          .filter((result) => result.item.source.sourceId === sourceId)
+          .map((result) => result.item.category),
+      ),
+    ],
+  }));
+  return {
+    items,
+    includedCharacters: chars,
+    omittedCount: Math.max(0, ranked.length - items.length),
+    provenance,
+  };
 }
 
-export function createProjectBrain(projectId: string, repositoryId: string, revision: string, files: Array<{path:string;content:string}>): ProjectBrain {
-  return {projectId,revision,summary:`Project ${projectId} at revision ${revision}`,requirements:[],decisions:[],lessons:[],risks:[],conventions:[],index:indexRepository(repositoryId,revision,files),updatedAt:new Date().toISOString()};
+export function createProjectBrain(
+  projectId: string,
+  repositoryId: string,
+  revision: string,
+  files: Array<{ path: string; content: string }>,
+): ProjectBrain {
+  return {
+    projectId,
+    revision,
+    summary: `Project ${projectId} at revision ${revision}`,
+    requirements: [],
+    decisions: [],
+    lessons: [],
+    risks: [],
+    conventions: [],
+    index: indexRepository(repositoryId, revision, files),
+    updatedAt: new Date().toISOString(),
+  };
 }
