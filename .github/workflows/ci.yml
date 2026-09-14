@@ -2,9 +2,14 @@ name: CI
 
 on:
   push:
-    branches: [main, stage-1-engineering-foundation, stage-2-identity-persistence-events, stage-3-ai-gateway-providers-credentials]
+    branches:
+      - main
+      - stage-1-engineering-foundation
+      - stage-2-identity-persistence-events
+      - stage-3-ai-gateway-providers-credentials
   pull_request:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
