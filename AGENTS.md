@@ -4,7 +4,9 @@
 
 This file defines repository-wide expectations for AI coding agents and human contributors working on INFINITY-11.
 
-INFINITY-11 is intended to become a production-grade, **FREE-FIRST, BYOK-first, multimodal AI orchestration and development platform** capable of building serious web, mobile, desktop, and backend applications. Contributors must preserve the architectural boundaries described in `docs/`.
+INFINITY-11 is intended to become a production-grade, **FREE-FIRST, BYOK-first, multimodal AI engineering, creation, and automation platform** capable of building serious web, mobile, desktop, and backend applications, running governed AI workforces, and operating event-driven automations.
+
+Contributors must preserve the architectural boundaries described in `docs/`.
 
 ## Current repository state
 
@@ -35,6 +37,37 @@ For the current stage, documentation and architecture changes are allowed; imple
 - Never design the core architecture around the assumption that third-party compute is unlimited or free.
 - Keep platform costs, user AI/API costs, user compute costs, and optional future managed-service costs explicitly separated.
 - Paid services may be supported as optional providers, but basic architectural capabilities must not depend on a single paid vendor.
+
+## Best-Possible-Output rule
+
+The product goal is not merely to produce a decent or plausible result.
+
+> **INFINITY-11 must pursue the best practically achievable verified output within the user's requirements, resources, policies, cost, and execution constraints.**
+
+For meaningful work, agents should use the strongest practical loop:
+
+```text
+Understand
+→ research where needed
+→ plan
+→ execute
+→ test
+→ critique
+→ improve
+→ retest
+→ verify
+```
+
+Completion state must distinguish:
+
+```text
+VERIFIED
+PARTIALLY VERIFIED
+UNVERIFIED
+BLOCKED
+```
+
+Do not treat “the model generated it” or “the build passed” as sufficient proof of overall quality.
 
 ## Remote execution rules
 
@@ -69,6 +102,64 @@ INFINITY-11 must be designed for real applications rather than demo-only generat
 
 A single product specification may produce multiple application targets. Framework selection must remain capability-driven and provider-neutral rather than hard-coded into the platform.
 
+## Automation rules
+
+Automation is a first-class subsystem, not an integration afterthought.
+
+The platform must support:
+
+- visual workflow construction;
+- natural-language workflow generation;
+- triggers;
+- actions;
+- conditions;
+- loops;
+- parallel branches;
+- schedules;
+- webhooks;
+- events;
+- approvals;
+- agents and sub-agents;
+- tools and MCP;
+- browser/GitHub/database/sandbox actions;
+- retries;
+- bounded recovery;
+- durable state;
+- resume;
+- auditability.
+
+Workflows may be deterministic, autonomous, or hybrid. Hybrid execution is the preferred target for serious production automation because deterministic boundaries can contain agent judgment.
+
+Never allow “self-healing” to become an excuse for unlimited retries or uncontrolled destructive actions.
+
+## AI workforce rules
+
+Agents are governed software workers, not merely personas.
+
+Each agent should have explicit:
+
+- identity
+- role
+- goal
+- capabilities
+- skills
+- tools
+- model policy
+- context policy
+- memory policy
+- permission policy
+- execution profile
+- verification policy
+- iteration limit
+- execution timeout
+- budget limit
+- network policy
+- approval policy
+
+Teams may use a Team Lead/orchestrator and specialist members. Teams should be dynamically composed around the actual task rather than hard-coded to one universal roster.
+
+Autonomous execution must remain observable, interruptible, policy-controlled, and auditable.
+
 ## Architecture rules
 
 - Keep provider-specific behavior inside provider adapters.
@@ -79,12 +170,14 @@ A single product specification may produce multiple application targets. Framewo
 - Default agent and tool permissions to deny unless explicitly granted.
 - Treat shell, network, repository write, deployment, and secret access as privileged capabilities.
 - Use isolated execution environments for untrusted or autonomous code execution where appropriate.
-- Make long-running work observable, cancellable, retryable, and stateful.
+- Make long-running work observable, cancellable, retryable, resumable, and stateful.
 - Use normalized error categories for provider failures and routing decisions.
 - Preserve idempotency for operations that can create external side effects.
 - Prefer Git branches and reviewable diffs for autonomous repository changes.
 - Never assume a generated artifact is correct until relevant verification succeeds.
 - Keep sandbox, database, and deployment integrations behind provider interfaces.
+- Keep workflow state separate from transient UI state.
+- Do not hide automation side effects behind generic “AI action” abstractions.
 
 ## AI provider rules
 
@@ -106,21 +199,6 @@ Do not invent exact provider quotas, prices, model capabilities, or availability
 - Rotate or disable unhealthy credentials through explicit lifecycle operations.
 - Do not automatically export raw credentials in project backups.
 
-## Agent rules
-
-Agents must have explicit:
-
-- model policy
-- tool policy
-- permission policy
-- iteration limit
-- execution timeout
-- budget limit
-- network policy
-- approval policy
-
-Autonomous execution must remain observable and interruptible. Destructive operations require appropriate approval or an explicit policy that permits them.
-
 ## Execution-provider rules
 
 Execution must use an abstraction such as `SandboxProvider`/`ExecutionProvider` so that E2B, Vercel Sandbox, Docker, local/self-hosted runners, and future providers can be added or replaced without redesigning the product.
@@ -128,6 +206,31 @@ Execution must use an abstraction such as `SandboxProvider`/`ExecutionProvider` 
 Each execution environment should define lifecycle state, resource limits, timeout, cleanup, logs, artifact handling, secret injection, network policy, and ownership/cost attribution.
 
 Never imply that an external free tier provides unlimited compute.
+
+## Workflow/runtime rules
+
+Workflow execution should be durable and observable.
+
+Every meaningful run should expose, where applicable:
+
+```text
+run ID
+workflow version
+trigger
+state
+current step
+agent/model/tool decisions
+permissions
+retries
+approvals
+outputs
+errors
+verification
+cost/usage
+final outcome
+```
+
+Recovery must be bounded and side-effect aware. Operations that can create duplicate external effects must be idempotent or guarded by explicit state/approval.
 
 ## GitHub rules
 
@@ -152,6 +255,8 @@ Before execution, evaluate:
 
 Do not grant every connected MCP tool access to every project secret by default.
 
+Imported workflows, agents, skills, MCP servers, and marketplace assets are untrusted until their dependencies and requested permissions are inspected.
+
 ## Verification standard
 
 For code changes, use the strongest practical verification sequence:
@@ -167,6 +272,7 @@ inspect
 → integration tests
 → build
 → E2E/runtime verification where relevant
+→ security verification
 → regression check
 → inspect final output
 ```
@@ -179,9 +285,24 @@ build
 → API/service checks
 → browser/DOM checks
 → visual QA
+→ accessibility
+→ performance checks
 → platform packaging checks
 → security checks
 → regression checks
+```
+
+For automations, verification should additionally cover:
+
+```text
+trigger behavior
+→ state transitions
+→ permissions
+→ retries
+→ recovery
+→ idempotency
+→ approval gates
+→ final side effects
 ```
 
 Adjust the sequence to the actual change, but never replace verification with confidence language.
@@ -190,6 +311,7 @@ Adjust the sequence to the actual change, but never replace verification with co
 
 Architecture decisions should be reflected in `docs/architecture/`.
 Product behavior should be reflected in `docs/description/`.
+The latest cross-cutting research amendments belong in `docs/description/INFINITY-11-LATEST-RESEARCH-AMENDMENTS.md`.
 Future implementation-phase documentation belongs under `docs/phases/`.
 
 The documentation set should remain internally consistent about:
@@ -199,8 +321,11 @@ The documentation set should remain internally consistent about:
 - remote execution
 - heavy-application capability
 - multiplatform application generation
+- automation
+- AI workforce
 - provider abstractions
 - security and verification
+- best-possible-output quality
 - implementation status
 
 ## Scope discipline
@@ -209,4 +334,4 @@ Do not introduce unrelated dependencies, provider lock-in, unnecessary infrastru
 
 ## Quality bar
 
-The goal is not merely to make INFINITY-11 work. The goal is to make it maintainable, secure, testable, observable, extensible, understandable, free-first, provider-independent, and capable of building serious multiplatform software as the system grows.
+The goal is not merely to make INFINITY-11 work. The goal is to make it maintainable, secure, testable, observable, extensible, understandable, free-first, provider-independent, capable of building serious multiplatform software, capable of orchestrating useful automation, and capable of continuously improving results until the strongest practical verified outcome is reached.
