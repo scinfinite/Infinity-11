@@ -1,413 +1,449 @@
-# INFINITY-11 — Detailed Product & Technical Description
+# INFINITY-11 — Detailed Product, Architecture & Competitive Specification
 
-> **Status:** Foundational product definition
+> **Status:** Foundational product definition — research-aligned
+> **Implementation status:** Documentation/design only; no product coding is authorized by this document
+> **Strategy:** FREE-FIRST + OPEN-SOURCE-FIRST + BYOK-FIRST
 > **Audience:** Product designers, architects, engineers, AI-agent designers, security reviewers, and future contributors
-> **Scope:** Product behavior, system boundaries, execution semantics, security model, data model, UX contracts, and extensibility
+> **Scope:** Product behavior, architecture, competitive strategy, execution semantics, security, cost model, UX, extensibility, and future implementation contracts
 > **Non-scope:** Implementation code, deployment commands, and a delivery roadmap
 
 ---
 
 ## 1. Executive definition
 
-INFINITY-11 is a premium, BYOK-first, multimodal AI application platform designed for people who want one environment for AI-assisted thinking, software development, research, media generation, automation, and deployment.
+INFINITY-11 is a provider-independent AI engineering operating system and multimodal application builder. It is designed to unify AI chat, software engineering, research, media generation, agent teams, automation, sandboxed execution, GitHub workflows, knowledge, memory, and deployment without making any single AI provider, sandbox, database, or hosting vendor the architectural center.
 
-The defining architectural idea is **provider-independent orchestration**. INFINITY-11 does not make one AI provider the center of the system. Instead, it creates a stable control plane above providers, models, credentials, agents, tools, execution environments, repositories, and deployment targets.
+The product is intentionally broader than a conventional AI chat application and intentionally different from a Replit clone. Replit demonstrates the value of a connected idea-to-build-to-deploy lifecycle; OpenCode demonstrates provider independence and local models; Claude Code demonstrates skills, hooks, MCP, subagents, and verification; Codex demonstrates persistent parallel agent work; ECC demonstrates portable engineering-harness concepts; Agency Agents demonstrates reusable specialist agents, teams, projects, and runbooks; E2B and Vercel demonstrate isolated execution; GitHub provides the source-of-truth engineering lifecycle; Supabase provides a practical free-first backend foundation.
 
-The platform accepts user intent and converts it into controlled, observable work. Depending on the task, that work may involve a single model call, a multi-model route, a parallel agent graph, an MCP tool, an isolated E2B sandbox, a GitHub operation, a workflow, or a complete build-and-deploy cycle.
+INFINITY-11 combines the underlying patterns while adding a unified intelligence, routing, security, explainability, and workforce layer.
 
-## 2. Product promise
+### North-star definition
+
+> **INFINITY-11 turns user intent into safe, observable, verifiable work across models, credentials, agents, tools, execution environments, repositories, workflows, and deployment targets.**
+
+---
+
+## 2. Product position
+
+INFINITY-11 should be understood as:
+
+```text
+AI APPLICATION BUILDER
+        +
+AI ENGINEERING ENVIRONMENT
+        +
+AI WORKFORCE / ORCHESTRATION LAYER
+        +
+PROVIDER-NEUTRAL AI GATEWAY
+        +
+AUTOMATION CONTROL PLANE
+```
+
+It should not be positioned as:
+
+- a thin wrapper around one model API;
+- a copy of Replit;
+- a catalog of personality prompts;
+- a mandatory paid cloud platform;
+- a provider-specific gateway;
+- an unsafe autonomous shell runner;
+- an opaque model router that invents quota information.
+
+---
+
+## 3. Product promise
 
 > **Bring your AI keys. Bring your tools. Bring your repositories. Build anything.**
 
-The promise has five technical consequences:
+This promise creates explicit architectural requirements:
 
-1. Users retain control of provider credentials.
-2. Provider failure must not unnecessarily terminate work.
-3. Automation must remain observable and permissioned.
-4. Generated code must be executed in controlled environments.
-5. Important system decisions must be explainable without exposing secrets or private internal reasoning.
+1. Users can bring multiple credentials per provider.
+2. Users can bring multiple providers and local models.
+3. Provider failure must not unnecessarily terminate work.
+4. Routing must be capability-aware and policy-aware.
+5. Agent actions must be permissioned and observable.
+6. Generated code must execute in controlled environments.
+7. Important decisions must be explainable without exposing secrets or private chain-of-thought.
+8. The basic architecture must remain usable without mandatory paid infrastructure.
+9. Paid services may improve convenience or scale but must not become hidden architectural dependencies.
 
-## 3. Product identity
+---
 
-INFINITY-11 combines the following primitives into one product:
+## 4. Competitive research synthesis
+
+The following research is treated as architectural input, not as a list of features to copy.
+
+### 4.1 Replit — pattern to learn
+
+Replit's strongest strategic pattern is the connected lifecycle: describe an idea, let an agent build it, inspect/run it, preview it, debug it, and deploy it in one environment. Current Replit also emphasizes mobile-app generation and preview workflows. citeturn0search6
+
+**INFINITY-11 decision:**
+
+- **KEEP:** zero-friction idea-to-running-project experience;
+- **ADAPT:** browser IDE + preview + deployment as one lifecycle;
+- **IMPROVE:** make the lifecycle provider-, sandbox-, database-, and deployment-provider independent;
+- **INVENT:** Project Brain + explainable routing + AI Workforce + verification loop;
+- **REJECT:** architectural dependence on one hosted environment.
+
+### 4.2 Ideavo — BYOK pattern
+
+Ideavo validates the demand for BYOK and multi-provider use.
+
+**INFINITY-11 decision:** go beyond simply selecting a provider by introducing credential-aware routing, quota confidence, health, cost policy, capability matching, and fallback.
+
+### 4.3 E2B — execution pattern
+
+E2B is a useful model for isolated execution of generated or untrusted code.
+
+**INFINITY-11 decision:** E2B is an adapter, not the architecture. The sandbox contract must support E2B, local/container execution, Vercel-style sandboxing, and future providers.
+
+### 4.4 ECC — engineering-harness pattern
+
+ECC has evolved toward a broad engineering harness with skills, agents, orchestration, validation, memory, MCP inventory, worktree workflows, and cross-harness support.
+
+**INFINITY-11 decision:** adopt the concepts of portable skills, agent registries, worktree-aware execution, validation gates, harness adapters, and engineering memory. Do not copy prompts, code, or proprietary structure.
+
+### 4.5 Agency Agents — workforce pattern
+
+Agency Agents demonstrates the usefulness of specialist agents, teams, projects, and runbook-style workflows.
+
+**INFINITY-11 decision:** agents are executable software workers, not just personas. Each worker receives capabilities, tools, model policy, context policy, memory policy, permissions, budgets, workspace, verification, and history.
+
+### 4.6 OpenCode — provider independence
+
+OpenCode currently supports 75+ LLM providers and local models, with configurable providers and OpenAI-compatible endpoints. citeturn0search0turn0search4
+
+**INFINITY-11 decision:** provider neutrality is a first-class architectural invariant. Local AI must be possible where the user's hardware permits it.
+
+### 4.7 Claude Code — extension and verification pattern
+
+Claude Code establishes a useful distinction among skills, subagents, teams, hooks, MCP, and plugins, with a gather → act → verify execution model.
+
+**INFINITY-11 decision:** implement equivalent concepts through an original portable extension model and unified policy engine.
+
+### 4.8 Codex — persistent workforce pattern
+
+Codex demonstrates that parallel agents, isolated worktrees, long-running tasks, background work, and supervision are becoming normal engineering primitives.
+
+**INFINITY-11 decision:** support durable task runs, parallel execution, worktree isolation, resumability, scheduling, and event-triggered work.
+
+### 4.9 GitHub — source-of-truth pattern
+
+GitHub should not be treated merely as an export destination. Repository state, issues, PRs, CI, reviews, branches, and commits should participate in the execution lifecycle.
+
+**INFINITY-11 decision:** GitHub is a first-class integration boundary and project source-of-truth option.
+
+### 4.10 Supabase — free-first backend pattern
+
+Supabase currently offers a $0 Free plan with 500 MB database size, 1 GB file storage, 5 GB egress, 50,000 MAU, and two active projects, with inactivity pausing. citeturn0search1turn0search3
+
+**INFINITY-11 decision:** Supabase is the default development backend adapter, but all persistence boundaries remain abstract enough to support PostgreSQL and future providers.
+
+### 4.11 Vercel — routing/deployment pattern
+
+Vercel demonstrates the value of managed AI routing, deployment, sandboxing, and observability primitives.
+
+**INFINITY-11 decision:** use Vercel as an optional adapter. Never make Vercel the required AI gateway or execution engine.
+
+---
+
+## 5. Competitive capability matrix
+
+| Capability | Replit | OpenCode | Claude Code | Codex | ECC | Agency Agents | INFINITY-11 decision |
+|---|---|---|---|---|---|---|---|
+| Prompt-to-app | Strong | Limited | Coding-focused | Strong | Harness-focused | Agent-focused | **Improve** |
+| Browser IDE | Strong | Partial | External/editor-oriented | App/agent-oriented | No single IDE | App-oriented | **Keep + improve** |
+| BYOK | Supported patterns | Strong | Provider-specific | Provider-specific | Harness-level | Tool integration | **Core** |
+| Multi-key routing | Limited/managed | Provider config | Limited | Managed | Harness-level | Not core | **Invent** |
+| Provider neutrality | Moderate | Strong | Moderate | Moderate | Strong | Strong | **Core invariant** |
+| Local models | Limited | Strong | Limited | Limited | Adapters | Tool-dependent | **Core** |
+| Agent workforce | Strong | Strong | Strong | Strong | Strong | Strong | **Improve** |
+| Skills | Emerging | Supported patterns | Strong | Strong | Strong | Agent content | **Universal skill system** |
+| MCP | Supported | Supported | Strong | Supported | Strong | Supported patterns | **Core** |
+| Sandboxed execution | Strong | Local/external | Local/tool-based | Strong | Worktree/harness | Tool-dependent | **Adapter abstraction** |
+| Verification | Growing | Engineering-focused | Strong | Strong | Strong | Runbooks | **Core moat** |
+| GitHub lifecycle | Strong | Strong | Strong | Strong | Strong | Supported | **First-class** |
+| Deployment | Strong | External | External | External | External | External | **Universal adapters** |
+| Explainable routing | Limited | Model selection | Limited | Limited | Harness | Limited | **Invent** |
+| Project Brain | Partial | Partial | Memory/context | Partial | Engineering memory | Project model | **Invent** |
+| Event-driven workforce | Emerging | Strong tooling | Hooks/teams | Strong | Strong | Runbooks | **Improve** |
+
+---
+
+## 6. Strategic feature classification
+
+Every major capability must be classified before implementation.
+
+### KEEP
+
+Patterns with proven user value that should exist in INFINITY-11:
+
+- prompt-to-project creation;
+- browser-based code workspace;
+- live preview;
+- model/provider selection;
+- agent execution;
+- specialist agents;
+- skills;
+- MCP;
+- GitHub integration;
+- isolated execution;
+- workflow automation;
+- deployment;
+- usage and audit visibility;
+- PWA/responsive operation.
+
+### ADAPT
+
+Patterns that should be changed to fit INFINITY-11:
+
+- Replit-style build lifecycle → provider-neutral Build lifecycle;
+- Claude-style skills → universal skill package with compatibility metadata;
+- Codex worktrees → sandbox/worktree abstraction;
+- ECC harness adapters → universal execution adapters;
+- Agency personas → governed executable agents;
+- managed model selection → multi-key intelligence router;
+- cloud sandbox → pluggable SandboxProvider;
+- Supabase backend → DatabaseProvider abstraction.
+
+### IMPROVE
+
+Capabilities where INFINITY-11 should provide stronger behavior:
+
+- model routing;
+- multi-key failover;
+- agent teams;
+- verification;
+- codebase intelligence;
+- project memory;
+- observability;
+- security policy;
+- workflow resumability;
+- provider portability;
+- explainability;
+- cost control.
+
+### INVENT
+
+The primary INFINITY-11 moat:
+
+1. **Multi-Key Intelligence** — credential-level routing and health.
+2. **AI Intelligence Gateway** — task/capability/policy-aware routing.
+3. **AI Workforce** — persistent agents with identity, tools, memory, permissions, budgets, schedules, and performance history.
+4. **Project Brain** — structured durable understanding of a project.
+5. **Adaptive Model Router** — routing informed by historical task performance.
+6. **Universal Agent Package** — portable agent definitions across supported harnesses.
+7. **Universal Sandbox Manager** — execution-provider abstraction.
+8. **Universal Deployment Manager** — deployment-provider abstraction.
+9. **Verification Engine** — tests + static analysis + security + visual/browser checks + human review.
+10. **Explainability Layer** — explains routing, context sources, permissions, costs, and execution decisions without exposing private reasoning.
+
+### REJECT
+
+Do not make these architectural requirements:
+
+- mandatory paid API gateway;
+- mandatory proprietary model;
+- mandatory E2B account;
+- mandatory Supabase paid plan;
+- mandatory Vercel deployment;
+- hidden quota assumptions;
+- unlimited autonomous privileged execution;
+- copying competitor source/prompts/configuration;
+- provider-specific business logic in the UI;
+- irreversible agent actions without policy/approval;
+- opaque model scoring with no observable evidence.
+
+---
+
+## 7. Free-first / open-source-first operating policy
+
+### 7.1 Principle
+
+INFINITY-11 must be designed so that the project can be researched, developed, tested, and meaningfully operated with **$0 mandatory infrastructure spend**.
+
+This does not mean every possible workload can run for free. Provider API calls, large-scale hosted execution, commercial model usage, domains, and high-volume storage may cost money. The architecture must instead make paid infrastructure optional and user-controlled.
+
+### 7.2 Preferred stack hierarchy
 
 ```text
-Models
-Providers
-Credentials
-Router
-Agents
-Skills
-Tools
-MCP
-Projects
-Conversations
-Files
-Knowledge
-Memory
-Sandboxes
-Repositories
-Workflows
-Deployments
-Usage
-Security
-Observability
+OPEN SOURCE / LOCAL
+        ↓
+FREE TIER / BYOK
+        ↓
+OPTIONAL MANAGED SERVICE
+        ↓
+PAID SCALE
 ```
 
-The product is therefore closer to an **AI engineering operating environment** than a conventional chat application.
+### 7.3 Development defaults
 
-## 4. Design principles
+- GitHub for source control and public/open collaboration.
+- Supabase Free for early hosted persistence when needed. citeturn0search1
+- Local PostgreSQL as a self-hosted alternative.
+- Local models through Ollama/LM Studio/vLLM or other compatible servers where hardware permits; OpenCode demonstrates the feasibility of this provider model. citeturn0search0turn0search5
+- Docker/local processes for development sandboxes when E2B is unavailable.
+- E2B as optional user-provided infrastructure.
+- Vercel/Cloudflare/other deployment targets as optional adapters.
+- Playwright and open-source browser tooling for visual verification.
+- Open-source static analysis and security tools where technically appropriate.
 
-### 4.1 BYOK-first
+### 7.4 Cost boundary
 
-Users may connect multiple API credentials for the same provider and multiple providers simultaneously. Credentials are treated as routing resources rather than a single global configuration value.
-
-### 4.2 Provider-agnostic
-
-Provider-specific request formats, authentication methods, error codes, capability quirks, and quota semantics remain behind adapters.
-
-### 4.3 Capability-aware
-
-A model is eligible for a request only when its declared or observed capabilities satisfy the request requirements and policy constraints.
-
-### 4.4 Observable
-
-Routing, execution, fallback, tool use, sandbox activity, usage, and important external effects should have traceable events.
-
-### 4.5 Secure by boundary
-
-Credentials, user data, tools, MCP servers, sandboxes, repositories, and deployment systems have different trust levels and must not be treated as one undifferentiated resource pool.
-
-### 4.6 Human-controlled automation
-
-Automation may be powerful, but privileged external effects remain governed by permissions and optional approval gates.
-
-### 4.7 Evidence over assumption
-
-System state should be based on observed provider responses, execution results, tests, source metadata, or explicitly labeled estimates. Unknown information remains unknown.
-
-## 5. User and workspace model
+The platform must expose:
 
 ```text
-User
- └── Workspace
-      ├── Members
-      ├── Provider credentials
-      ├── Projects
-      ├── Integrations
-      ├── Policies
-      └── Shared resources
-           └── Project
-                ├── Conversations
-                ├── Files
-                ├── Agents
-                ├── Skills
-                ├── Knowledge
-                ├── Workflows
-                ├── Repository links
-                ├── Sandbox configuration
-                ├── Previews
-                └── Deployments
+mandatory cost
+optional cost
+user-owned cost
+estimated cost
+unknown cost
 ```
 
-The workspace is the tenancy boundary. The project is the primary unit of sustained technical work.
+No UI may imply that a service is free when the underlying provider can charge for it.
 
-## 6. Core user journeys
+---
 
-### 6.1 Chat journey
+## 8. System architecture
 
 ```text
-Prompt
- ↓
-Context selection
- ↓
-Capability detection
- ↓
-Routing policy
- ↓
-Credential selection
- ↓
-Provider request
- ↓
-Streaming response
- ↓
-Artifact / message persistence
+                              INFINITY-11
+                                   │
+             ┌─────────────────────┴─────────────────────┐
+             │                                           │
+        EXPERIENCE                                  CONTROL PLANE
+             │                                           │
+   Chat / Code / Build / Design                  Identity / Policy
+   Research / Media / Agents                     Security / Cost
+   Projects / Workflows                          Audit / Observability
+             │                                           │
+             └─────────────────────┬─────────────────────┘
+                                   │
+                           INTELLIGENCE PLANE
+                                   │
+          ┌────────────────────────┼────────────────────────┐
+          │                        │                        │
+    Context Engine          AI Gateway / Router       Evaluation
+    Project Brain           Credential Router         Model Memory
+    Knowledge / Memory      Provider Adapters         Verification
+          │                        │                        │
+          └────────────────────────┼────────────────────────┘
+                                   │
+                            EXECUTION PLANE
+                                   │
+      ┌───────────┬───────────┬────┴────┬───────────┬───────────┐
+      │ Agents    │ Tools     │ MCP      │ Sandbox   │ Workflows │
+      │ Worktrees │ Browser   │ Git      │ Terminal  │ Jobs      │
+      └───────────┴───────────┴──────────┴───────────┴───────────┘
+                                   │
+                          PROVIDER / ADAPTER PLANE
+                                   │
+    AI Providers / Local Models / GitHub / Supabase / E2B / Vercel
+    Deployment Providers / Storage / Future Integrations
 ```
 
-### 6.2 Coding journey
+---
+
+## 9. AI Intelligence Gateway
+
+The gateway is not a normal proxy. It is an intelligence and policy boundary.
 
 ```text
-Task
+Request
  ↓
-Repository/project context
+Intent classification
  ↓
-Evidence collection
+Task type
  ↓
-Agent plan
+Capability requirements
  ↓
-File changes
+Context requirements
  ↓
-Tests / diagnostics
+Project policy
  ↓
-Diff review
+Candidate models
  ↓
-Apply / revert
-```
-
-### 6.3 Build journey
-
-```text
-Idea
+Provider health
  ↓
-Requirements
+Credential health
  ↓
-Architecture
+Quota signal
  ↓
-E2B sandbox
+Cost preference
  ↓
-Implementation
+Latency preference
+ ↓
+Historical success
+ ↓
+Selection
+ ↓
+Execution
  ↓
 Verification
- ↓
-Preview
- ↓
-GitHub
- ↓
-Deployment
- ↓
-Monitoring
 ```
 
-### 6.4 Research journey
+### Routing modes
+
+- Manual model.
+- Auto.
+- Best quality.
+- Fastest.
+- Cheapest.
+- Free-only.
+- Local-only.
+- Provider-preferred.
+- Capability-first.
+- Custom policy.
+- Evaluation mode.
+
+### Routing evidence
+
+Every route should be explainable through facts such as:
+
+- requested capability;
+- candidate eligibility;
+- model availability;
+- credential health;
+- policy constraints;
+- observed latency;
+- estimated cost;
+- historical success;
+- fallback reason.
+
+Private chain-of-thought must never be exposed as the explanation mechanism.
+
+---
+
+## 10. Multi-key intelligence
+
+Provider and credential are separate objects.
 
 ```text
-Question
- ↓
-Source discovery
- ↓
-Evidence extraction
- ↓
-Cross-checking
- ↓
-Knowledge/context assembly
- ↓
-Report
- ↓
-Source lineage
+Provider
+├── Credential A
+│   ├── Model X
+│   └── Model Y
+├── Credential B
+│   ├── Model X
+│   └── Model Z
+└── Credential C
+    └── Model Y
 ```
 
-### 6.5 Automation journey
+Credential state:
 
 ```text
-Trigger
- ↓
-Policy
- ↓
-Workflow graph
- ↓
-Agents / tools
- ↓
-Conditions
- ↓
-Verification
- ↓
-Output / notification
+ACTIVE
+DEGRADED
+RATE_LIMITED
+COOLDOWN
+EXHAUSTED
+INVALID
+REVOKED
+UNKNOWN
 ```
 
-## 7. Application architecture
-
-```text
-                           INFINITY-11
-                                │
-                ┌───────────────┴───────────────┐
-                │                               │
-          Web / PWA                        API / BFF
-                │                               │
-                └───────────────┬───────────────┘
-                                │
-                         Domain services
-                                │
-       ┌───────────────┬────────┼────────┬───────────────┐
-       │               │        │        │               │
-    Projects        AI Core   Agents   Tools         Workflows
-       │               │        │        │               │
-       └───────────────┴────────┴────────┴───────────────┘
-                                │
-                    External capability adapters
-                                │
-      ┌──────────┬──────────┬───┴────┬──────────┬──────────┐
-      │ Providers│   MCP    │  E2B   │ GitHub   │ Vercel   │
-      └──────────┴──────────┴────────┴──────────┴──────────┘
-                                │
-                          Data / control
-                                │
-                     Supabase + storage + jobs
-```
-
-## 8. AI Gateway
-
-The AI Gateway is the canonical inference boundary.
-
-A normalized request conceptually contains:
-
-```text
-request_id
-workspace_id
-project_id
-conversation_id
-messages
-attachments
-capability_requirements
-model_preference
-routing_policy
-credential_policy
-tool_policy
-budget
-privacy_policy
-```
-
-The Gateway performs:
-
-1. Authentication.
-2. Authorization.
-3. Request validation.
-4. Context preparation.
-5. Capability analysis.
-6. Routing.
-7. Credential selection.
-8. Provider adaptation.
-9. Streaming/event normalization.
-10. Usage accounting.
-11. Error normalization.
-12. Trace/audit emission.
-
-## 9. Provider adapter contract
-
-Provider adapters isolate external API differences.
-
-```text
-ProviderAdapter
-├── discoverModels()
-├── getCapabilities()
-├── validateCredential()
-├── generateText()
-├── streamText()
-├── generateImage()
-├── generateAudio()
-├── generateVideo()
-├── createEmbedding()
-├── getUsage()
-└── healthCheck()
-```
-
-Not every provider implements every capability. Unsupported operations must return a typed capability error rather than silently failing.
-
-## 10. Model registry
-
-The model registry stores normalized metadata.
-
-```text
-Model
-├── provider_id
-├── provider_model_id
-├── display_name
-├── capabilities
-├── modalities
-├── context_window
-├── max_output
-├── tool_support
-├── streaming_support
-├── reasoning_features
-├── pricing
-├── health
-├── availability
-└── metadata_source
-```
-
-The registry must distinguish provider-reported facts, internally observed facts, estimates, and unknown values.
-
-## 11. BYOK credential pool
-
-A provider may contain multiple credentials.
-
-```text
-OpenRouter
-├── key-01: healthy
-├── key-02: rate-limited
-└── key-03: exhausted
-
-Gemini
-├── key-01: healthy
-└── key-02: healthy
-
-Groq
-└── key-01: healthy
-```
-
-Credentials have lifecycle states such as `active`, `degraded`, `cooldown`, `invalid`, `revoked`, and `unknown`.
-
-Raw credential material must never be sent to the browser after secure storage.
-
-## 12. Routing model
-
-Routing is a constrained selection problem.
-
-```text
-Candidates
-   ↓
-Capability filter
-   ↓
-Policy filter
-   ↓
-Credential eligibility
-   ↓
-Health / quota filter
-   ↓
-Preference scoring
-   ↓
-Selected route
-```
-
-Routing modes include:
-
-- Manual
-- Auto
-- Best quality
-- Fastest
-- Cheapest
-- Free-only
-- Provider-preferred
-- Custom policy
-
-## 13. Multi-key failover semantics
-
-The desired behavior is not blind round-robin rotation.
-
-Example:
-
-```text
-Request → OpenRouter / Model A / Key 1
-                 │
-                 └─ rate limited
-                       ↓
-              OpenRouter / Model B / Key 1
-                       │
-                       └─ unavailable
-                             ↓
-              OpenRouter / Model A / Key 2
-                       │
-                       └─ provider unavailable
-                             ↓
-                  Next compatible provider
-```
-
-Fallback is permitted only when the failure is recoverable and the alternative satisfies the request constraints.
-
-The system must distinguish quota exhaustion from authentication failure. An invalid key should not be repeatedly retried.
-
-## 14. Quota truth model
-
-Quota information has multiple confidence levels:
+Quota confidence:
 
 ```text
 PROVIDER_REPORTED
@@ -416,11 +452,714 @@ ESTIMATED
 UNKNOWN
 ```
 
-The UI must not present an estimate as an exact provider quota. When a provider does not expose remaining quota, the interface should say that the remaining amount is unknown.
+Routing must never pretend an estimated quota is exact.
 
-## 15. Error normalization
+---
 
-External failures are mapped into stable internal categories:
+## 11. Agent workforce
+
+An agent is a governed software worker.
+
+```text
+Agent
+├── identity
+├── role
+├── capabilities
+├── skills
+├── tools
+├── model_policy
+├── context_policy
+├── memory_policy
+├── permission_policy
+├── execution_profile
+├── verification_policy
+├── budget_policy
+├── schedule
+├── workspace
+└── performance_history
+```
+
+### Workforce model
+
+```text
+Event
+ ↓
+Task
+ ↓
+Planner
+ ↓
+Agent selection
+ ↓
+Parallel workers
+ ↓
+Verification
+ ↓
+Synthesis
+ ↓
+Human approval when required
+ ↓
+External effect
+```
+
+Workers may be:
+
+- planner;
+- researcher;
+- architect;
+- coder;
+- debugger;
+- tester;
+- security reviewer;
+- UI/visual specialist;
+- documentation agent;
+- release agent;
+- deployment agent;
+- monitoring/repair agent.
+
+---
+
+## 12. Project Brain
+
+The Project Brain is one of the primary product moats.
+
+```text
+PROJECT BRAIN
+│
+├── Requirements
+├── Architecture
+├── Decisions
+├── Conventions
+├── Dependencies
+├── Codebase map
+├── Known bugs
+├── Failed approaches
+├── Successful patterns
+├── Tests
+├── Security state
+├── Deployments
+├── Agent history
+├── Model performance
+└── Lessons learned
+```
+
+The brain must distinguish facts, observations, assumptions, stale information, and source-backed knowledge.
+
+---
+
+## 13. Codebase intelligence
+
+```text
+Repository
+ ↓
+Language detection
+ ↓
+Framework detection
+ ↓
+Dependency graph
+ ↓
+Symbol graph
+ ↓
+Architecture inference
+ ↓
+Test map
+ ↓
+Risk map
+ ↓
+Documentation map
+ ↓
+Codebase index
+```
+
+The result feeds the Context Engine, Project Brain, code review, agent planning, and verification.
+
+---
+
+## 14. Context engine
+
+```text
+Retrieve
+ ↓
+Rank
+ ↓
+Compress
+ ↓
+Budget
+ ↓
+Assemble
+ ↓
+Execute
+```
+
+Potential context sources:
+
+- conversation;
+- repository;
+- symbols;
+- project brain;
+- skills;
+- memory;
+- knowledge;
+- tools;
+- MCP;
+- policies;
+- verified prior execution results.
+
+### Context Inspector
+
+The UI should show source categories and inclusion reasons, for example:
+
+```text
+Repository       34%
+Project Brain    18%
+Conversation       9%
+Skill              7%
+Memory             8%
+Tool output       17%
+Knowledge          7%
+```
+
+These numbers are illustrative, not fixed quotas.
+
+---
+
+## 15. Evidence-first engineering loop
+
+The engineering experience must encode the following discipline:
+
+```text
+Inspect
+ ↓
+Reproduce
+ ↓
+Diagnose
+ ↓
+Identify root cause
+ ↓
+Inspect related code
+ ↓
+Minimal maintainable change
+ ↓
+Run tests / build
+ ↓
+Inspect output
+ ↓
+Regression check
+ ↓
+Report verified result
+```
+
+An agent must not mark a code task complete merely because a model generated a patch.
+
+---
+
+## 16. Verification engine
+
+Verification is a first-class subsystem.
+
+```text
+Implementation
+ ↓
+Unit tests
+ ↓
+Integration tests
+ ↓
+Static analysis
+ ↓
+Security checks
+ ↓
+Build
+ ↓
+Browser / visual QA
+ ↓
+Human review when required
+ ↓
+Verification score
+```
+
+Verification evidence is attached to the task/run/project record.
+
+---
+
+## 17. Browser and visual QA
+
+For web projects:
+
+```text
+Build
+ ↓
+Run preview
+ ↓
+Browser automation
+ ↓
+Screenshot
+ ↓
+DOM / accessibility tree
+ ↓
+Console / network inspection
+ ↓
+Visual evaluation
+ ↓
+Detected issue
+ ↓
+Agent fix
+ ↓
+Repeat
+```
+
+The goal is to prevent “build succeeded” from being confused with “application actually works.”
+
+---
+
+## 18. Security model
+
+```text
+Agent
+ ↓
+Capability request
+ ↓
+Policy evaluation
+ ↓
+Risk classification
+ ↓
+ALLOW / ASK / DENY
+ ↓
+Execution
+ ↓
+Audit
+```
+
+Canonical capabilities:
+
+```text
+filesystem.read
+filesystem.write
+filesystem.delete
+shell.execute
+network.request
+github.read
+github.write
+database.read
+database.write
+deploy.execute
+secret.use
+browser.control
+mcp.use
+```
+
+High-impact operations should support human approval.
+
+---
+
+## 19. MCP supply-chain model
+
+MCP is treated as a software supply chain, not as an automatic trust boundary.
+
+```text
+Discover
+ ↓
+Inspect metadata
+ ↓
+Assess publisher / source
+ ↓
+Review requested permissions
+ ↓
+Install / register
+ ↓
+Sandbox where possible
+ ↓
+Monitor
+ ↓
+Audit
+ ↓
+Revoke
+```
+
+---
+
+## 20. Universal adapters
+
+### Sandbox
+
+```text
+SandboxProvider
+├── Local
+├── Docker
+├── E2B
+├── Vercel
+├── Daytona
+└── Future
+```
+
+### Database
+
+```text
+DatabaseProvider
+├── Supabase
+├── PostgreSQL
+├── Neon
+├── Self-hosted PostgreSQL
+└── Future
+```
+
+### Deployment
+
+```text
+DeploymentProvider
+├── Vercel
+├── Cloudflare
+├── Netlify
+├── Railway
+├── Render
+├── Docker
+└── Self-hosted
+```
+
+No adapter should leak provider-specific assumptions into domain code.
+
+---
+
+## 21. Universal skills
+
+The preferred conceptual package format is compatible with the emerging Agent Skills direction while remaining INFINITY-11-owned.
+
+```text
+skill/
+├── SKILL.md
+├── metadata/
+├── references/
+├── scripts/
+├── examples/
+├── tests/
+└── adapters/
+```
+
+Compatibility targets include INFINITY-11, Claude Code, Codex, OpenCode, Cursor, Cline, and GitHub Copilot where technically possible.
+
+---
+
+## 22. GitHub lifecycle
+
+```text
+Issue
+ ↓
+Understand
+ ↓
+Plan
+ ↓
+Worktree / isolated workspace
+ ↓
+Implement
+ ↓
+Test
+ ↓
+Security
+ ↓
+Review
+ ↓
+PR
+ ↓
+CI
+ ↓
+Fix
+ ↓
+Merge
+ ↓
+Observe
+```
+
+GitHub events may also trigger the AI Workforce.
+
+---
+
+## 23. Event-driven automation
+
+```text
+Event Bus
+│
+├── GitHub event
+├── CI failure
+├── deployment failure
+├── database alert
+├── schedule
+├── webhook
+├── user event
+└── monitoring event
+        ↓
+   Agent trigger
+        ↓
+   Task creation
+        ↓
+   Agent execution
+        ↓
+   Verification
+        ↓
+   Approval / action
+```
+
+Supported workflow forms:
+
+- immediate;
+- scheduled;
+- recurring;
+- event-driven;
+- long-running;
+- resumable;
+- human-approved.
+
+---
+
+## 24. Workflow model
+
+```text
+Workflow
+├── Trigger
+├── Task
+├── Agent
+├── Tool
+├── Condition
+├── Parallel
+├── Approval
+├── Retry
+├── Timeout
+├── Resume
+└── Output
+```
+
+Workflow runs must retain execution state so that transient infrastructure failures do not silently destroy work.
+
+---
+
+## 25. Three UX modes
+
+### CREATE
+
+For users who want the shortest path from idea to result.
+
+### ENGINEER
+
+For users who want:
+
+- editor;
+- terminal;
+- Git;
+- diffs;
+- tests;
+- logs;
+- agents;
+- context;
+- verification.
+
+### COMMAND CENTER
+
+For users managing:
+
+- agents;
+- tasks;
+- projects;
+- workflows;
+- models;
+- providers;
+- credentials;
+- sandboxes;
+- deployments;
+- events;
+- usage;
+- security.
+
+The same underlying execution system powers all three modes.
+
+---
+
+## 26. Multimodal system
+
+Modality is represented as capability metadata.
+
+```text
+TEXT
+VISION
+IMAGE_GENERATION
+IMAGE_EDITING
+AUDIO_INPUT
+AUDIO_OUTPUT
+SPEECH
+VIDEO
+DOCUMENT
+EMBEDDING
+```
+
+A model is selectable only when it satisfies the operation's real requirements.
+
+---
+
+## 27. Model performance memory
+
+The platform may learn routing preferences from observed results.
+
+```text
+Task type
+Model
+Provider
+Credential
+Latency
+Cost
+Tokens
+Tool usage
+Tests
+Outcome
+Human rating
+```
+
+Examples of learned signals:
+
+- React coding success;
+- Java debugging success;
+- Python test repair;
+- UI design quality;
+- security review quality;
+- long-context reliability;
+- tool-call reliability.
+
+Learning must remain bounded by policy and must never silently override explicit user constraints.
+
+---
+
+## 28. Evaluation engine
+
+```text
+Task
+ ↓
+Model / Agent A
+Model / Agent B
+Model / Agent C
+ ↓
+Run
+ ↓
+Tests
+ ↓
+Static analysis
+ ↓
+Security
+ ↓
+Visual QA
+ ↓
+Human review
+ ↓
+Score
+```
+
+Evaluation can improve routing without exposing private reasoning.
+
+---
+
+## 29. Agent marketplace / catalog
+
+A future catalog can contain:
+
+- agents;
+- skills;
+- teams;
+- tools;
+- MCP servers;
+- workflows;
+- templates;
+- integrations.
+
+Metadata should include:
+
+```text
+publisher
+version
+permissions
+required tools
+required secrets
+model requirements
+security status
+dependencies
+compatibility
+evaluation
+license
+```
+
+No marketplace item is trusted merely because it is listed.
+
+---
+
+## 30. Explainability
+
+The system should explain:
+
+- why a model was selected;
+- why another model was rejected;
+- why a credential entered cooldown;
+- why a fallback occurred;
+- which context sources were used;
+- which permissions were required;
+- what estimated cost was incurred;
+- which verification checks passed or failed.
+
+It should not reveal private chain-of-thought, raw secrets, or protected internal data.
+
+---
+
+## 31. Data model principles
+
+Core durable entities:
+
+```text
+User
+Workspace
+Membership
+Project
+Conversation
+Message
+Artifact
+Provider
+Credential
+Model
+RouteDecision
+Agent
+Skill
+Tool
+MCPServer
+AgentRun
+Task
+Workflow
+WorkflowRun
+Sandbox
+Repository
+CommitReference
+PullRequestReference
+Deployment
+KnowledgeSource
+MemoryEntry
+Evaluation
+AuditEvent
+UsageRecord
+```
+
+All execution records should have stable IDs and correlation IDs where applicable.
+
+---
+
+## 32. Privacy and secret boundaries
+
+Secrets are not ordinary project content.
+
+Rules:
+
+1. Never return raw credentials to the browser after secure storage.
+2. Never place provider keys into generated source files unless explicitly required and authorized.
+3. Never copy all application secrets into a sandbox by default.
+4. Redact secrets from logs and traces.
+5. Keep integration scopes explicit.
+6. Allow credential revocation.
+7. Make data retention configurable where technically feasible.
+
+---
+
+## 33. Failure semantics
+
+External errors are normalized:
 
 ```text
 AUTHENTICATION_ERROR
@@ -436,1001 +1175,156 @@ CONTENT_RESTRICTION
 TIMEOUT
 NETWORK_ERROR
 PROVIDER_ERROR
+SANDBOX_ERROR
+TOOL_ERROR
+POLICY_DENIED
 UNKNOWN_ERROR
 ```
 
-This normalized category drives retry and fallback policy.
+Retry and fallback behavior must be determined from the category, not from a generic “retry everything” policy.
 
-## 16. Retry semantics
+---
 
-Retries are operation-specific and bounded.
+## 34. Observability
 
-A transient network or provider error may be retried. An invalid request should not. Authentication failures should normally trigger credential quarantine or user action rather than repeated calls.
-
-Every retry should retain the original correlation identity and record the attempt number.
-
-## 17. Context engine
-
-The context engine assembles the effective input for an execution.
+Every meaningful execution should be traceable:
 
 ```text
-System instructions
-+ user request
-+ conversation history
-+ project context
-+ selected files
-+ retrieved knowledge
-+ memory
-+ agent instructions
-+ tool definitions
-+ MCP definitions
-+ policy constraints
+request_id
+ ├── context selection
+ ├── route decision
+ ├── credential decision
+ ├── provider call
+ ├── tool calls
+ ├── sandbox actions
+ ├── verification
+ ├── usage
+ ├── fallback events
+ └── final outcome
 ```
 
-Large projects should use retrieval and selective context rather than blindly loading every file.
+The observability UI is an engineering surface, not merely a monitoring dashboard.
 
-## 18. Context inspector
+---
 
-Power users can inspect the categories that contributed to an execution.
+## 35. UI product map
 
-The inspector may show source, scope, size, relevance, and inclusion reason. Secrets, protected credentials, and private internal reasoning must be redacted.
-
-## 19. Multimodal execution
-
-INFINITY-11 treats modality as a capability requirement.
-
-Examples:
-
-```text
-Image understanding → vision-capable model
-Image generation    → image-generation model
-Audio transcription  → speech/audio model
-Video generation     → video-capable provider
-Document analysis    → document-compatible pipeline
-```
-
-A model selector should not offer a model for an operation it cannot actually perform.
-
-## 20. Streaming event model
-
-The UI should consume normalized events rather than provider-specific streaming formats.
-
-```text
-request.started
-message.delta
-message.completed
-tool.requested
-tool.started
-tool.completed
-sandbox.started
-sandbox.completed
-warning
-error
-request.completed
-```
-
-This allows Chat, Agents, Build, and Workflow screens to share the same event semantics.
-
-## 21. Agent definition
-
-An agent is a governed execution identity.
-
-```text
-Agent
-├── instructions
-├── model strategy
-├── skills
-├── tools
-├── memory policy
-├── permissions
-├── budget
-├── iteration limit
-├── timeout
-├── network policy
-└── approval policy
-```
-
-An agent is therefore more than a system prompt.
-
-## 22. Agent execution lifecycle
-
-```text
-CREATED
-  ↓
-QUEUED
-  ↓
-CONTEXT_PREPARING
-  ↓
-ROUTING
-  ↓
-RUNNING
-  ├── TOOL_WAIT
-  ├── APPROVAL_WAIT
-  └── CHILD_TASKS
-  ↓
-VERIFYING
-  ↓
-COMPLETED
-```
-
-Terminal states also include `FAILED` and `CANCELLED`.
-
-## 23. Parallel agents
-
-Parallel execution uses a dependency graph.
-
-```text
-                   ┌→ Research ─┐
-User → Planner ────┼→ Code ─────┼→ Synthesizer → Verify
-                   ├→ Design ───┤
-                   └→ Security ─┘
-```
-
-Independent nodes can run concurrently. Dependent nodes consume completed outputs. A single failed child should not automatically hide the state of sibling tasks.
-
-## 24. Agent permissions
-
-Permissions may include:
-
-- read files
-- write files
-- delete files
-- execute commands
-- access network
-- access selected secrets
-- modify Git branches
-- create commits
-- create pull requests
-- modify database resources
-- deploy
-- call external services
-
-The default security posture is deny-by-default for privileged actions.
-
-## 25. Agent budgets
-
-Budgets can constrain:
-
-- model calls
-- iterations
-- tool calls
-- wall-clock time
-- token usage
-- estimated cost
-- sandbox resources
-
-Budget exhaustion must produce an explicit terminal state rather than an invisible stop.
-
-## 26. Skills
-
-Skills are reusable capability packages that can be attached to agents or workflows.
-
-A skill may contain instructions, tool references, validation rules, examples, or procedural knowledge. Skills should be versioned and have explicit dependencies and permissions.
-
-## 27. Tool runtime
-
-Tools require:
-
-```text
-name
-version
-input schema
-output schema
-permission policy
-timeout
-retry policy
-side-effect classification
-observability hooks
-```
-
-Tool discovery does not grant execution permission.
-
-## 28. MCP runtime
-
-MCP servers are external capability providers.
-
-```text
-MCP server
- ↓
-discovery
- ↓
-tool registry
- ↓
-permission evaluation
- ↓
-approval if required
- ↓
-execution
- ↓
-observation + audit
-```
-
-The project must be able to revoke an MCP server or individual tool without deleting unrelated project configuration.
-
-## 29. E2B sandbox model
-
-Generated code and untrusted commands execute in an isolated E2B environment.
-
-```text
-CREATE
- ↓
-INITIALIZE
- ↓
-MOUNT / PREPARE PROJECT
- ↓
-EXECUTE
- ↓
-OBSERVE
- ↓
-TEST / VERIFY
- ↓
-EXPORT ARTIFACTS
- ↓
-TERMINATE
-```
-
-Sandbox configuration should include timeout, resource limits, network policy, environment configuration, and cleanup behavior.
-
-## 30. Sandbox secret policy
-
-A sandbox must not automatically inherit all application secrets. Access should be explicit, scoped, temporary where possible, and auditable.
-
-Deployment credentials and provider credentials should not be copied into generated projects unless the operation specifically requires them and policy permits it.
-
-## 31. Code workspace
-
-The Code workspace is an AI-assisted browser IDE.
-
-```text
-Explorer | Editor | AI / Context
---------------------------------
-Terminal | Problems | Tests | Git | Logs | Preview
-```
-
-AI modifications are represented as reviewable changes. The user can inspect a diff before applying a proposed modification.
-
-## 32. Evidence-first coding
-
-Agentic coding follows:
-
-```text
-Inspect
- → Reproduce
- → Diagnose
- → Identify root cause
- → Inspect related code
- → Minimal change
- → Test
- → Review
- → Regression check
-```
-
-A generated patch is not considered verified solely because the model claims success.
-
-## 33. Language support
-
-The architecture is language-agnostic and should support environments for:
-
-```text
-Python
-Java
-JavaScript
-TypeScript
-Go
-Rust
-C
-C++
-C#
-PHP
-Ruby
-Kotlin
-Swift
-Dart
-SQL
-Shell
-HTML
-CSS
-```
-
-Language support is determined by the execution environment, toolchain availability, project configuration, and sandbox policy.
-
-## 34. Build system
-
-Build converts a natural-language idea into an executable project workflow.
-
-The Build experience should preserve artifacts from each stage:
-
-```text
-requirements
-architecture
-source files
-configuration
-logs
-verification results
-preview
-repository state
-deployment record
-```
-
-This makes the build inspectable instead of treating it as one opaque generation request.
-
-## 35. Preview system
-
-A generated application can expose a live preview from the sandbox when supported.
-
-The preview surface should show runtime state and make build/runtime failures discoverable without replacing the editor or logs.
-
-## 36. GitHub integration
-
-GitHub is an external repository capability.
-
-Supported conceptual operations include:
-
-```text
-Repository read
-Branch read/create
-File read/write
-Commit
-Pull request
-Issue
-Review
-CI status
-```
-
-Write operations require authorization and should be represented in the activity/audit stream.
-
-## 37. Git safety
-
-Agentic repository changes should normally occur on an isolated branch. Production branch modification, merge, release, or deployment should require explicit policy authorization.
-
-Destructive Git actions should be separately permissioned.
-
-## 38. Testing and verification
-
-Verification may include:
-
-- dependency installation
-- formatting
-- linting
-- type checking
-- unit tests
-- integration tests
-- end-to-end tests
-- security checks
-- production build
-- runtime smoke checks
-
-The actual checks depend on the project and environment. Results should be persisted as evidence.
-
-## 39. Research system
-
-Research is source-oriented rather than merely answer-oriented.
-
-A research artifact can contain:
-
-```text
-question
-sources
-source metadata
-extracted evidence
-claims
-cross-checks
-notes
-citations
-report
-```
-
-Source-backed claims should preserve provenance where possible.
-
-## 40. Knowledge system
-
-Knowledge represents retrievable information from project files, documents, imported sources, and generated research.
-
-Knowledge records should maintain source identity, indexing state, project scope, and retrieval metadata where applicable.
-
-## 41. Memory system
-
-Memory is distinct from knowledge.
-
-```text
-Memory   = durable context
-Knowledge = retrievable source material
-Context   = information selected for one execution
-```
-
-Memory inclusion should be policy-controlled and inspectable at a category level.
-
-## 42. Workflow engine
-
-Workflows are persistent graphs rather than simple scripts.
-
-```text
-Trigger
-  ↓
-Task
-  ↓
-Condition ─────→ Branch
-  ↓
-Agent / Tool
-  ↓
-Approval
-  ↓
-Verification
-  ↓
-Output
-```
-
-Nodes should have deterministic lifecycle state and correlation identifiers.
-
-## 43. Workflow reliability
-
-Long-running workflows require resumability. A workflow engine should record completed nodes and safe retry boundaries so a transient failure does not repeat unrelated side effects.
-
-Side-effecting nodes should support idempotency keys where practical.
-
-## 44. Supabase data foundation
-
-Supabase is the primary backend foundation for authentication, relational data, storage, realtime features where appropriate, and row-level security.
-
-Core domains conceptually include:
-
-```text
-profiles
-workspaces
-memberships
-projects
-conversations
-messages
-files
-providers
-credentials
-models
-agents
-agent_runs
-skills
-tools
-mcp_servers
-workflows
-workflow_runs
-repositories
-deployments
-usage_events
-audit_events
-security_events
-```
-
-## 45. Authorization model
-
-Authorization is enforced at the application boundary and, where appropriate, the database boundary.
-
-A user should never gain access to another workspace's private project, credentials, files, agent runs, or audit events by changing an identifier in a request.
-
-## 46. Secret handling
-
-Secrets may include:
-
-- AI API keys
-- OAuth tokens
-- GitHub tokens
-- deployment tokens
-- database credentials
-- private keys
-- environment secrets
-
-They must not appear in source control, client storage, URLs, analytics events, or unredacted logs.
-
-## 47. Secret encryption
-
-Production credential storage should use encryption at rest with an appropriate key-management design. Envelope encryption is a suitable conceptual model:
-
-```text
-Application data
-      ↓
-Encrypted credential
-      ↓
-Data-encryption key
-      ↓
-Key-encryption boundary
-```
-
-The browser receives only masked metadata after credential creation.
-
-## 48. Security center
-
-Security Center aggregates actionable security state:
-
-```text
-Credential risks
-Permission risks
-MCP risks
-Agent policy risks
-Repository exposure
-Deployment risks
-Dependency findings
-Suspicious activity
-```
-
-Security findings should include severity, evidence, affected resource, remediation guidance, and status.
-
-## 49. Human approval
-
-Privileged operations can pause execution and request approval.
-
-Approval UI should display:
-
-```text
-Actor
-Action
-Target
-Reason
-Permissions
-Side effects
-Cost estimate
-Approve / Reject / Modify
-```
-
-Approval is an execution state, not merely a modal decoration.
-
-## 50. Usage and cost
-
-Usage accounting should track:
-
-- requests
-- tokens where available
-- model
-- provider
-- credential
-- latency
-- failures
-- retries
-- fallback
-- agent
-- workflow
-- project
-- cost metadata
-
-Provider-reported costs and internally calculated estimates must be labeled separately.
-
-## 51. Provider health
-
-Health state can be derived from:
-
-```text
-availability
-latency
-error rate
-rate-limit frequency
-credential validity
-model availability
-```
-
-Health signals should be time-aware and should not permanently quarantine a provider because of one transient error.
-
-## 52. Observability
-
-A request trace should connect:
-
-```text
-User action
- → API request
- → routing decision
- → credential selection
- → provider call
- → tool calls
- → sandbox execution
- → verification
- → artifact
- → final response
-```
-
-Correlation IDs make this chain searchable.
-
-## 53. Audit model
-
-Auditable events include credential changes, permission changes, agent runs, tool execution, MCP changes, repository writes, workflow execution, and deployments.
-
-Audit records should identify actor, resource, action, timestamp, result, and correlation ID without storing secrets.
-
-## 54. Deployment architecture
-
-The deployment layer abstracts hosting providers.
-
-```text
-Project revision
- ↓
-Build artifact
- ↓
-Deployment adapter
- ↓
-Preview / production
- ↓
-Runtime state
- ↓
-Logs + health
-```
-
-Vercel is the primary intended hosting integration, while the abstraction allows future targets.
-
-## 55. Media system
-
-Media capabilities are organized by operation rather than provider.
-
-```text
-Image
-Video
-Audio
-Speech / Voice
-Music
-Documents
-```
-
-The model registry supplies capability metadata and the router selects eligible providers/models.
-
-## 56. Library
-
-Library is the durable artifact surface.
-
-Artifacts may include:
-
-- documents
-- images
-- audio
-- video
-- code snapshots
-- research reports
-- generated files
-- build outputs
-- exported conversations
-
-Every artifact should have ownership/scope metadata and a known source relationship where appropriate.
-
-## 57. Activity timeline
-
-Activity provides a human-readable event history across projects and integrations.
-
-Filters can include actor, resource, event type, project, provider, agent, workflow, date, and outcome.
-
-## 58. UI information architecture
-
-The product shell is organized around work rather than infrastructure:
+Primary surfaces:
 
 ```text
 Home
 Chat
 Projects
-History
-Library
-
 Code
 Build
 Design
 Media
 Research
-
 Agents
+Agent Run
 Skills
 Models
 Router
-Evaluations
-
-Workflows
-Automations
-Tasks
-
-GitHub
+API Keys
+Providers
 MCP
 Integrations
+GitHub
 Deployments
-
-API Keys
+Library
+Knowledge
+Workflows
 Usage
-Security
+Security Center
 Activity
 Settings
+Command Palette
 ```
 
-Infrastructure details should appear contextually while remaining available to power users.
+---
 
-## 59. Home dashboard
+## 36. Visual language
 
-Home should answer:
+The product should feel premium without becoming decorative noise.
 
-- What am I working on?
-- What is running?
-- What needs attention?
-- Are providers healthy?
-- Are there security warnings?
-- What can I start next?
+Principles:
 
-It should prioritize active work over decorative analytics.
+- strong hierarchy;
+- high information density where engineering requires it;
+- calm empty states;
+- consistent status semantics;
+- restrained motion;
+- responsive layouts;
+- keyboard accessibility;
+- clear permission/cost indicators;
+- progressive disclosure;
+- excellent mobile/PWA behavior.
 
-## 60. Chat screen
+---
 
-Chat is the general-purpose AI workspace.
+## 37. Product quality gates before implementation
 
-The composer should expose model/router selection, attachments, context, agent selection, tools, project selection, run controls, and command actions without overwhelming ordinary users.
+No coding phase should begin from this document until these design questions are resolved sufficiently:
 
-## 61. Code screen
+- What is free/local by default?
+- Which services are optional adapters?
+- What is the minimum viable provider contract?
+- What is the credential lifecycle?
+- What are the security defaults?
+- What can agents do without approval?
+- How are quota states represented honestly?
+- What constitutes verification?
+- What is the source of truth for a project?
+- How is provider lock-in avoided?
+- How can a user export their project and data?
+- What is the minimum infrastructure required for local development?
 
-Code should combine file navigation, editor, AI agent, terminal, diagnostics, tests, Git, logs, and preview.
+---
 
-The most important interaction is the transition from **AI proposal → human review → verified change**.
+## 38. Implementation constraint: no coding yet
 
-## 62. Build screen
+This document is deliberately a **design contract**, not a request to begin implementation.
 
-Build is a guided engineering workspace. The interface should show current stage, sandbox status, generated files, logs, test results, preview, repository state, and deployment state.
+The current phase is research and architecture hardening. Future coding should begin only after the product, architecture, free-first strategy, security boundaries, and capability contracts are sufficiently stable.
 
-## 63. Agents screen
-
-Agents should be managed like executable resources. Users need to understand what an agent can access, which model strategy it uses, what skills/tools it has, and what limits apply.
-
-## 64. Router screen
-
-Router should expose the active policy and a readable explanation of routing decisions.
-
-It should be possible to understand why a particular model/provider/key was selected without revealing credential material.
-
-## 65. API Keys screen
-
-Credential management should show provider, masked key identity, health, last-used state, observed usage, quota signal, and failure/cooldown information.
-
-## 66. MCP screen
-
-MCP management should show server connection state, discovered tools, schemas, permissions, approval requirements, and recent execution history.
-
-## 67. Integrations screen
-
-Integrations should expose authentication state, permissions, capabilities, data scope, health, and supported actions.
-
-## 68. GitHub screen
-
-GitHub views should provide repository, branch, file, commit, issue, pull-request, review, and CI context. Agent-driven write actions should remain permissioned and auditable.
-
-## 69. Deployments screen
-
-Deployment history should connect source revision to build state, environment, runtime state, logs, URL, and rollback/redeploy operations.
-
-## 70. Mobile and PWA
-
-The product is designed for responsive use and PWA installation.
-
-Mobile prioritizes:
+When implementation eventually begins, work must follow the evidence-first engineering discipline:
 
 ```text
-Home
-Chat
-Build
+Inspect
+ → Reproduce
+ → Design
+ → Implement minimally
+ → Test
+ → Inspect output
+ → Regression-check
+ → Document
+ → Verify
+```
+
+---
+
+## 39. Final architectural thesis
+
+The common direction across the researched ecosystem is not “better chat.” It is:
+
+```text
+Intent
+ ↓
+Intelligence
+ ↓
 Agents
-More
-```
-
-Advanced controls can appear in sheets or drawers. Offline UI must never imply that a network-dependent AI operation succeeded.
-
-## 71. Visual design
-
-The visual direction is premium, polished, futuristic, professional, and restrained.
-
-The design system should emphasize:
-
-- clear hierarchy
-- strong typography
-- consistent spacing
-- subtle depth
-- meaningful status states
-- accessible contrast
-- purposeful animation
-
-Animation should communicate state rather than become decoration.
-
-## 72. Accessibility
-
-All major interactions should support keyboard navigation, semantic structure, visible focus, accessible dialogs, screen-reader labels, adequate contrast, and reduced-motion preferences.
-
-Accessibility is a product requirement, not a final polish task.
-
-## 73. Extensibility model
-
-New capabilities should enter through stable extension boundaries:
-
-```text
-New AI provider     → Provider adapter
-New model           → Registry metadata
-New tool            → Tool contract
-New MCP service     → MCP runtime
-New skill           → Skill package
-New agent           → Agent definition
-New hosting target  → Deployment adapter
-New integration     → Integration adapter
-```
-
-Core orchestration should not accumulate provider-specific conditional branches.
-
-## 74. Privacy model
-
-Privacy-sensitive information should have explicit scope.
-
-```text
-User-private
-Workspace-private
-Project-private
-Integration-scoped
-Execution-scoped
-Public / exported
-```
-
-Data should not silently cross these boundaries.
-
-## 75. External side-effect model
-
-External effects are classified before execution.
-
-```text
-READ_ONLY
-REVERSIBLE_WRITE
-IRREVERSIBLE_WRITE
-PRIVILEGED_OPERATION
-DEPLOYMENT
-```
-
-Higher-risk operations receive stronger authorization and, where configured, human approval.
-
-## 76. Failure UX
-
-Failures should be actionable rather than generic.
-
-A useful failure view answers:
-
-1. What failed?
-2. Why did it fail?
-3. What was attempted?
-4. Was fallback attempted?
-5. What remains unchanged?
-6. What can the user do next?
-
-## 77. State consistency
-
-UI state should reflect backend execution state. Optimistic UI may be used for safe local interactions, but external effects should transition to confirmed state only after authoritative acknowledgement.
-
-## 78. Idempotency
-
-Operations such as deployment, webhook processing, commit creation, and workflow side effects should use idempotency controls where duplicate execution could cause damage.
-
-## 79. Cancellation
-
-Cancellation must propagate through all active layers where supported:
-
-```text
-User cancel
  ↓
-Workflow / agent
+Tools
  ↓
-Model request
- ↓
-Tool
- ↓
-Sandbox
-```
-
-The UI should distinguish cancellation requested from cancellation confirmed when external systems are asynchronous.
-
-## 80. Performance principles
-
-Performance priorities are:
-
-1. fast initial application shell
-2. responsive navigation
-3. incremental data loading
-4. streaming AI output
-5. virtualized large lists where needed
-6. background processing for long jobs
-7. minimal redundant provider calls
-8. efficient context retrieval
-
-## 81. Data lineage
-
-Generated artifacts should be traceable to their originating project, execution, and relevant inputs where practical.
-
-For research and knowledge, source lineage is especially important.
-
-## 82. Evaluation system
-
-Evaluations can measure agents, models, prompts, workflows, and routing policies.
-
-Useful dimensions include:
-
-```text
-correctness
-reliability
-latency
-cost
-failure rate
-tool success
-verification success
-user preference
-```
-
-Evaluation results should not silently alter production routing unless an explicit policy enables controlled adaptation.
-
-## 83. Controlled intelligence
-
-INFINITY-11 can become more capable through new providers, models, skills, agents, tools, knowledge, evaluations, and policies without requiring uncontrolled self-modification.
-
-Any future self-improvement mechanism should be bounded, reviewable, reversible, and observable.
-
-## 84. Engineering quality bar
-
-A completed feature is not merely code that exists. It should have:
-
-```text
-Correct behavior
-Clear boundaries
-Error handling
-Security controls
-Observability
-Tests appropriate to risk
-Documentation
-Regression coverage
-```
-
-## 85. Architectural invariants
-
-The following rules should remain true as the platform grows:
-
-- The browser never owns raw provider secrets after secure submission.
-- UI code does not implement provider-specific API behavior.
-- Tool discovery does not equal tool permission.
-- Sandbox execution is isolated from the host by design.
-- External writes are permissioned.
-- Routing decisions are bounded and observable.
-- Unknown quota is represented as unknown.
-- Retry behavior is error-aware.
-- Long-running execution is cancellable where supported.
-- Audit records do not contain secrets.
-- Project boundaries are enforced server-side.
-- User-visible completion represents verified execution state.
-
-## 86. Reference end-to-end execution
-
-```text
-User
- ↓
-Web / PWA
- ↓
-Authenticated API
- ↓
-Workspace + Project authorization
- ↓
-Context engine
- ↓
-Policy engine
- ↓
-AI Gateway
- ↓
-Capability filter
- ↓
-Router
- ↓
-Credential selector
- ↓
-Provider adapter
- ↓
-Model
- ↓
-Normalized events
- ↓
-Tool / MCP / E2B execution if required
+Execution
  ↓
 Verification
  ↓
-Artifacts + usage + audit
+Software lifecycle
  ↓
-Final user-visible result
+Continuous operation
 ```
 
-## 87. Product north star
+INFINITY-11 should own this control plane while remaining open at the edges.
 
-INFINITY-11 should make sophisticated AI-assisted engineering feel like one coherent environment instead of a collection of disconnected tools.
-
-The product should hide unnecessary provider complexity while exposing the decisions that matter: **which model is running, why it was selected, what the agent can access, what tools will execute, what external effects will occur, what was verified, and what it cost.**
-
-That balance—high automation with high visibility and user control—is the central technical and product identity of INFINITY-11.
+The strategic goal is not to defeat one competitor by copying its feature list. The goal is to build a system where the strongest patterns from the ecosystem become interoperable primitives, while INFINITY-11's own moat comes from multi-key intelligence, adaptive routing, project understanding, governed AI workers, universal adapters, verification, and explainability.
