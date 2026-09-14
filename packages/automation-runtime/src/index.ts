@@ -1,7 +1,20 @@
 import { randomUUID } from 'node:crypto';
 
-export type WorkflowStatus = 'pending' | 'running' | 'waiting' | 'completed' | 'failed' | 'cancelled';
-export type NodeKind = 'action' | 'agent' | 'condition' | 'parallel' | 'wait' | 'approval' | 'verify';
+export type WorkflowStatus =
+  | 'pending'
+  | 'running'
+  | 'waiting'
+  | 'completed'
+  | 'failed'
+  | 'cancelled';
+export type NodeKind =
+  | 'action'
+  | 'agent'
+  | 'condition'
+  | 'parallel'
+  | 'wait'
+  | 'approval'
+  | 'verify';
 export type RetryPolicy = { maxAttempts: number; backoffMs: number };
 export type WorkflowContext = Readonly<Record<string, unknown>>;
 
@@ -47,7 +60,15 @@ export interface WorkflowRun {
 }
 
 export interface WorkflowEvent {
-  type: 'run.started' | 'node.started' | 'node.completed' | 'run.waiting' | 'run.completed' | 'run.failed' | 'run.cancelled' | 'run.resumed';
+  type:
+    | 'run.started'
+    | 'node.started'
+    | 'node.completed'
+    | 'run.waiting'
+    | 'run.completed'
+    | 'run.failed'
+    | 'run.cancelled'
+    | 'run.resumed';
   runId: string;
   workflowId: string;
   nodeId?: string;
@@ -113,19 +134,36 @@ export class WorkflowRegistry {
   private readonly definitions = new Map<string, Map<number, WorkflowDefinition>>();
 
   register(definition: WorkflowDefinition): void {
-    if (!definition.id || definition.version < 1 || !definition.name) throw new Error('INVALID_WORKFLOW');
-    if (!definition.nodes.some((node) => node.id === definition.startNodeId)) throw new Error('START_NODE_NOT_FOUND');
-    if (new Set(definition.nodes.map((node) => node.id)).size !== definition.nodes.length) throw new Error('DUPLICATE_NODE');
+    if (!definition.id || definition.version < 1 || !definition.name) {
+      throw new Error('INVALID_WORKFLOW');
+    }
+    if (!definition.nodes.some((node) => node.id === definition.startNodeId)) {
+      throw new Error('START_NODE_NOT_FOUND');
+    }
+    if (new Set(definition.nodes.map((node) => node.id)).size !== definition.nodes.length) {
+      throw new Error('DUPLICATE_NODE');
+    }
     const ids = new Set(definition.nodes.map((node) => node.id));
     for (const node of definition.nodes) {
       if (node.next && !ids.has(node.next)) throw new Error(`NEXT_NODE_NOT_FOUND:${node.id}`);
-      if (node.onFalse && !ids.has(node.onFalse)) throw new Error(`FALSE_NODE_NOT_FOUND:${node.id}`);
-      if (node.retry && (node.retry.maxAttempts < 1 || node.retry.backoffMs < 0)) throw new Error(`INVALID_RETRY:${node.id}`);
-      if (node.kind === 'parallel' && (!node.branches || node.branches.length === 0)) throw new Error(`PARALLEL_WITHOUT_BRANCHES:${node.id}`);
-      if (node.kind === 'parallel' && node.branches?.some((id) => !ids.has(id))) throw new Error(`PARALLEL_NODE_NOT_FOUND:${node.id}`);
+      if (node.onFalse && !ids.has(node.onFalse)) {
+        throw new Error(`FALSE_NODE_NOT_FOUND:${node.id}`);
+      }
+      if (node.retry && (node.retry.maxAttempts < 1 || node.retry.backoffMs < 0)) {
+        throw new Error(`INVALID_RETRY:${node.id}`);
+      }
+      if (node.kind === 'parallel' && (!node.branches || node.branches.length === 0)) {
+        throw new Error(`PARALLEL_WITHOUT_BRANCHES:${node.id}`);
+      }
+      if (node.kind === 'parallel' && node.branches?.some((id) => !ids.has(id))) {
+        throw new Error(`PARALLEL_NODE_NOT_FOUND:${node.id}`);
+      }
     }
-    const versions = this.definitions.get(definition.id) ?? new Map<number, WorkflowDefinition>();
-    if (versions.has(definition.version)) throw new Error(`WORKFLOW_VERSION_EXISTS:${definition.id}:${definition.version}`);
+    const versions =
+      this.definitions.get(definition.id) ?? new Map<number, WorkflowDefinition>();
+    if (versions.has(definition.version)) {
+      throw new Error(`WORKFLOW_VERSION_EXISTS:${definition.id}:${definition.version}`);
+    }
     versions.set(definition.version, copyDefinition(definition));
     this.definitions.set(definition.id, versions);
   }
@@ -160,7 +198,14 @@ export class WorkflowEngine {
   private readonly contexts = new Map<string, WorkflowContext>();
   private readonly cancelled = new Set<string>();
 
-  constructor(options: { registry?: WorkflowRegistry; runs?: RunStore; events?: EventSink; idempotency?: IdempotencyLedger } = {}) {
+  constructor(
+    options: {
+      registry?: WorkflowRegistry;
+      runs?: RunStore;
+      events?: EventSink;
+      idempotency?: IdempotencyLedger;
+    } = {},
+  ) {
     this.definitions = options.registry ?? new WorkflowRegistry();
     this.runs = options.runs ?? new InMemoryRunStore();
     this.events = options.events ?? new InMemoryEventSink();
@@ -194,18 +239,37 @@ export class WorkflowEngine {
       createdAt: timestamp,
       updatedAt: timestamp,
     });
-    await this.events.publish({ type: 'run.started', runId: id, workflowId, occurredAt: timestamp, metadata: {} });
+    await this.events.publish({
+      type: 'run.started',
+      runId: id,
+      workflowId,
+      occurredAt: timestamp,
+      metadata: {},
+    });
     await this.execute(id);
     return id;
   }
 
   async resume(runId: string): Promise<WorkflowRun> {
     const run = this.requireRun(runId);
-    if (run.status !== 'waiting' && run.status !== 'failed') throw new Error(`RUN_NOT_RESUMABLE:${run.status}`);
-    if (run.status === 'waiting' && run.waitingUntil && Date.now() < Date.parse(run.waitingUntil)) return run;
-    if (run.status === 'failed' && !run.currentNodeId) throw new Error('RUN_MISSING_CHECKPOINT');
+    if (run.status !== 'waiting' && run.status !== 'failed') {
+      throw new Error(`RUN_NOT_RESUMABLE:${run.status}`);
+    }
+    if (run.status === 'waiting' && run.waitingUntil && Date.now() < Date.parse(run.waitingUntil)) {
+      return run;
+    }
+    if (run.status === 'failed' && !run.currentNodeId) {
+      throw new Error('RUN_MISSING_CHECKPOINT');
+    }
     this.runs.update(runId, { status: 'running', waitingUntil: undefined, error: undefined });
-    await this.events.publish({ type: 'run.resumed', runId, workflowId: run.workflowId, nodeId: run.currentNodeId, occurredAt: now(), metadata: { checkpoint: run.checkpoint } });
+    await this.events.publish({
+      type: 'run.resumed',
+      runId,
+      workflowId: run.workflowId,
+      nodeId: run.currentNodeId,
+      occurredAt: now(),
+      metadata: { checkpoint: run.checkpoint },
+    });
     await this.execute(runId);
     return this.requireRun(runId);
   }
@@ -214,7 +278,14 @@ export class WorkflowEngine {
     const run = this.requireRun(runId);
     this.cancelled.add(runId);
     const cancelled = this.runs.update(runId, { status: 'cancelled' });
-    void this.events.publish({ type: 'run.cancelled', runId, workflowId: run.workflowId, nodeId: run.currentNodeId, occurredAt: now(), metadata: {} });
+    void this.events.publish({
+      type: 'run.cancelled',
+      runId,
+      workflowId: run.workflowId,
+      nodeId: run.currentNodeId,
+      occurredAt: now(),
+      metadata: {},
+    });
     return cancelled;
   }
 
@@ -240,12 +311,16 @@ export class WorkflowEngine {
         run = this.runs.update(runId, { currentNodeId: node.next });
         continue;
       }
-      await this.events.publish({ type: 'node.started', runId, workflowId: run.workflowId, nodeId: node.id, occurredAt: now(), metadata: { kind: node.kind } });
+      await this.events.publish({
+        type: 'node.started',
+        runId,
+        workflowId: run.workflowId,
+        nodeId: node.id,
+        occurredAt: now(),
+        metadata: { kind: node.kind },
+      });
       const outcome = await this.runNode(run, node, nodes);
-      if (outcome === 'waiting') {
-        return;
-      }
-      if (outcome === 'failed') return;
+      if (outcome === 'waiting' || outcome === 'failed') return;
       run = this.requireRun(runId);
       const completed = [...run.completedNodes, node.id];
       run = this.runs.update(runId, {
@@ -255,11 +330,24 @@ export class WorkflowEngine {
         currentNodeId: outcome === 'skip-next' ? node.onFalse : node.next,
         waitingUntil: undefined,
       });
-      await this.events.publish({ type: 'node.completed', runId, workflowId: run.workflowId, nodeId: node.id, occurredAt: now(), metadata: {} });
+      await this.events.publish({
+        type: 'node.completed',
+        runId,
+        workflowId: run.workflowId,
+        nodeId: node.id,
+        occurredAt: now(),
+        metadata: {},
+      });
     }
     if (run.status !== 'cancelled') {
       run = this.runs.update(runId, { status: 'completed', currentNodeId: undefined });
-      await this.events.publish({ type: 'run.completed', runId, workflowId: run.workflowId, occurredAt: now(), metadata: { completedNodes: run.completedNodes.length } });
+      await this.events.publish({
+        type: 'run.completed',
+        runId,
+        workflowId: run.workflowId,
+        occurredAt: now(),
+        metadata: { completedNodes: run.completedNodes.length },
+      });
     }
   }
 
@@ -274,7 +362,14 @@ export class WorkflowEngine {
       if (!run.waitingUntil) {
         const waitingUntil = new Date(Date.now() + node.waitMs).toISOString();
         this.runs.update(run.id, { status: 'waiting', waitingUntil });
-        await this.events.publish({ type: 'run.waiting', runId: run.id, workflowId: run.workflowId, nodeId: node.id, occurredAt: now(), metadata: { waitingUntil } });
+        await this.events.publish({
+          type: 'run.waiting',
+          runId: run.id,
+          workflowId: run.workflowId,
+          nodeId: node.id,
+          occurredAt: now(),
+          metadata: { waitingUntil },
+        });
         return 'waiting';
       }
       if (Date.now() < Date.parse(run.waitingUntil)) return 'waiting';
@@ -284,7 +379,9 @@ export class WorkflowEngine {
       if (!node.approval) return 'waiting';
       return (await node.approval(context)) ? 'ok' : 'waiting';
     }
-    if (node.kind === 'condition') return node.condition && (await node.condition(context)) ? 'ok' : 'skip-next';
+    if (node.kind === 'condition') {
+      return node.condition && (await node.condition(context)) ? 'ok' : 'skip-next';
+    }
     if (node.kind === 'parallel') {
       const branches = node.branches ?? [];
       await Promise.all(branches.map((branchId) => this.executeBranch(run, nodes, branchId)));
@@ -305,26 +402,36 @@ export class WorkflowEngine {
     const policy = node.retry ?? { maxAttempts: 1, backoffMs: 0 };
     let lastError = 'NODE_FAILED';
     for (let attempt = 1; attempt <= policy.maxAttempts; attempt += 1) {
-      this.runs.update(run.id, { attempts: { ...this.requireRun(run.id).attempts, [node.id]: attempt } });
+      this.runs.update(run.id, {
+        attempts: { ...this.requireRun(run.id).attempts, [node.id]: attempt },
+      });
       try {
         const output = await execute(context);
         const current = this.requireRun(run.id);
         this.runs.update(run.id, { outputs: { ...current.outputs, [node.id]: output } });
         if (key) {
           this.idempotency.mark(key);
-          this.runs.update(run.id, { idempotencyKeys: [...this.requireRun(run.id).idempotencyKeys, key] });
+          this.runs.update(run.id, {
+            idempotencyKeys: [...this.requireRun(run.id).idempotencyKeys, key],
+          });
         }
         return 'ok';
       } catch (error) {
         lastError = error instanceof Error ? error.message : String(error);
-        if (attempt < policy.maxAttempts && policy.backoffMs > 0) await new Promise((resolve) => setTimeout(resolve, policy.backoffMs * attempt));
+        if (attempt < policy.maxAttempts && policy.backoffMs > 0) {
+          await new Promise((resolve) => setTimeout(resolve, policy.backoffMs * attempt));
+        }
       }
     }
     await this.fail(run.id, `${node.id}:${lastError}`);
     return 'failed';
   }
 
-  private async executeBranch(run: WorkflowRun, nodes: ReadonlyMap<string, WorkflowNode>, startNodeId: string): Promise<void> {
+  private async executeBranch(
+    run: WorkflowRun,
+    nodes: ReadonlyMap<string, WorkflowNode>,
+    startNodeId: string,
+  ): Promise<void> {
     let nodeId: string | undefined = startNodeId;
     const visited = new Set<string>();
     while (nodeId) {
@@ -335,23 +442,40 @@ export class WorkflowEngine {
       const outcome = await this.runNode(this.requireRun(run.id), node, nodes);
       if (outcome === 'waiting' || outcome === 'failed') return;
       const current = this.requireRun(run.id);
-      if (!current.completedNodes.includes(node.id)) this.runs.update(run.id, { completedNodes: [...current.completedNodes, node.id] });
+      if (!current.completedNodes.includes(node.id)) {
+        this.runs.update(run.id, { completedNodes: [...current.completedNodes, node.id] });
+      }
       nodeId = outcome === 'skip-next' ? node.onFalse : node.next;
     }
   }
 
   private async fail(runId: string, error: string): Promise<void> {
     const run = this.runs.update(runId, { status: 'failed', error });
-    await this.events.publish({ type: 'run.failed', runId, workflowId: run.workflowId, nodeId: run.currentNodeId, occurredAt: now(), metadata: { error } });
+    await this.events.publish({
+      type: 'run.failed',
+      runId,
+      workflowId: run.workflowId,
+      nodeId: run.currentNodeId,
+      occurredAt: now(),
+      metadata: { error },
+    });
   }
 }
 
 export class ManualTrigger implements Trigger {
-  constructor(public readonly id: string, private readonly engine: WorkflowEngine, private readonly workflowId: string) {}
+  constructor(
+    public readonly id: string,
+    private readonly engine: WorkflowEngine,
+    private readonly workflowId: string,
+  ) {}
 
   start(input: WorkflowContext): Promise<string> {
     return this.engine.start(this.workflowId, input);
   }
 }
 
-export const workflowNode = (id: string, kind: NodeKind, next?: string): WorkflowNode => ({ id, kind, ...(next ? { next } : {}) });
+export const workflowNode = (
+  id: string,
+  kind: NodeKind,
+  next?: string,
+): WorkflowNode => ({ id, kind, ...(next ? { next } : {}) });
