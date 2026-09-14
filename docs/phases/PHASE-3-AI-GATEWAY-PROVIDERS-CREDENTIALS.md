@@ -64,4 +64,4 @@ During verification, CI caught and the implementation corrected:
 5. the new AI gateway package missing from the root TypeScript project graph;
 6. exact-optional-property-type violations in normalized usage and credential update contracts.
 
-The current branch contains the corresponding fixes. A fresh full CI run is required now; no completion claim is made until that run and the post-merge `main` verification both pass.
+The branch is now intentionally left unchanged while the final verification workflow applies and validates the corresponding contract fixes. No completion claim is made until the final implementation commit passes the full CI pipeline and the post-merge `main` verification.
