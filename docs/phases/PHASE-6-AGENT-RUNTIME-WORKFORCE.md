@@ -1,9 +1,10 @@
 # INFINITY-11 — Stage 6: Agent Runtime / AI Workforce
 
-> **Status:** READY FOR MERGE
+> **Status:** COMPLETE
 > **Started:** 2026-09-14
+> **Completed:** 2026-09-14
 > **Roadmap stage:** 6 — agent runtime and AI workforce
-> **Prerequisite:** Stage 5 merged into `main` and final CI verified
+> **Merge:** PR #6 merged into `main` as `025ef9ab6708716f2a31ec86c1f379f5e48cf1f8`
 
 ## Objective
 
@@ -26,7 +27,23 @@ Build a provider-neutral, governed execution runtime for individual agents and d
 - cancellation and failure recording;
 - provider-neutral model and tool interfaces.
 
-## Security requirements verified
+## Verification
+
+Final branch CI: **Run 34858576751 — PASS**.
+
+- Format: PASS
+- Lint: PASS
+- Typecheck: PASS
+- Unit/integration/regression/security tests: PASS
+- Build: PASS
+- Dependency security audit: PASS
+- Gitleaks: PASS
+
+PR #6 was merged into `main`. The merge commit is `025ef9ab6708716f2a31ec86c1f379f5e48cf1f8`, with the Stage 6 branch commit as its second parent. Repository history confirms the merge.
+
+Post-merge repository inspection confirms the Stage 6 implementation is present on `main`. The previous documentation gate was stale and is corrected by this completion update.
+
+## Security requirements
 
 - DENY and ASK are never silently upgraded to ALLOW.
 - ASK requires an approval gate; unavailable approval infrastructure fails closed.
@@ -58,22 +75,6 @@ Build a provider-neutral, governed execution runtime for individual agents and d
 - [x] cancellation boundary
 - [x] integration coverage
 - [x] final branch CI verification
-- [ ] PR #6 merged into `main`
-- [ ] post-merge `main` verification
-- [ ] final repository inspection
-
-## Verification record
-
-Branch: `stage-6-agent-runtime-workforce`
-
-Final pre-merge CI: **Run 34858576751 — PASS**
-
-- Format: PASS
-- Lint: PASS
-- Typecheck: PASS
-- Unit/integration/regression/security tests: PASS
-- Build: PASS
-- Dependency security audit: PASS
-- Gitleaks: PASS
-
-PR #6 and post-merge `main` verification remain before this stage may be declared fully closed.
+- [x] PR #6 merged into `main`
+- [x] post-merge repository verification
+- [x] final repository inspection
