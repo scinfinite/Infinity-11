@@ -6,12 +6,7 @@ import type {
   AIUsage,
 } from '@infinity-11/ai-gateway';
 
-export type ModelCapability =
-  | 'text'
-  | 'vision'
-  | 'streaming'
-  | 'tool-calling'
-  | 'reasoning';
+export type ModelCapability = 'text' | 'vision' | 'streaming' | 'tool-calling' | 'reasoning';
 
 export interface ModelPricing {
   inputPerMillion: number;
@@ -211,9 +206,7 @@ export class HealthTracker {
       provider,
       available: !unavailable,
       consecutiveFailures: failures,
-      ...(unavailable
-        ? { cooldownUntil: new Date(now + this.cooldownMs).toISOString() }
-        : {}),
+      ...(unavailable ? { cooldownUntil: new Date(now + this.cooldownMs).toISOString() } : {}),
     });
   }
 
@@ -249,8 +242,7 @@ export class Router {
       reason: string;
     }> = [];
     const eligible: RouteCandidate[] = [];
-    const required =
-      policy.requiredCapabilities ?? new Set<ModelCapability>(['text']);
+    const required = policy.requiredCapabilities ?? new Set<ModelCapability>(['text']);
     const excluded = new Set(policy.excludedProviders ?? []);
     const preferred = new Set(policy.preferredProviders ?? []);
     const weights: RoutingWeights = {
@@ -267,9 +259,7 @@ export class Router {
       throw new Error('INVALID_ROUTING_WEIGHTS');
     }
 
-    const activeCredentials = candidates.filter(
-      (credential) => credential.enabled,
-    );
+    const activeCredentials = candidates.filter((credential) => credential.enabled);
     for (const model of this.registry.list()) {
       if (!model.enabled) {
         rejected.push({
@@ -316,8 +306,7 @@ export class Router {
       }
       if (
         policy.maxLatencyMs != null &&
-        (model.expectedLatencyMs ?? Number.POSITIVE_INFINITY) >
-          policy.maxLatencyMs
+        (model.expectedLatencyMs ?? Number.POSITIVE_INFINITY) > policy.maxLatencyMs
       ) {
         rejected.push({
           provider: model.provider,
@@ -352,15 +341,11 @@ export class Router {
         const factors = {
           cost,
           latency: this.latencyScore(model),
-          reliability:
-            Math.min(1, Math.max(0, model.reliability ?? 0.5)) * quota,
+          reliability: Math.min(1, Math.max(0, model.reliability ?? 0.5)) * quota,
           preference: preferred.has(model.provider) ? 1 : 0,
         };
         const totalWeight =
-          weights.cost +
-          weights.latency +
-          weights.reliability +
-          weights.preference;
+          weights.cost + weights.latency + weights.reliability + weights.preference;
         const score =
           (factors.cost * weights.cost +
             factors.latency * weights.latency +
@@ -379,10 +364,7 @@ export class Router {
         a.credential.credentialId.localeCompare(b.credential.credentialId),
     );
     if (!eligible.length) throw new Error('NO_ELIGIBLE_ROUTE');
-    const maxAttempts = Math.max(
-      1,
-      Math.min(policy.maxAttempts ?? 3, eligible.length),
-    );
+    const maxAttempts = Math.max(1, Math.min(policy.maxAttempts ?? 3, eligible.length));
     return {
       requestId,
       selected: eligible[0],
@@ -403,8 +385,7 @@ export class Router {
 
   private costScore(model: ModelMetadata): number {
     if (!model.pricing) return 0.5;
-    const cost =
-      model.pricing.inputPerMillion + model.pricing.outputPerMillion;
+    const cost = model.pricing.inputPerMillion + model.pricing.outputPerMillion;
     return 1 / (1 + cost);
   }
 
@@ -474,9 +455,7 @@ export class RoutedAIGateway {
             model: candidate.model.id,
             usage: structuredClone(response.usage),
             ...(estimatedCost == null ? {} : { estimatedCost }),
-            ...(candidate.model.pricing
-              ? { currency: candidate.model.pricing.currency }
-              : {}),
+            ...(candidate.model.pricing ? { currency: candidate.model.pricing.currency } : {}),
           });
         }
         return {
@@ -484,9 +463,7 @@ export class RoutedAIGateway {
           decision,
           attempts,
           ...(estimatedCost == null ? {} : { estimatedCost }),
-          ...(candidate.model.pricing
-            ? { currency: candidate.model.pricing.currency }
-            : {}),
+          ...(candidate.model.pricing ? { currency: candidate.model.pricing.currency } : {}),
         };
       } catch (error) {
         attempts.push({
@@ -525,20 +502,13 @@ function clonePolicy(policy: RoutingPolicy): RoutingPolicy {
     ...(policy.requiredCapabilities
       ? { requiredCapabilities: new Set(policy.requiredCapabilities) }
       : {}),
-    ...(policy.preferredProviders
-      ? { preferredProviders: [...policy.preferredProviders] }
-      : {}),
-    ...(policy.excludedProviders
-      ? { excludedProviders: [...policy.excludedProviders] }
-      : {}),
+    ...(policy.preferredProviders ? { preferredProviders: [...policy.preferredProviders] } : {}),
+    ...(policy.excludedProviders ? { excludedProviders: [...policy.excludedProviders] } : {}),
     ...(policy.weights ? { weights: { ...policy.weights } } : {}),
   };
 }
 
-function estimateCost(
-  model: ModelMetadata,
-  usage: AIUsage | undefined,
-): number | undefined {
+function estimateCost(model: ModelMetadata, usage: AIUsage | undefined): number | undefined {
   if (!model.pricing || !usage) return undefined;
   return (
     ((usage.inputTokens ?? 0) * model.pricing.inputPerMillion) / 1_000_000 +

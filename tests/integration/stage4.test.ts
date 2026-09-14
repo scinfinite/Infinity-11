@@ -29,9 +29,7 @@ const model = (overrides: Partial<ModelMetadata> = {}): ModelMetadata => ({
   ...overrides,
 });
 
-const credential = (
-  overrides: Partial<CredentialRouteState> = {},
-): CredentialRouteState => ({
+const credential = (overrides: Partial<CredentialRouteState> = {}): CredentialRouteState => ({
   credentialId: 'credential-a',
   provider: 'provider-a',
   enabled: true,
@@ -42,17 +40,13 @@ describe('stage 4 model routing', () => {
   it('filters capabilities and disabled models', () => {
     const registry = new ModelRegistry();
     registry.register(model());
-    registry.register(
-      model({ id: 'vision-only', capabilities: new Set(['vision']) }),
-    );
+    registry.register(model({ id: 'vision-only', capabilities: new Set(['vision']) }));
     registry.register(model({ id: 'disabled', enabled: false }));
     const router = new Router(registry);
 
-    const decision = router.decide(
-      'req-1',
-      [credential()],
-      { requiredCapabilities: new Set(['text']) },
-    );
+    const decision = router.decide('req-1', [credential()], {
+      requiredCapabilities: new Set(['text']),
+    });
 
     expect(decision.selected.model.id).toBe('model-a');
     expect(decision.rejected.map((item) => item.reason)).toEqual(
@@ -120,22 +114,14 @@ describe('stage 4 model routing', () => {
         usage: { inputTokens: 1_000, outputTokens: 500, totalTokens: 1_500 },
       });
     const gateway = { complete } as unknown as AIGateway;
-    const routed = new RoutedAIGateway(
-      gateway,
-      router,
-      decisionSink,
-      usageSink,
-    );
+    const routed = new RoutedAIGateway(gateway, router, decisionSink, usageSink);
 
     const result = await routed.complete(
       {
         workspaceId: 'workspace',
         messages: [{ role: 'user', content: 'hello' }],
       } as Omit<AIRequest, 'credentialId' | 'model'>,
-      [
-        credential(),
-        credential({ credentialId: 'credential-b', provider: 'provider-b' }),
-      ],
+      [credential(), credential({ credentialId: 'credential-b', provider: 'provider-b' })],
       { maxAttempts: 2 },
       'request-1',
       { requestId: 'request-1', workspaceId: 'workspace' },
@@ -162,10 +148,7 @@ describe('stage 4 model routing', () => {
       retryable: false,
       message: 'bad request',
     });
-    const routed = new RoutedAIGateway(
-      { complete } as unknown as AIGateway,
-      router,
-    );
+    const routed = new RoutedAIGateway({ complete } as unknown as AIGateway, router);
 
     await expect(
       routed.complete(
@@ -173,10 +156,7 @@ describe('stage 4 model routing', () => {
           workspaceId: 'workspace',
           messages: [{ role: 'user', content: 'hello' }],
         } as Omit<AIRequest, 'credentialId' | 'model'>,
-        [
-          credential(),
-          credential({ credentialId: 'credential-b', provider: 'provider-b' }),
-        ],
+        [credential(), credential({ credentialId: 'credential-b', provider: 'provider-b' })],
         { maxAttempts: 2 },
         'request-2',
         { requestId: 'request-2', workspaceId: 'workspace' },
