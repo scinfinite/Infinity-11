@@ -2,22 +2,31 @@
 
 INFINITY-11 is a **FREE-FIRST, BYOK-first multimodal AI engineering, creation, and automation operating system** for chat, coding, research, design, media generation, agents, teams, automation, app/web building, integrations, remote execution, verification, deployment, and continuous operation.
 
-The product is intentionally being designed before implementation. The documentation set is the source of truth for product intent and architecture until coding begins.
+The product is being designed before implementation. The documentation set is the source of truth for product intent and architecture until coding begins.
+
+## Canonical design baseline
+
+**`docs/architecture/INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md` is now the canonical pre-implementation architecture baseline.** It freezes the product thesis, architectural planes, execution semantics, AI Workforce, Automation Fabric, security/governance, verification/quality model, UX contracts, provider abstractions, free-first economics, multiplatform strategy, and implementation invariants.
+
+The latest research amendment remains the source for the research history and competitive rationale; the final blueprint is the normalized architectural decision layer derived from it.
 
 ## Documentation map
 
+- `docs/architecture/INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md` — **canonical pre-implementation architecture baseline**.
 - `docs/description/INFINITY-11-DETAILED-DESCRIPTION.md` — foundational product, capability, competitive, economic, security, and execution specification.
-- `docs/description/INFINITY-11-ARCHITECTURE-AND-SCREENS.md` — system architecture, remote execution model, application targets, and UI/screen specification.
+- `docs/description/INFINITY-11-ARCHITECTURE-AND-SCREENS.md` — detailed system architecture, application targets, and UI/screen specification.
 - `docs/description/INFINITY-11-SHORT-DESCRIPTION-AND-MINDMAP.md` — concise product definition and strategic mindmap.
-- `docs/description/INFINITY-11-LATEST-RESEARCH-AMENDMENTS.md` — **current amendment layer** covering the latest Make, cto.new, CrewAI, best-output, automation, workforce, and orchestration direction.
-- `docs/architecture/README.md` — governing architecture principles, subsystem boundaries, execution providers, automation, and quality rules.
-- `docs/phases/README.md` — implementation-planning boundary; implementation phases are not yet started.
+- `docs/description/INFINITY-11-LATEST-RESEARCH-AMENDMENTS.md` — latest Make/cto.new/CrewAI/automation/workforce/best-output research amendment layer.
+- `docs/architecture/README.md` — governing architecture principles and subsystem boundaries.
+- `docs/phases/README.md` — implementation-planning boundary; the implementation roadmap is intentionally deferred until the canonical baseline is audited.
 
 ## Current design status
 
 **Stage: PRE-IMPLEMENTATION / PRODUCT + ARCHITECTURE DEFINITION**
 
-No application implementation is intentionally being started yet. Current work is focused on making the product definition, architecture, economics, execution model, security model, automation model, workforce model, quality model, and documentation internally consistent before coding.
+No application implementation is intentionally being started yet. The product thesis, core architecture, execution model, automation model, workforce model, verification model, security boundaries, UX information architecture, free-first economics, and provider abstractions are now defined in the canonical blueprint.
+
+The remaining pre-coding gate is an evidence-based repository/documentation audit against the blueprint, followed by an acceptance-driven implementation dependency graph and roadmap.
 
 ## Hard product requirements
 
@@ -63,53 +72,23 @@ INFINITY-11 must be designed to create serious applications, including multi-ser
 
 ### 5. Multiplatform capability
 
-The architecture must support application targets including:
-
-- Web
-- Mobile
-- Desktop
-- Backend/services
-- Shared packages/contracts
-
-Language and framework selection remains capability-driven. Java is explicitly within the intended supported development language scope, alongside other suitable languages.
+The architecture must support application targets including Web, Mobile, Desktop, Backend/services, and Shared packages/contracts. Language and framework selection remains capability-driven. Java is explicitly within the intended supported development language scope.
 
 ### 6. Best-possible-output requirement
 
 INFINITY-11 must not optimize merely for a decent first output. It should seek the best practically achievable **verified** result within the user's requirements, resources, policy, cost, and execution constraints.
 
-The quality loop is:
-
-```text
-Understand → Research → Plan → Execute → Test → Critique → Improve → Verify → Deliver
-```
-
 ### 7. Automation as a first-class subsystem
 
-INFINITY-11 must support n8n/Make-like visual automation while extending it with AI-native capabilities:
-
-- visual workflows;
-- natural-language workflow generation;
-- scheduled and recurring tasks;
-- webhooks and event triggers;
-- deterministic steps;
-- autonomous agents;
-- hybrid workflows;
-- parallel execution;
-- approvals;
-- retries and bounded recovery;
-- durable state and resume;
-- MCP/tool integration;
-- self-healing where policy permits.
+INFINITY-11 must support n8n/Make-like visual automation while extending it with AI-native capabilities: visual workflows, natural-language workflow generation, schedules, webhooks, event triggers, deterministic steps, autonomous agents, hybrid workflows, parallel execution, approvals, retries, durable state, resume, MCP/tool integration, and bounded self-healing.
 
 ### 8. AI workforce
 
 INFINITY-11 must support persistent, governed teams of specialized AI workers. Teams are dynamically composed around project requirements rather than being limited to fixed personas.
 
-Workers have explicit model, tool, memory, permission, budget, execution, verification, schedule, and approval policies.
-
 ### 9. Deterministic + autonomous orchestration
 
-The runtime must support three modes:
+The runtime supports:
 
 ```text
 DETERMINISTIC
@@ -117,59 +96,25 @@ AUTONOMOUS
 HYBRID
 ```
 
-Hybrid execution is the preferred model for serious production automation: deterministic control around agent judgment where judgment is actually needed.
-
-## Core principles
-
-1. BYOK-first.
-2. Provider-agnostic.
-3. Model-agnostic.
-4. Capability-aware multimodal orchestration.
-5. Agent-native execution.
-6. Automation-native execution.
-7. Best-possible-output by default.
-8. Secure secret handling.
-9. Permission-first tools and MCP.
-10. Sandboxed remote code execution.
-11. Git-native development.
-12. Observable and verifiable execution.
-13. Modular extensibility.
-14. PWA-first responsive experience.
-15. Free/open-source-friendly architecture.
-16. Explicit user control over automation and autonomous actions.
-17. Production verification before declaring important work complete.
-18. Execution-provider abstraction instead of sandbox lock-in.
-19. Serious application and multiplatform support instead of demo-only generation.
-20. Clear separation between product capability and infrastructure cost.
-21. Deterministic workflows and autonomous agents must coexist.
-22. No final-quality claim without relevant evidence.
-
-## Latest competitive direction
-
-Recent research into Make, cto.new, and CrewAI reinforces the following architectural choices:
-
-```text
-MAKE
- → visual automation + agents inside workflows + MCP + integrations
-
-CTO.NEW
- → persistent AI teams + Team Lead delegation + specialist members + approvals
-
-CREWAI
- → deterministic Flows + autonomous Crews + governed runtime + observability
-
-SI-AGENTS PATTERNS
- → engineering intelligence + project brain + verification + skills + controlled improvement
-
-                    ↓
-
-             INFINITY-11
-                    ↓
-     CREATE + ENGINEER + AUTOMATE + OPERATE
-```
-
-These are architectural inspirations only. INFINITY-11 must implement original contracts and avoid copying source code, prompts, proprietary structures, or branding.
+Hybrid execution is the preferred model for serious production automation.
 
 ## Source-of-truth rule
 
-Product requirements belong in `docs/description/`. Architecture boundaries belong in `docs/architecture/`. The latest cross-cutting amendments belong in `docs/description/INFINITY-11-LATEST-RESEARCH-AMENDMENTS.md`. Implementation status and future phase acceptance criteria belong in `docs/phases/` once implementation planning is explicitly started. Root-level `README.md` and `AGENTS.md` must remain consistent with this documentation set.
+```text
+Canonical architecture baseline
+→ docs/architecture/INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md
+
+Product requirements / detailed behavior
+→ docs/description/
+
+Architecture principles / boundaries
+→ docs/architecture/README.md
+
+Research history / competitive amendments
+→ docs/description/INFINITY-11-LATEST-RESEARCH-AMENDMENTS.md
+
+Implementation status / acceptance roadmap
+→ docs/phases/ (after the pre-coding gate)
+```
+
+Root `README.md` and `AGENTS.md` must remain consistent with this hierarchy.
