@@ -18,17 +18,19 @@ The repository pre-coding audit is:
 
 **Pre-implementation gate: CLOSED.**
 
-Architecture/product design is sufficiently frozen to begin foundation implementation. Application implementation itself has **not started**.
-
 Stage 0 — architecture/audit gate is complete.
 
-**Next: Stage 1 — Repository, Contracts, and CI Foundation.**
+**Stage 1 — Engineering Foundation: IN PROGRESS — final CI verification pending.**
+
+Detailed Stage 1 status is tracked in:
+
+**`docs/phases/PHASE-1-ENGINEERING-FOUNDATION.md`**
 
 ## Dependency-driven sequence
 
 ```text
 0  Architecture / audit gate                 COMPLETE
-1  Repository + contracts + CI               NEXT
+1  Repository + contracts + CI               IN PROGRESS
 2  Identity + persistence + events            TODO
 3  AI Gateway + providers + credentials       TODO
 4  Model registry + routing + failover        TODO
