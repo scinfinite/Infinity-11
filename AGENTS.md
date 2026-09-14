@@ -4,11 +4,13 @@
 
 This file defines repository-wide expectations for AI coding agents and human contributors working on INFINITY-11.
 
-INFINITY-11 is intended to become a production-grade, BYOK-first, multimodal AI orchestration and development platform. Contributors must preserve the architectural boundaries described in `docs/`.
+INFINITY-11 is intended to become a production-grade, **FREE-FIRST, BYOK-first, multimodal AI orchestration and development platform** capable of building serious web, mobile, desktop, and backend applications. Contributors must preserve the architectural boundaries described in `docs/`.
 
 ## Current repository state
 
-The repository initialization currently establishes product documentation and structure. Do not assume that application code exists merely because a subsystem is described in the specifications.
+The repository is currently in the **pre-implementation product-definition and architecture stage**. Product requirements and architecture are being refined before coding starts. Do not assume that application code exists merely because a subsystem is described in the specifications.
+
+For the current stage, documentation and architecture changes are allowed; implementation code should not be introduced unless implementation has been explicitly started.
 
 ## Mandatory engineering behavior
 
@@ -18,12 +20,54 @@ The repository initialization currently establishes product documentation and st
 4. Trace errors to their root cause rather than treating symptoms.
 5. Inspect related modules before changing shared abstractions.
 6. Prefer the smallest maintainable change that addresses the root cause.
-7. Run the most relevant tests, type checks, builds, and regression checks after changes.
+7. Run the most relevant tests, type checks, builds, and regression checks after implementation changes begin.
 8. Do not claim a fix is verified unless it was actually verified.
 9. If verification is unavailable, state exactly what could not be verified.
 10. Do not silently skip failing checks.
 11. Fix discovered regressions before moving to unrelated work when practical.
-12. Keep documentation synchronized with architecture changes.
+12. Keep documentation synchronized with architecture and product changes.
+13. Do not begin application implementation while the project is explicitly in the design-only stage.
+
+## Product and economic rules
+
+- The initial INFINITY-11 web product must not require a paid INFINITY-11 subscription.
+- Prefer free-tier, open-source, local, self-hosted, and BYOK options where technically viable.
+- Never design the core architecture around the assumption that third-party compute is unlimited or free.
+- Keep platform costs, user AI/API costs, user compute costs, and optional future managed-service costs explicitly separated.
+- Paid services may be supported as optional providers, but basic architectural capabilities must not depend on a single paid vendor.
+
+## Remote execution rules
+
+INFINITY-11 is **remote-execution-first for heavy workloads**.
+
+The user's phone/laptop is primarily the control, interaction, editing, streaming, and visualization surface. When remote execution is available, heavy work should run outside the user's device, including:
+
+- dependency installation
+- compilation/builds
+- test suites
+- application runtime services
+- browser automation
+- visual QA
+- code indexing jobs
+- large repository analysis
+- packaging where remote tooling is appropriate
+
+Execution must go through a provider abstraction rather than coupling the product to one sandbox vendor.
+
+## Heavy application and multiplatform rules
+
+INFINITY-11 must be designed for real applications rather than demo-only generation. Architecture should support, where technically appropriate:
+
+- web applications
+- mobile applications
+- desktop applications
+- backend services and APIs
+- databases and storage
+- multi-service systems
+- shared contracts and reusable packages
+- Java and other supported backend/programming languages
+
+A single product specification may produce multiple application targets. Framework selection must remain capability-driven and provider-neutral rather than hard-coded into the platform.
 
 ## Architecture rules
 
@@ -34,12 +78,13 @@ The repository initialization currently establishes product documentation and st
 - Enforce workspace/project authorization server-side and with database security controls.
 - Default agent and tool permissions to deny unless explicitly granted.
 - Treat shell, network, repository write, deployment, and secret access as privileged capabilities.
-- Use isolated E2B environments for untrusted or autonomous code execution where appropriate.
+- Use isolated execution environments for untrusted or autonomous code execution where appropriate.
 - Make long-running work observable, cancellable, retryable, and stateful.
 - Use normalized error categories for provider failures and routing decisions.
 - Preserve idempotency for operations that can create external side effects.
 - Prefer Git branches and reviewable diffs for autonomous repository changes.
 - Never assume a generated artifact is correct until relevant verification succeeds.
+- Keep sandbox, database, and deployment integrations behind provider interfaces.
 
 ## AI provider rules
 
@@ -76,11 +121,13 @@ Agents must have explicit:
 
 Autonomous execution must remain observable and interruptible. Destructive operations require appropriate approval or an explicit policy that permits them.
 
-## E2B rules
+## Execution-provider rules
 
-E2B is an isolated execution environment for coding/building workflows. Do not assume sandbox execution is equivalent to trusted host execution.
+Execution must use an abstraction such as `SandboxProvider`/`ExecutionProvider` so that E2B, Vercel Sandbox, Docker, local/self-hosted runners, and future providers can be added or replaced without redesigning the product.
 
-Sandbox tasks should have lifecycle state, resource limits, timeouts, cleanup, logs, and explicit environment/secret injection.
+Each execution environment should define lifecycle state, resource limits, timeout, cleanup, logs, artifact handling, secret injection, network policy, and ownership/cost attribution.
+
+Never imply that an external free tier provides unlimited compute.
 
 ## GitHub rules
 
@@ -124,6 +171,19 @@ inspect
 → inspect final output
 ```
 
+For generated applications, verification should be target-aware and may include:
+
+```text
+build
+→ start
+→ API/service checks
+→ browser/DOM checks
+→ visual QA
+→ platform packaging checks
+→ security checks
+→ regression checks
+```
+
 Adjust the sequence to the actual change, but never replace verification with confidence language.
 
 ## Documentation rules
@@ -132,7 +192,16 @@ Architecture decisions should be reflected in `docs/architecture/`.
 Product behavior should be reflected in `docs/description/`.
 Future implementation-phase documentation belongs under `docs/phases/`.
 
-Do not create an implementation roadmap merely because a future capability is mentioned in the product description.
+The documentation set should remain internally consistent about:
+
+- $0 subscription target
+- BYOK economics
+- remote execution
+- heavy-application capability
+- multiplatform application generation
+- provider abstractions
+- security and verification
+- implementation status
 
 ## Scope discipline
 
@@ -140,4 +209,4 @@ Do not introduce unrelated dependencies, provider lock-in, unnecessary infrastru
 
 ## Quality bar
 
-The goal is not merely to make INFINITY-11 work. The goal is to make it maintainable, secure, testable, observable, extensible, and understandable as the system grows.
+The goal is not merely to make INFINITY-11 work. The goal is to make it maintainable, secure, testable, observable, extensible, understandable, free-first, provider-independent, and capable of building serious multiplatform software as the system grows.
