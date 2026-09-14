@@ -1,6 +1,6 @@
 # INFINITY-11 — Stage 1: Engineering Foundation
 
-> **Status:** IN PROGRESS
+> **Status:** IN PROGRESS — final CI verification pending
 > **Started:** 2026-09-14
 > **Roadmap stage:** 1 — Repository, contracts, and CI foundation
 > **Baseline:** Stage 0 architecture/audit gate complete
@@ -36,28 +36,36 @@ Turn the frozen architecture into a real, testable engineering foundation withou
 - Explicit web and worker application boundaries without implementing later-stage product behavior.
 - Vitest unit/contract/integration/security/regression coverage for the foundation invariants.
 - Prettier, ESLint, TypeScript, Vitest, dependency audit, and Gitleaks CI foundation.
+- Recognized `.prettierrc.json` formatting configuration.
+- `pnpm-lock.yaml` committed as the canonical dependency-resolution snapshot.
+- CI uses `pnpm install --frozen-lockfile` for reproducible installs.
+- Vitest upgraded to 3.2.6 to clear the critical audit advisory detected during CI.
 - `.env.example` and repository secret exclusions.
 - Migration and versioning conventions documented under `docs/architecture/`.
 
-## Verification gate
+## Verification evidence
 
-Stage 1 is **not complete** until all of the following have evidence:
+The latest substantive CI run passed every engineering check before the lockfile/documentation changes:
 
-- [ ] clean install
-- [ ] format check
-- [ ] lint
-- [ ] typecheck
-- [ ] unit/contract tests
-- [ ] integration checks
-- [ ] build
-- [ ] dependency security audit
-- [ ] secret scan
-- [ ] regression checks
-- [ ] final CI run
+- [x] clean dependency install
+- [x] format check
+- [x] lint
+- [x] typecheck
+- [x] unit/contract tests — 5/5 test files, 5/5 tests passed
+- [x] integration coverage included in the test suite
+- [x] build — all 6 buildable workspace projects completed
+- [x] dependency security audit
+- [x] secret scan — Gitleaks passed
+- [x] regression coverage included in the test suite
+- [ ] final CI run for the final branch state
 - [ ] final repository inspection
 
-## Known bootstrap limitation
+## Lockfile bootstrap
 
-The pre-implementation repository had no lockfile. The first CI bootstrap therefore uses `pnpm install --no-frozen-lockfile`. A generated lockfile should be committed through the normal development environment before tightening CI to frozen installs.
+The repository originally had no lockfile. A temporary, least-scope GitHub Actions bootstrap job generated the lockfile with pnpm 10.15.0 and committed it. The temporary write-enabled workflow was then removed.
 
-This limitation prevents a 100% completion claim until reproducible dependency resolution is established and the final CI run verifies the resulting repository.
+The permanent CI workflow now has read-only repository permissions and enforces `pnpm install --frozen-lockfile`.
+
+## Completion rule
+
+Stage 1 remains open until the final branch state has a successful CI run and the repository tree has been inspected after that run. Only then may this document be changed to `COMPLETE`.
