@@ -172,7 +172,7 @@ function extractSymbols(path: string, text: string, language: Language): SymbolR
         ? [
             /\bclass\s+([A-Za-z_$][\w$]*)/g,
             /\binterface\s+([A-Za-z_$][\w$]*)/g,
-            /(?:public|private|protected|static|final|abstract|synchronized|native|\s)+[\w<>\[\], ?]+\s+([A-Za-z_$][\w$]*)\s*\(/g,
+            /(?:public|private|protected|static|final|abstract|synchronized|native|\s)+[\w<>[], ?]+\s+([A-Za-z_$][\w$]*)\s*\(/g,
           ]
         : [
             /(?:export\s+)?(?:async\s+)?function\s+([A-Za-z_$][\w$]*)/g,
@@ -216,8 +216,8 @@ function extractImports(text: string, language: Language): string[] {
         : language === 'go'
           ? [/^\s*import\s+"([^"]+)"/gm]
           : [
-              /\bimport\s+(?:[^'\"]+from\s+)?['\"]([^'\"]+)['\"]/g,
-              /\brequire\(\s*['\"]([^'\"]+)['\"]\s*\)/g,
+              /\bimport\s+(?:[^'\"]+from\s+)?['"]([^'"]+)['"]/g,
+              /\brequire\(\s*['"]([^'"]+)['"]\s*\)/g,
             ];
   const result: string[] = [];
   for (const pattern of patterns) {
@@ -285,15 +285,15 @@ export class KnowledgeStore {
   }
   search(query: RetrievalQuery): RetrievalResult[] {
     const terms = query.text
-        .toLowerCase()
-        .split(/[^a-z0-9_$.-]+/)
-        .filter((t) => t.length > 1),
-      results: RetrievalResult[] = [];
+      .toLowerCase()
+      .split(/[^a-z0-9_$.-]+/)
+      .filter((term) => term.length > 1);
+    const results: RetrievalResult[] = [];
     for (const item of this.items.values()) {
       if (query.categories && !query.categories.includes(item.category)) continue;
       if (query.paths && !query.paths.some((path) => item.source.path?.startsWith(path))) continue;
-      const hay = `${item.title} ${item.content} ${item.tags.join(' ')}`.toLowerCase(),
-        matchedTerms = terms.filter((term) => hay.includes(term));
+      const hay = `${item.title} ${item.content} ${item.tags.join(' ')}`.toLowerCase();
+      const matchedTerms = terms.filter((term) => hay.includes(term));
       if (!matchedTerms.length) continue;
       results.push({
         item,
@@ -311,10 +311,10 @@ export function buildContextPack(
   budget: ContextBudget,
 ): ContextPack {
   const ranked = store.search({
-      ...query,
-      limit: Math.max(query.limit ?? budget.maxItems, budget.maxItems * 2),
-    }),
-    items: RetrievalResult[] = [];
+    ...query,
+    limit: Math.max(query.limit ?? budget.maxItems, budget.maxItems * 2),
+  });
+  const items: RetrievalResult[] = [];
   let chars = 0;
   for (const result of ranked) {
     if (items.length >= budget.maxItems) break;
