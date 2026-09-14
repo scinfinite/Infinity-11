@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -33,8 +33,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-        with:
-          ref: ${{ github.head_ref || github.ref }}
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
@@ -47,19 +45,6 @@ jobs:
           pnpm --version
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Normalize Stage 9 formatting once
-        if: github.event_name == 'pull_request'
-        run: |
-          pnpm exec prettier --write packages/verification/src/index.ts tests/stage-9-verification.test.ts
-          if git diff --quiet; then
-            echo "Stage 9 formatting already clean"
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add packages/verification/src/index.ts tests/stage-9-verification.test.ts
-            git commit -m "chore(stage-9): normalize verification formatting"
-            git push origin "HEAD:${{ github.head_ref }}"
-          fi
       - name: Format check
         run: pnpm format:check
       - name: Lint
