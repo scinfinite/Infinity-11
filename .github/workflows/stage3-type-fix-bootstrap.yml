@@ -20,7 +20,6 @@ jobs:
       - run: |
           python3 - <<'PY'
           from pathlib import Path
-          import re
           ai = Path('packages/ai-gateway/src/index.ts')
           s = ai.read_text()
           s = s.replace('usage?: AIUsage;', 'usage: AIUsage | undefined;')
@@ -28,11 +27,11 @@ jobs:
           ai.write_text(s)
           db = Path('packages/persistence/src/index.ts')
           s = db.read_text()
-          pattern = r'const next = \{\.\.\.current,\.\.\.patch,updatedAt: now\(\)\};'
-          replacement = 'const next = { ...current, label: patch.label ?? current.label, ciphertext: patch.ciphertext ?? current.ciphertext, enabled: patch.enabled ?? current.enabled, updatedAt: now() };'
-          if not re.search(pattern, s):
+          old = 'const next = { ...current, ...patch, updatedAt: now() };'
+          new = 'const next = { ...current, label: patch.label ?? current.label, ciphertext: patch.ciphertext ?? current.ciphertext, enabled: patch.enabled ?? current.enabled, updatedAt: now() };'
+          if old not in s:
               raise SystemExit('expected credential update expression not found')
-          db.write_text(re.sub(pattern, replacement, s))
+          db.write_text(s.replace(old, new))
           PY
       - run: pnpm exec prettier --write packages/ai-gateway/src/index.ts packages/persistence/src/index.ts
       - run: pnpm lint
