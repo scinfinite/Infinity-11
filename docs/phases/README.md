@@ -30,6 +30,8 @@ Stage 0 — architecture/audit gate is complete.
 
 **Stage 5 — Execution Fabric / Sandbox Abstraction: COMPLETE and merged into `main`; post-merge verification passed.**
 
+**Stage 6 — Agent Runtime / AI Workforce: IN PROGRESS on `stage-6-agent-runtime-workforce`.**
+
 Detailed status is tracked in:
 
 - `docs/phases/PHASE-1-ENGINEERING-FOUNDATION.md`
@@ -37,6 +39,7 @@ Detailed status is tracked in:
 - `docs/phases/PHASE-3-AI-GATEWAY-PROVIDERS-CREDENTIALS.md`
 - `docs/phases/PHASE-4-MODEL-REGISTRY-ROUTING-FAILOVER.md`
 - `docs/phases/PHASE-5-EXECUTION-FABRIC-SANDBOX.md`
+- `docs/phases/PHASE-6-AGENT-RUNTIME-WORKFORCE.md`
 
 ## Dependency-driven sequence
 
@@ -47,7 +50,7 @@ Detailed status is tracked in:
 3  AI Gateway + providers + credentials       COMPLETE
 4  Model registry + routing + failover        COMPLETE
 5  Execution Fabric + sandbox abstraction     COMPLETE
-6  Agent Runtime + AI Workforce               TODO
+6  Agent Runtime + AI Workforce               IN PROGRESS
 7  Automation Fabric + durable workflows      TODO
 8  Project Brain + Context + Knowledge        TODO
 9  Verification + Browser/Visual QA           TODO
@@ -55,7 +58,7 @@ Detailed status is tracked in:
 11 Heavy Application Builder                  TODO
 12 GitHub + Deployment + OPERATE              TODO
 13 Multiplatform packaging                    TODO
-14 Ecosystem / Marketplace / advanced AI     TODO
+14 Ecosystem / Marketplace + advanced AI     TODO
 ```
 
 ## Stage completion standard
