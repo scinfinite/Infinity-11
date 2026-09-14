@@ -1,4 +1,4 @@
-import { mkdtemp, mkdir, rm } from 'node:fs/promises';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -63,7 +63,7 @@ describe('stage 5 execution fabric', () => {
         provider.execute({
           workspaceId: 'workspace-1',
           workingDirectory: root,
-          command: [process.execPath, '-e', ''],
+          command: [process.execPath, '-e', 'void 0'],
           network: 'allow',
           correlation: { correlationId: 'corr-3' },
           reason: 'approval test',
@@ -103,14 +103,13 @@ describe('stage 5 execution fabric', () => {
     const root = await mkdtemp(join(tmpdir(), 'infinity11-stage5-'));
     try {
       const file = join(root, 'artifact.txt');
-      await mkdir(root, { recursive: true });
-      await (await import('node:fs/promises')).writeFile(file, 'artifact');
+      await writeFile(file, 'artifact');
       const artifact = await collectArtifact(root, 'artifact.txt');
       expect(artifact).toMatchObject({ path: 'artifact.txt', size: 8 });
       expect(artifact.sha256).toMatch(/^[a-f0-9]{64}$/);
       const fabric = new ExecutionFabric([new LocalExecutionProvider(policy(root))]);
       expect(fabric.provider('local').id).toBe('local');
-      await expect(fabric.provider('missing')).toThrow('EXECUTION_PROVIDER_NOT_FOUND:missing');
+      expect(() => fabric.provider('missing')).toThrow('EXECUTION_PROVIDER_NOT_FOUND:missing');
     } finally {
       await rm(root, { recursive: true, force: true });
     }
@@ -124,7 +123,7 @@ describe('stage 5 execution fabric', () => {
         provider.execute({
           workspaceId: 'workspace-1',
           workingDirectory: root,
-          command: [process.execPath, '-e', ''],
+          command: [process.execPath, '-e', 'void 0'],
           network: 'deny',
           correlation: { correlationId: 'corr-5' },
           reason: 'network isolation test',
