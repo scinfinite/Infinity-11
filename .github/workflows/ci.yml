@@ -34,15 +34,17 @@ jobs:
           pnpm --version
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
-      - name: Persist generated lockfile
+      - name: Normalize formatting
+        run: pnpm format
+      - name: Persist generated foundation files
         run: |
-          if git diff --quiet -- pnpm-lock.yaml; then
-            echo 'Lockfile already synchronized.'
+          if git diff --quiet; then
+            echo 'Generated files already synchronized.'
           else
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add pnpm-lock.yaml
-            git commit -m 'chore(stage-2): synchronize workspace lockfile [skip ci]'
+            git add pnpm-lock.yaml packages apps tests
+            git commit -m 'chore(stage-2): synchronize generated foundation files [skip ci]'
             git push
           fi
       - name: Format check
