@@ -2,7 +2,12 @@ import { mkdtemp, mkdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { ExecutionFabric, LocalExecutionProvider, collectArtifact, type ExecutionPolicy } from '../../packages/execution/src/index.js';
+import {
+  ExecutionFabric,
+  LocalExecutionProvider,
+  collectArtifact,
+  type ExecutionPolicy,
+} from '../../packages/execution/src/index.js';
 
 const policy = (root: string, decision: 'ALLOW' | 'ASK' | 'DENY' = 'ALLOW'): ExecutionPolicy => ({
   permission: { decide: () => decision },
@@ -35,14 +40,16 @@ describe('stage 5 execution fabric', () => {
     const root = await mkdtemp(join(tmpdir(), 'infinity11-stage5-'));
     try {
       const provider = new LocalExecutionProvider(policy(root));
-      await expect(provider.execute({
-        workspaceId: 'workspace-1',
-        workingDirectory: join(root, '..'),
-        command: [process.execPath, '-e', 'process.stdout.write("bad")'],
-        network: 'allow',
-        correlation: { correlationId: 'corr-2' },
-        reason: 'security test',
-      })).rejects.toThrow('WORKSPACE_PATH_ESCAPE');
+      await expect(
+        provider.execute({
+          workspaceId: 'workspace-1',
+          workingDirectory: join(root, '..'),
+          command: [process.execPath, '-e', 'process.stdout.write("bad")'],
+          network: 'allow',
+          correlation: { correlationId: 'corr-2' },
+          reason: 'security test',
+        }),
+      ).rejects.toThrow('WORKSPACE_PATH_ESCAPE');
     } finally {
       await rm(root, { recursive: true, force: true });
     }
@@ -52,14 +59,16 @@ describe('stage 5 execution fabric', () => {
     const root = await mkdtemp(join(tmpdir(), 'infinity11-stage5-'));
     try {
       const provider = new LocalExecutionProvider(policy(root, 'ASK'));
-      await expect(provider.execute({
-        workspaceId: 'workspace-1',
-        workingDirectory: root,
-        command: [process.execPath, '-e', ''],
-        network: 'allow',
-        correlation: { correlationId: 'corr-3' },
-        reason: 'approval test',
-      })).rejects.toThrow('EXECUTION_PERMISSION_ASK');
+      await expect(
+        provider.execute({
+          workspaceId: 'workspace-1',
+          workingDirectory: root,
+          command: [process.execPath, '-e', ''],
+          network: 'allow',
+          correlation: { correlationId: 'corr-3' },
+          reason: 'approval test',
+        }),
+      ).rejects.toThrow('EXECUTION_PERMISSION_ASK');
     } finally {
       await rm(root, { recursive: true, force: true });
     }
@@ -72,7 +81,11 @@ describe('stage 5 execution fabric', () => {
       const result = await provider.execute({
         workspaceId: 'workspace-1',
         workingDirectory: root,
-        command: [process.execPath, '-e', 'setInterval(() => process.stdout.write("1234567890"), 1)'],
+        command: [
+          process.execPath,
+          '-e',
+          'setInterval(() => process.stdout.write("1234567890"), 1)',
+        ],
         network: 'allow',
         limits: { timeoutMs: 50, maxOutputBytes: 32 },
         correlation: { correlationId: 'corr-4' },
@@ -107,11 +120,18 @@ describe('stage 5 execution fabric', () => {
     const root = await mkdtemp(join(tmpdir(), 'infinity11-stage5-'));
     try {
       const provider = new LocalExecutionProvider(policy(root));
-      await expect(provider.execute({
-        workspaceId: 'workspace-1', workingDirectory: root,
-        command: [process.execPath, '-e', ''], network: 'deny',
-        correlation: { correlationId: 'corr-5' }, reason: 'network isolation test',
-      })).rejects.toThrow('NETWORK_ISOLATION_UNAVAILABLE_LOCAL_PROVIDER');
-    } finally { await rm(root, { recursive: true, force: true }); }
+      await expect(
+        provider.execute({
+          workspaceId: 'workspace-1',
+          workingDirectory: root,
+          command: [process.execPath, '-e', ''],
+          network: 'deny',
+          correlation: { correlationId: 'corr-5' },
+          reason: 'network isolation test',
+        }),
+      ).rejects.toThrow('NETWORK_ISOLATION_UNAVAILABLE_LOCAL_PROVIDER');
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
   });
 });
