@@ -30,7 +30,7 @@ Stage 0 — architecture/audit gate is complete.
 
 **Stage 5 — Execution Fabric / Sandbox Abstraction: COMPLETE and merged into `main`; post-merge verification passed.**
 
-**Stage 6 — Agent Runtime / AI Workforce: IN PROGRESS on `stage-6-agent-runtime-workforce`.**
+**Stage 6 — Agent Runtime / AI Workforce: READY FOR MERGE on `stage-6-agent-runtime-workforce`; final branch CI passed.**
 
 Detailed status is tracked in:
 
@@ -50,7 +50,7 @@ Detailed status is tracked in:
 3  AI Gateway + providers + credentials       COMPLETE
 4  Model registry + routing + failover        COMPLETE
 5  Execution Fabric + sandbox abstraction     COMPLETE
-6  Agent Runtime + AI Workforce               IN PROGRESS
+6  Agent Runtime + AI Workforce               READY FOR MERGE
 7  Automation Fabric + durable workflows      TODO
 8  Project Brain + Context + Knowledge        TODO
 9  Verification + Browser/Visual QA           TODO
