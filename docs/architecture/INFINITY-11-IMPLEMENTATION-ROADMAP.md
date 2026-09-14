@@ -576,14 +576,14 @@ A stage may be marked **PARTIALLY COMPLETE** when a bounded subset is delivered,
 
 ```text
 STAGE 0  Architecture / audit gate             COMPLETE
-STAGE 1  Contracts + repository + CI            NEXT
-STAGE 2  Identity + persistence + events        TODO
-STAGE 3  AI Gateway + providers + credentials   TODO
-STAGE 4  Router + failover + usage              TODO
-STAGE 5  Execution Fabric                       TODO
-STAGE 6  Agent Runtime + Workforce              TODO
-STAGE 7  Automation Fabric                      TODO
-STAGE 8  Project Brain + Context                TODO
+STAGE 1  Repository + contracts + CI            COMPLETE
+STAGE 2  Identity + workspace + persistence    COMPLETE
+STAGE 3  AI Gateway + providers + credentials   COMPLETE
+STAGE 4  Router + failover + usage              COMPLETE
+STAGE 5  Execution Fabric                       COMPLETE
+STAGE 6  Agent Runtime + Workforce              COMPLETE
+STAGE 7  Automation Fabric                      COMPLETE
+STAGE 8  Project Brain + Context                NEXT
 STAGE 9  Verification + Browser QA              TODO
 STAGE 10 Core Web/PWA UX                         TODO
 STAGE 11 Heavy Application Builder               TODO
@@ -592,4 +592,4 @@ STAGE 13 Multiplatform                           TODO
 STAGE 14 Ecosystem / Marketplace                TODO
 ```
 
-No application implementation is claimed by this roadmap. The next executable engineering task is **Stage 1**.
+Stage 7 is closed on the `stage-7-automation-fabric` implementation branch after final CI verification. The branch is ready for merge into `main`; post-merge `main` verification is still required before Stage 7 can be considered repository-closed.

@@ -12,6 +12,7 @@
     { "path": "packages/ai-gateway/tsconfig.json" },
     { "path": "packages/execution/tsconfig.json" },
     { "path": "packages/agents/tsconfig.json" },
+    { "path": "packages/automation-runtime/tsconfig.json" },
     { "path": "apps/web/tsconfig.json" },
     { "path": "apps/worker/tsconfig.json" }
   ]
