@@ -1,0 +1,44 @@
+name: Stage 3 typecheck fix bootstrap
+
+on:
+  push:
+    branches: [stage-3-ai-gateway-providers-credentials]
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22.14.0
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          ai = Path('packages/ai-gateway/src/index.ts')
+          s = ai.read_text()
+          for name in ('inputTokens', 'outputTokens', 'totalTokens'):
+              s = s.replace(f'{name}?: number;', f'{name}: number | undefined;')
+          ai.write_text(s)
+          db = Path('packages/persistence/src/index.ts')
+          s = db.read_text()
+          old = 'label?: string; ciphertext?: string; enabled?: boolean'
+          new = 'label?: string | undefined; ciphertext?: string | undefined; enabled?: boolean | undefined'
+          if old not in s:
+              raise SystemExit('expected persistence patch type not found')
+          db.write_text(s.replace(old, new))
+          PY
+      - run: pnpm exec prettier --write packages/ai-gateway/src/index.ts packages/persistence/src/index.ts
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add packages/ai-gateway/src/index.ts packages/persistence/src/index.ts
+          git commit -m "fix(stage-3): satisfy exact optional usage contracts"
+          git push
