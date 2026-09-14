@@ -1,8 +1,7 @@
 # INFINITY-11 — Stage 6: Agent Runtime / AI Workforce
 
-> **Status:** COMPLETE
+> **Status:** READY FOR MERGE
 > **Started:** 2026-09-14
-> **Closed:** 2026-09-14
 > **Roadmap stage:** 6 — agent runtime and AI workforce
 > **Prerequisite:** Stage 5 merged into `main` and final CI verified
 
@@ -59,9 +58,9 @@ Build a provider-neutral, governed execution runtime for individual agents and d
 - [x] cancellation boundary
 - [x] integration coverage
 - [x] final branch CI verification
-- [x] PR #6 merged into `main`
-- [x] post-merge `main` verification
-- [x] final repository inspection
+- [ ] PR #6 merged into `main`
+- [ ] post-merge `main` verification
+- [ ] final repository inspection
 
 ## Verification record
 
@@ -77,4 +76,4 @@ Final pre-merge CI: **Run 34858576751 — PASS**
 - Dependency security audit: PASS
 - Gitleaks: PASS
 
-The stage is ready for merge; post-merge verification is recorded after PR #6 is merged.
+PR #6 and post-merge `main` verification remain before this stage may be declared fully closed.
