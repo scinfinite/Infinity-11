@@ -26,13 +26,14 @@ Stage 0 — architecture/audit gate is complete.
 
 **Stage 3 — AI Gateway / Providers / Credentials: COMPLETE and merged into `main`.**
 
-**Stage 4 — Model Registry / Routing / Failover / Usage: NEXT.**
+**Stage 4 — Model Registry / Routing / Failover / Usage: COMPLETE pending post-merge `main` verification.**
 
 Detailed status is tracked in:
 
 - `docs/phases/PHASE-1-ENGINEERING-FOUNDATION.md`
 - `docs/phases/PHASE-2-IDENTITY-PERSISTENCE-EVENTS.md`
 - `docs/phases/PHASE-3-AI-GATEWAY-PROVIDERS-CREDENTIALS.md`
+- `docs/phases/PHASE-4-MODEL-REGISTRY-ROUTING-FAILOVER.md`
 
 ## Dependency-driven sequence
 
@@ -41,7 +42,7 @@ Detailed status is tracked in:
 1  Repository + contracts + CI               COMPLETE
 2  Identity + persistence + events            COMPLETE
 3  AI Gateway + providers + credentials       COMPLETE
-4  Model registry + routing + failover        NEXT
+4  Model registry + routing + failover        COMPLETE
 5  Execution Fabric + sandbox abstraction     TODO
 6  Agent Runtime + AI Workforce               TODO
 7  Automation Fabric + durable workflows      TODO
