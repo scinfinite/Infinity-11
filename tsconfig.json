@@ -5,6 +5,10 @@
     { "path": "packages/config/tsconfig.json" },
     { "path": "packages/observability/tsconfig.json" },
     { "path": "packages/security/tsconfig.json" },
+    { "path": "packages/persistence/tsconfig.json" },
+    { "path": "packages/identity/tsconfig.json" },
+    { "path": "packages/events/tsconfig.json" },
+    { "path": "packages/storage/tsconfig.json" },
     { "path": "apps/web/tsconfig.json" },
     { "path": "apps/worker/tsconfig.json" }
   ]
