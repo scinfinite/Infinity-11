@@ -201,6 +201,17 @@ export interface PerformanceSink {
 const now = () => new Date().toISOString();
 const clone = <T>(value: T): T => structuredClone(value);
 
+const cloneAgent = (agent: AgentDefinition): AgentDefinition => ({
+  ...agent,
+  capabilities: [...agent.capabilities],
+  skills: [...agent.skills],
+  budget: { ...agent.budget },
+  modelPolicy: agent.modelPolicy,
+  permissionPolicy: agent.permissionPolicy,
+  ...(agent.memoryPolicy ? { memoryPolicy: agent.memoryPolicy } : {}),
+  ...(agent.contextPolicy ? { contextPolicy: agent.contextPolicy } : {}),
+});
+
 export class InMemoryRunStore implements RunStore {
   private readonly runs = new Map<string, AgentRun>();
   create(run: AgentRun): void {
@@ -272,14 +283,14 @@ export class AgentRegistry {
     )
       throw new Error('INVALID_AGENT_DEFINITION');
     if (this.agents.has(agent.id)) throw new Error(`AGENT_ALREADY_REGISTERED:${agent.id}`);
-    this.agents.set(agent.id, clone(agent));
+    this.agents.set(agent.id, cloneAgent(agent));
   }
   get(id: string): AgentDefinition | undefined {
     const agent = this.agents.get(id);
-    return agent ? clone(agent) : undefined;
+    return agent ? cloneAgent(agent) : undefined;
   }
   list(): readonly AgentDefinition[] {
-    return [...this.agents.values()].map(clone);
+    return [...this.agents.values()].map(cloneAgent);
   }
 }
 export class SkillRegistry {
