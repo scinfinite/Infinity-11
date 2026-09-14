@@ -54,6 +54,17 @@ export interface JobRecord {
   availableAt: string;
   createdAt: string;
 }
+export interface CredentialRecord {
+  id: string;
+  workspaceId: string;
+  provider: string;
+  label: string;
+  ciphertext: string;
+  enabled: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface DatabaseProvider {
   migrate(): void;
   close(): void;
@@ -77,6 +88,24 @@ export interface DatabaseProvider {
   claimJob(now?: string): JobRecord | undefined;
   completeJob(id: string): void;
   failJob(id: string): void;
+  createCredential(
+    workspaceId: string,
+    provider: string,
+    label: string,
+    ciphertext: string,
+  ): CredentialRecord;
+  getCredential(id: string, workspaceId: string): CredentialRecord | undefined;
+  listCredentials(workspaceId: string): CredentialRecord[];
+  updateCredential(
+    id: string,
+    workspaceId: string,
+    patch: {
+      label?: string | undefined;
+      ciphertext?: string | undefined;
+      enabled?: boolean | undefined;
+    },
+  ): CredentialRecord;
+  deleteCredential(id: string, workspaceId: string): void;
 }
 const now = () => new Date().toISOString();
 export class SqliteDatabaseProvider implements DatabaseProvider {
@@ -95,7 +124,8 @@ CREATE TABLE IF NOT EXISTS projects (id TEXT PRIMARY KEY,workspace_id TEXT NOT N
 CREATE TABLE IF NOT EXISTS domain_events (id TEXT PRIMARY KEY,workspace_id TEXT NOT NULL,event_json TEXT NOT NULL,occurred_at TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS audit_log (id TEXT PRIMARY KEY,workspace_id TEXT NOT NULL,actor_id TEXT NOT NULL,action TEXT NOT NULL,resource_type TEXT NOT NULL,resource_id TEXT NOT NULL,correlation_id TEXT NOT NULL,occurred_at TEXT NOT NULL,metadata_json TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS jobs (id TEXT PRIMARY KEY,type TEXT NOT NULL,payload_json TEXT NOT NULL,status TEXT NOT NULL CHECK(status IN ('queued','running','completed','failed')),attempts INTEGER NOT NULL,available_at TEXT NOT NULL,created_at TEXT NOT NULL);
-CREATE INDEX IF NOT EXISTS idx_memberships_user ON memberships(user_id);CREATE INDEX IF NOT EXISTS idx_projects_workspace ON projects(workspace_id);CREATE INDEX IF NOT EXISTS idx_events_workspace ON domain_events(workspace_id,occurred_at);CREATE INDEX IF NOT EXISTS idx_audit_workspace ON audit_log(workspace_id,occurred_at);CREATE INDEX IF NOT EXISTS idx_jobs_ready ON jobs(status,available_at);`);
+CREATE TABLE IF NOT EXISTS credentials (id TEXT PRIMARY KEY,workspace_id TEXT NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,provider TEXT NOT NULL,label TEXT NOT NULL,ciphertext TEXT NOT NULL,enabled INTEGER NOT NULL CHECK(enabled IN (0,1)),created_at TEXT NOT NULL,updated_at TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS idx_memberships_user ON memberships(user_id);CREATE INDEX IF NOT EXISTS idx_projects_workspace ON projects(workspace_id);CREATE INDEX IF NOT EXISTS idx_events_workspace ON domain_events(workspace_id,occurred_at);CREATE INDEX IF NOT EXISTS idx_audit_workspace ON audit_log(workspace_id,occurred_at);CREATE INDEX IF NOT EXISTS idx_jobs_ready ON jobs(status,available_at);CREATE INDEX IF NOT EXISTS idx_credentials_workspace ON credentials(workspace_id,provider);`);
   }
   close(): void {
     this.db.close();
@@ -268,5 +298,75 @@ CREATE INDEX IF NOT EXISTS idx_memberships_user ON memberships(user_id);CREATE I
   }
   failJob(id: string): void {
     this.db.prepare("UPDATE jobs SET status='failed' WHERE id=? AND status='running'").run(id);
+  }
+  createCredential(
+    workspaceId: string,
+    provider: string,
+    label: string,
+    ciphertext: string,
+  ): CredentialRecord {
+    const r = {
+      id: randomUUID(),
+      workspaceId,
+      provider,
+      label,
+      ciphertext,
+      enabled: true,
+      createdAt: now(),
+      updatedAt: now(),
+    };
+    this.db
+      .prepare('INSERT INTO credentials VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
+      .run(r.id, r.workspaceId, r.provider, r.label, r.ciphertext, 1, r.createdAt, r.updatedAt);
+    return r;
+  }
+  getCredential(id: string, workspaceId: string): CredentialRecord | undefined {
+    const r = this.db
+      .prepare(
+        'SELECT id,workspace_id AS workspaceId,provider,label,ciphertext,enabled,created_at AS createdAt,updated_at AS updatedAt FROM credentials WHERE id=? AND workspace_id=?',
+      )
+      .get(id, workspaceId) as unknown as
+      | (Omit<CredentialRecord, 'enabled'> & { enabled: number })
+      | undefined;
+    return r ? { ...r, enabled: r.enabled === 1 } : undefined;
+  }
+  listCredentials(workspaceId: string): CredentialRecord[] {
+    return (
+      this.db
+        .prepare(
+          'SELECT id,workspace_id AS workspaceId,provider,label,ciphertext,enabled,created_at AS createdAt,updated_at AS updatedAt FROM credentials WHERE workspace_id=? ORDER BY created_at',
+        )
+        .all(workspaceId) as unknown as Array<
+        Omit<CredentialRecord, 'enabled'> & { enabled: number }
+      >
+    ).map((r) => ({ ...r, enabled: r.enabled === 1 }));
+  }
+  updateCredential(
+    id: string,
+    workspaceId: string,
+    patch: {
+      label?: string | undefined;
+      ciphertext?: string | undefined;
+      enabled?: boolean | undefined;
+    },
+  ): CredentialRecord {
+    const current = this.getCredential(id, workspaceId);
+    if (!current) throw new Error('CREDENTIAL_NOT_FOUND');
+    const next = {
+      ...current,
+      label: patch.label ?? current.label,
+      ciphertext: patch.ciphertext ?? current.ciphertext,
+      enabled: patch.enabled ?? current.enabled,
+      updatedAt: now(),
+    };
+    this.db
+      .prepare(
+        'UPDATE credentials SET label=?,ciphertext=?,enabled=?,updated_at=? WHERE id=? AND workspace_id=?',
+      )
+      .run(next.label, next.ciphertext, next.enabled ? 1 : 0, next.updatedAt, id, workspaceId);
+    return next;
+  }
+  deleteCredential(id: string, workspaceId: string): void {
+    this.db.prepare('DELETE FROM credentials WHERE id=? AND workspace_id=?').run(id, workspaceId);
   }
 }
