@@ -12,6 +12,7 @@ on:
       - stage-6-agent-runtime-workforce
       - stage-7-automation-fabric
       - stage-8-project-brain-context-knowledge
+      - stage-9-verification-browser-visual-qa
   pull_request:
     branches:
       - main
