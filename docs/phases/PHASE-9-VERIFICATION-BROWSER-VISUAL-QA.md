@@ -1,9 +1,10 @@
 # INFINITY-11 — Stage 9: Verification + Browser / Visual QA
 
-> **Status:** COMPLETE — merged into `main` and post-merge CI verified
+> **Status:** COMPLETE — merged into `main` and final CI verified
 > **Roadmap stage:** 9
 > **PR:** #9
 > **Merge commit:** `1a23987be00eb1d5e1eaedab1fc8fae5ca6c83e9`
+> **Final main CI:** `34899369786` (green)
 
 ## Objective
 
@@ -29,22 +30,6 @@ Turn generated work into evidence-backed completion. Stage 9 establishes a provi
 The verification package does not hard-code Playwright, a browser vendor, screenshot storage, scanner, or model provider. A real browser implementation can satisfy `BrowserSession` without changing the orchestrator/check contracts. Browser/DOM/console/network observations are first-class evidence while execution remains replaceable.
 
 The repository currently has only a minimal web boundary, so Stage 9 validates the browser infrastructure with deterministic browser contracts rather than pretending that a production UI already exists. Live product UX remains Stage 10.
-
-## Quality model
-
-```text
-target + revision
-      ↓
-checks
-      ↓
-evidence + issues
-      ↓
-quality score
-      ↓
-verified / partially_verified / unverified / blocked
-```
-
-Failed non-critical checks can be handed to an improvement callback, bounded by `maxIterations`. Critical security evidence immediately produces `blocked` and can never be reported as `verified`.
 
 ## Acceptance checklist
 
@@ -73,10 +58,10 @@ Failed non-critical checks can be handed to an improvement callback, bounded by 
 
 ## Final verification evidence
 
-PR #9 passed the full verification pipeline before merge, and the merge commit `1a23987be00eb1d5e1eaedab1fc8fae5ca6c83e9` received a green `main` CI run (`34899190651`):
+PR #9 passed CI before merge. The merged `main` tree was then verified by CI run `34899369786`; both jobs completed successfully and every verification step passed:
 
 ```text
 format → lint → typecheck → tests → build → dependency security audit → secret scanning
 ```
 
-All jobs completed successfully. The repository is therefore Stage 9 closed.
+Stage 9 is repository-closed. Stage 10 is the next implementation stage.
