@@ -4,11 +4,11 @@
 
 **Stages 0–8: COMPLETE and merged into `main`.**
 
-**Stage 9 — Verification + Browser/Visual QA: COMPLETE and merged into `main`.**
+**Stage 9 — Verification + Browser/Visual QA: COMPLETE implementation, merged into `main`; final documentation synchronization is complete.**
 
-**Final repository CI gate: green on the current `main` tree.**
+**Final repository CI gate: running for the current `main` tree.**
 
-**Stage 10 — Core Web/PWA Product UX: NEXT.**
+**Stage 10 — Core Web/PWA Product UX: NEXT after the final CI gate.**
 
 ## Canonical planning baseline
 
