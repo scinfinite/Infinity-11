@@ -186,7 +186,10 @@ function extractSymbols(path: string, text: string, language: Language): SymbolR
         ? [
             [/\bclass\s+([A-Za-z_$][\w$]*)/g, 'class'],
             [/\binterface\s+([A-Za-z_$][\w$]*)/g, 'interface'],
-            [/(?:public|private|protected|static|final|abstract|synchronized|native|\s)+[A-Za-z0-9_<> ,?]+\s+([A-Za-z_$][\w$]*)\s*\(/g, 'method'],
+            [
+              /(?:public|private|protected|static|final|abstract|synchronized|native|\s)+[A-Za-z0-9_<> ,?]+\s+([A-Za-z_$][\w$]*)\s*\(/g,
+              'method',
+            ],
           ]
         : [
             [/(?:export\s+)?(?:async\s+)?function\s+([A-Za-z_$][\w$]*)/g, 'function'],
@@ -258,12 +261,14 @@ export function indexRepository(
       tests: /(^|[/_.-])(test|tests|spec|specs)([/_.-]|$)/i.test(file.path),
     });
     symbols.push(...fileSymbols);
-    for (const target of imports) dependencies.push({ from: file.path, to: target, kind: 'import' });
+    for (const target of imports)
+      dependencies.push({ from: file.path, to: target, kind: 'import' });
   }
 
   const counts = new Map<Language, number>();
   for (const file of records) {
-    if (file.language !== 'unknown') counts.set(file.language, (counts.get(file.language) ?? 0) + 1);
+    if (file.language !== 'unknown')
+      counts.set(file.language, (counts.get(file.language) ?? 0) + 1);
   }
 
   return {
@@ -299,7 +304,10 @@ export class KnowledgeStore {
   }
 
   search(query: RetrievalQuery): RetrievalResult[] {
-    const terms = query.text.toLowerCase().split(/[^a-z0-9_$.-]+/).filter((term) => term.length > 1);
+    const terms = query.text
+      .toLowerCase()
+      .split(/[^a-z0-9_$.-]+/)
+      .filter((term) => term.length > 1);
     const results: RetrievalResult[] = [];
     for (const item of this.items.values()) {
       if (query.categories && !query.categories.includes(item.category)) continue;

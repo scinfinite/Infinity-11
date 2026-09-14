@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { buildContextPack, createProjectBrain, detectLanguage, KnowledgeStore } from '../packages/knowledge/src/index.js';
+import {
+  buildContextPack,
+  createProjectBrain,
+  detectLanguage,
+  KnowledgeStore,
+} from '../packages/knowledge/src/index.js';
 import { MemoryStore, memoryFromLesson } from '../packages/memory/src/index.js';
 
 describe('Stage 8 Project Brain', () => {
@@ -22,7 +27,9 @@ describe('Stage 8 Project Brain', () => {
       },
     ]);
     expect(brain.index.files).toHaveLength(2);
-    expect(brain.index.symbols.some((symbol) => symbol.name === 'run' && symbol.exported)).toBe(true);
+    expect(brain.index.symbols.some((symbol) => symbol.name === 'run' && symbol.exported)).toBe(
+      true,
+    );
     expect(brain.index.dependencies).toContainEqual({
       from: 'src/app.ts',
       to: './helper',
@@ -53,7 +60,11 @@ describe('Stage 8 Project Brain', () => {
       importance: 0.9,
       updatedAt: new Date().toISOString(),
     });
-    const pack = buildContextPack(store, { text: 'database durable' }, { maxItems: 2, maxCharacters: 100 });
+    const pack = buildContextPack(
+      store,
+      { text: 'database durable' },
+      { maxItems: 2, maxCharacters: 100 },
+    );
     expect(pack.items[0]?.item.id).toBe('a');
     expect(pack.provenance).toEqual([{ sourceId: 'architecture', categories: ['decision'] }]);
     expect(pack.includedCharacters).toBeLessThanOrEqual(100);
