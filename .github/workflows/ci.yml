@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, stage-1-engineering-foundation]
+    branches: [main, stage-1-engineering-foundation, stage-2-identity-persistence-events]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -22,38 +22,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 22.14.0
-
       - name: Enable pnpm
         run: corepack enable
-
       - name: Verify toolchain
         run: |
           node --version
           pnpm --version
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
       - name: Format check
         run: pnpm format:check
-
       - name: Lint
         run: pnpm lint
-
       - name: Typecheck
         run: pnpm typecheck
-
       - name: Unit and contract tests
         run: pnpm test
-
       - name: Build
         run: pnpm build
-
       - name: Dependency security audit
         run: pnpm security
 
@@ -66,7 +56,6 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-
       - name: Gitleaks
         uses: gitleaks/gitleaks-action@v3
         env:
