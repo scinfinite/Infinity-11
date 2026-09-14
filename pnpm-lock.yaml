@@ -51,7 +51,28 @@ importers:
         specifier: workspace:*
         version: link:../types
 
+  packages/events:
+    dependencies:
+      '@infinity-11/types':
+        specifier: workspace:*
+        version: link:../types
+
+  packages/identity:
+    dependencies:
+      '@infinity-11/persistence':
+        specifier: workspace:*
+        version: link:../persistence
+      '@infinity-11/types':
+        specifier: workspace:*
+        version: link:../types
+
   packages/observability:
+    dependencies:
+      '@infinity-11/types':
+        specifier: workspace:*
+        version: link:../types
+
+  packages/persistence:
     dependencies:
       '@infinity-11/types':
         specifier: workspace:*
@@ -62,6 +83,8 @@ importers:
       '@infinity-11/types':
         specifier: workspace:*
         version: link:../types
+
+  packages/storage: {}
 
   packages/types: {}
 
