@@ -2,7 +2,7 @@
 
 ## Current status
 
-**Phases 1–14: COMPLETE, merged into `main`, and verified by CI.**
+**Phases 1–15: COMPLETE, merged into `main`, and verified by CI.**
 
 **Phase 11 — Advanced Application Builder Foundation: COMPLETE.** The Phase 11 application specification/foundation is part of the verified baseline.
 
@@ -11,6 +11,8 @@
 **Phase 13 — Database and Data Layer Builder: COMPLETE.** Deterministic PostgreSQL/SQLite schema and seed generation, fail-closed validation, repository/executor/transaction/health contracts, branch verification, merge, and final exact-head main CI are verified.
 
 **Phase 14 — Authentication and Authorization Builder: COMPLETE.** Provider-independent authentication strategies, bounded session policy, role/permission validation, deny-precedence authorization, permission-boundary enforcement, deterministic planning, adapter contracts, branch verification, merge, and documentation closure are verified.
+
+**Phase 15 — AI Project Modification Engine: COMPLETE.** Deterministic create/update/delete/rename planning and application, path safety, optimistic concurrency, expected-hash checks, ALLOW/ASK/DENY policy enforcement, request-to-plan binding, rollback handling, branch verification, implementation merge, documentation closure, and final synchronized main CI are verified.
 
 ## Canonical V1 planning baseline
 
@@ -40,7 +42,7 @@ The authoritative detailed V1 implementation plan is:
 12 Full-Stack Code Generation              ← COMPLETE
 13 Database and Data Layer Builder          ← COMPLETE
 14 Authentication and Authorization Builder ← COMPLETE
-15 AI Project Modification Engine
+15 AI Project Modification Engine           ← COMPLETE
 16 Application Testing Engine
 17 Browser and Visual QA Engine
 18 Application Improvement Engine
@@ -108,9 +110,9 @@ The roadmap table is updated only from repository evidence.
 - Web is the control/experience surface; runtime owns policy and execution.
 - V1 completion boundary remains Phase 110.
 
-## Phase 14 evidence
+## Phase 15 evidence
 
-The Phase 14 implementation contract is documented in `PHASE-14-AUTHENTICATION-AUTHORIZATION-BUILDER.md`. The builder provides deterministic authentication configuration, session security constraints, role/permission validation, authorization evaluation with deny precedence, permission-boundary enforcement, and adapter boundaries for hashing, tokens, and sessions.
+The Phase 15 implementation contract is documented in `PHASE-15-AI-PROJECT-MODIFICATION-ENGINE.md`. The engine provides deterministic modification planning and application through a project-store adapter, with path safety, optimistic concurrency, expected-file-hash checks, ALLOW/ASK/DENY policy enforcement, request-to-plan integrity binding, and awaited rollback handling. Implementation PR #20 merged as `6ffde460767fb7f421154643e5bc5f2d99113aa3`; the final branch CI was #459.
 
 ## Final boundary
 
