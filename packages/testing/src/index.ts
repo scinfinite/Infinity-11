@@ -65,10 +65,7 @@ export interface TestRunner {
 }
 
 export interface TestPolicy {
-  evaluate(input: {
-    projectId: string;
-    test: TestCase;
-  }): Promise<PolicyDecision> | PolicyDecision;
+  evaluate(input: { projectId: string; test: TestCase }): Promise<PolicyDecision> | PolicyDecision;
 }
 
 export interface TestCaseResult {
@@ -246,10 +243,7 @@ export function validateTestSuite(suite: TestSuite): TestIssue[] {
   return issues;
 }
 
-export async function buildTestPlan(
-  suite: TestSuite,
-  policy: TestPolicy,
-): Promise<TestPlan> {
+export async function buildTestPlan(suite: TestSuite, policy: TestPolicy): Promise<TestPlan> {
   const issues = validateTestSuite(suite);
   if (issues.length) {
     throw new Error(`Invalid test suite: ${issues.map((issue) => issue.code).join(', ')}`);
@@ -334,11 +328,7 @@ export async function runTestPlan(
         timeoutMs: planned.timeoutMs,
       });
       const failure = evaluateResult(planned.test, execution);
-      const status: TestStatus = execution.timedOut
-        ? 'timed-out'
-        : failure
-          ? 'failed'
-          : 'passed';
+      const status: TestStatus = execution.timedOut ? 'timed-out' : failure ? 'failed' : 'passed';
       final = {
         id: planned.test.id,
         kind: planned.test.kind,
