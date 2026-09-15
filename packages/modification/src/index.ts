@@ -99,7 +99,7 @@ function canonicalRequest(request: ModificationRequest): string {
     baseRevision: request.baseRevision,
     reason: request.reason,
     actor: request.actor,
-    operations: [...request.operations].sort(compareOperations),
+    operations: request.operations.slice().sort(compareOperations),
   });
 }
 
@@ -161,7 +161,7 @@ export function validateModificationRequest(request: ModificationRequest): Modif
   }
 
   const paths = new Set<string>();
-  for (const [index, operation] of request.operations.entries()) {
+  request.operations.forEach((operation, index) => {
     const prefix = `operations.${index}`;
     assertSafePath(operation.path, `${prefix}.path`, issues);
     if (paths.has(operation.path)) {
@@ -213,7 +213,7 @@ export function validateModificationRequest(request: ModificationRequest): Modif
         message: 'Only rename operations may specify toPath.',
       });
     }
-  }
+  });
   return issues;
 }
 
@@ -277,14 +277,14 @@ export async function buildModificationPlan(
     });
   }
 
-  const operations = [...planned].sort(comparePlannedOperations);
-  const changedFiles = [
-    ...new Set(
+  const operations = planned.slice().sort(comparePlannedOperations);
+  const changedFiles = Array.from(
+    new Set(
       operations.flatMap((operation) =>
         operation.kind === 'rename' ? [operation.path, operation.toPath!] : [operation.path],
       ),
     ),
-  ].sort();
+  ).sort();
   return {
     requestId: request.id,
     projectId: request.projectId,
@@ -340,13 +340,13 @@ export async function applyModificationPlan(
       }
     }
   } catch (error) {
-    for (const [path, file] of backups) {
+    backups.forEach(async (file, path) => {
       if (file) {
         await store.write(request.projectId, path, file.content);
       } else if (await store.read(request.projectId, path)) {
         await store.remove(request.projectId, path);
       }
-    }
+    });
     throw error;
   }
 
