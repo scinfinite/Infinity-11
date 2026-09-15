@@ -2,7 +2,7 @@
 
 > **Status:** Active V1 implementation dependency roadmap
 > **Authoritative detailed plan:** `docs/architecture/INFINITY-11-V1-ROADMAP.md`
-> **Current verified baseline:** Phases 1–10 complete; Phase 11 is next.
+> **Current verified baseline:** Phases 1–11 complete; Phase 12 is in progress.
 > **Strategy:** FREE-FIRST + OPEN-SOURCE-FIRST + BYOK-FIRST.
 
 ## Purpose
@@ -22,8 +22,8 @@ This document summarizes dependency order and the engineering completion policy.
 08 Project Brain + Context + Knowledge            COMPLETE
 09 Verification + Browser/Visual QA               COMPLETE
 10 Core Web/PWA Product UX                         COMPLETE
-11 Advanced Application Builder Foundation         NEXT
-12 Full-Stack Code Generation                      TODO
+11 Advanced Application Builder Foundation         COMPLETE
+12 Full-Stack Code Generation                      IN PROGRESS
 13 Database and Data Layer Builder                 TODO
 14 Authentication and Authorization Builder       TODO
 15 AI Project Modification Engine                 TODO
@@ -124,6 +124,22 @@ This document summarizes dependency order and the engineering completion policy.
 110 V1.0 Launch and Roadmap Closure               TODO
 ```
 
+## Phase 12 implementation boundary
+
+Phase 12 converts Phase 11 application specifications into deterministic, auditable project source. The current implementation covers:
+
+- web, backend, and full-stack target selection;
+- TypeScript/JavaScript web and Node templates;
+- Python/FastAPI, Java/Spring Boot, and Go/Gin backend templates;
+- framework/language validation and fail-closed unsupported combinations;
+- deterministic file ordering and generation metadata;
+- requirement-to-file traceability;
+- generated-project path and secret-material auditing;
+- generated verification-command contract;
+- automated coverage for all supported framework variants.
+
+Phase 12 remains **IN PROGRESS** until branch CI, PR merge, and post-merge `main` CI are verified.
+
 ## Dependency model
 
 ```text
@@ -173,7 +189,7 @@ inspect → reproduce / verify → diagnose root cause → implement
 → documentation → final main CI → close
 ```
 
-A roadmap entry is planning information. It is not implementation evidence. The phase status table in the authoritative V1 roadmap must be updated only after accepted repository evidence exists.
+A roadmap entry is planning information. It is not implementation evidence. Phase status changes only after accepted repository evidence exists.
 
 ## Architectural constraints
 
@@ -202,4 +218,4 @@ architecture/INFINITY-11-V1-ROADMAP.md
 repository implementation + tests + runtime evidence + CI
 ```
 
-The detailed roadmap is now under `docs/architecture` so architecture and phase planning remain together without changing the product thesis.
+The detailed roadmap is under `docs/architecture` so architecture and phase planning remain together without changing the product thesis.
