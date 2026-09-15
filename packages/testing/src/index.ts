@@ -116,7 +116,9 @@ function hash(value: string): string {
 }
 
 function compareCases(a: TestCase, b: TestCase): number {
-  return a.id.localeCompare(b.id) || JSON.stringify(a).localeCompare(JSON.stringify(b));
+  return (
+    a.id.localeCompare(b.id) || JSON.stringify(a).localeCompare(JSON.stringify(b))
+  );
 }
 
 function canonicalSuite(suite: TestSuite): string {
@@ -197,14 +199,16 @@ export function validateTestSuite(suite: TestSuite): TestIssue[] {
       issues.push({
         code: 'UNSAFE_COMMAND',
         path: `${prefix}.command`,
-        message: 'Command must be a simple executable token; shell syntax is not accepted.',
+        message:
+          'Command must be a simple executable token; shell syntax is not accepted.',
       });
     }
     if (test.cwd !== undefined && !cwdPattern.test(test.cwd)) {
       issues.push({
         code: 'UNSAFE_CWD',
         path: `${prefix}.cwd`,
-        message: 'Working directory must be a safe project-relative path outside .git.',
+        message:
+          'Working directory must be a safe project-relative path outside .git.',
       });
     }
     const timeoutMs = normalizeTimeout(test.timeoutMs);
