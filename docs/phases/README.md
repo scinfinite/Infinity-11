@@ -86,7 +86,7 @@ Phase 19 implementation PR #28 merged into `main` as `61217b031eda49ab3e4512a8c5
 
 ## Phase 20 evidence
 
-Phase 20 implementation and documentation are staged together on the Phase 20 branch. Final merge and post-merge CI evidence will be recorded here only after all required verification gates pass.
+Phase 20 implementation PR #31 merged as `8440ad17551370cba72440e122d8bb5b00560654`. Its first post-merge main CI run #513 caught formatter drift in the new GitHub package. The exact Prettier output was captured, applied, and the temporary evidence step was removed before merge. Remediation PR #33 merged as `e5866d3996afd877e6e444a670cb114cd2d0aaed`; remediation CI #520 passed all required gates. Final synchronized post-merge `main` CI run #522 passed format, lint, typecheck, tests, build, dependency security audit, and Gitleaks. The dedicated phase document is `docs/phases/PHASE-20-GITHUB-ENGINEERING-INTEGRATION.md`.
 
 ## Next verified phase
 
