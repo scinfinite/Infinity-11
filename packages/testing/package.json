@@ -1,0 +1,10 @@
+{
+  "name": "@infinity-11/testing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic, policy-controlled application test planning and execution contracts for INFINITY-11.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  }
+}

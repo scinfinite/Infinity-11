@@ -4,26 +4,7 @@
 
 **Phases 1–15: COMPLETE, merged into `main`, and verified by CI.**
 
-**Phase 11 — Advanced Application Builder Foundation: COMPLETE.** The Phase 11 application specification/foundation is part of the verified baseline.
-
-**Phase 12 — Full-Stack Code Generation: COMPLETE.** Deterministic project generation, requirement traceability, generated-project security auditing, multi-framework coverage, branch CI, merge, and post-merge main CI are verified.
-
-**Phase 13 — Database and Data Layer Builder: COMPLETE.** Deterministic PostgreSQL/SQLite schema and seed generation, fail-closed validation, repository/executor/transaction/health contracts, branch verification, merge, and final exact-head main CI are verified.
-
-**Phase 14 — Authentication and Authorization Builder: COMPLETE.** Provider-independent authentication strategies, bounded session policy, role/permission validation, deny-precedence authorization, permission-boundary enforcement, deterministic planning, adapter contracts, branch verification, merge, and documentation closure are verified.
-
-**Phase 15 — AI Project Modification Engine: COMPLETE.** Deterministic create/update/delete/rename planning and application, path safety, optimistic concurrency, expected-hash checks, ALLOW/ASK/DENY policy enforcement, request-to-plan binding, rollback handling, branch verification, implementation merge, documentation closure, and final synchronized main CI are verified.
-
-## Canonical V1 planning baseline
-
-The authoritative detailed V1 implementation plan is:
-
-- `../architecture/INFINITY-11-V1-ROADMAP.md` — complete Phase 1–110 roadmap;
-- `../architecture/INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md` — canonical architectural baseline;
-- `../architecture/INFINITY-11-PRE-CODING-AUDIT.md` — original implementation gate;
-- `../architecture/INFINITY-11-IMPLEMENTATION-ROADMAP.md` — dependency-oriented implementation history;
-- `../description/INFINITY-11-DETAILED-DESCRIPTION.md` — detailed product/web specification;
-- `../description/INFINITY-11-ARCHITECTURE-AND-SCREENS.md` — active architecture and screen contract.
+**Phase 16 — Application Testing Engine: IN PROGRESS.** Deterministic test planning, bounded execution policy, assertion evaluation, retries, timeout diagnostics, and runner-adapter boundaries are being implemented.
 
 ## V1 sequence
 
@@ -43,7 +24,7 @@ The authoritative detailed V1 implementation plan is:
 13 Database and Data Layer Builder          ← COMPLETE
 14 Authentication and Authorization Builder ← COMPLETE
 15 AI Project Modification Engine           ← COMPLETE
-16 Application Testing Engine
+16 Application Testing Engine               ← IN PROGRESS
 17 Browser and Visual QA Engine
 18 Application Improvement Engine
 19 Application Templates and Scaffolding
@@ -63,37 +44,13 @@ The authoritative detailed V1 implementation plan is:
 ## Completion standard
 
 ```text
-inspect
-→ reproduce / verify
-→ diagnose root cause
-→ implement
-→ format
-→ lint
-→ typecheck
-→ unit tests
-→ integration tests
-→ build
-→ E2E / runtime
-→ security
-→ regression
-→ UX / accessibility
-→ documentation
-→ CI
-→ merge
-→ post-merge main CI
-→ close phase
+inspect → reproduce / verify → diagnose root cause → implement
+→ format → lint → typecheck → unit tests → integration tests → build
+→ E2E / runtime → security → regression → UX / accessibility
+→ documentation → CI → merge → post-merge main CI → close phase
 ```
 
 A phase is not complete merely because code compiles, a screen renders, or an agent claims success. Completion requires evidence for the phase acceptance boundary and regression protection for earlier phases.
-
-## Status discipline
-
-- `COMPLETED` means implementation and verification evidence exists.
-- `IN PROGRESS` means work is actively being implemented but the completion gate is not closed.
-- `NOT COMPLETED` means planned work has not been accepted as complete.
-- `BLOCKED` means a dependency or external constraint prevents safe completion.
-
-The roadmap table is updated only from repository evidence.
 
 ## Product invariants
 
@@ -112,10 +69,8 @@ The roadmap table is updated only from repository evidence.
 
 ## Phase 15 evidence
 
-The Phase 15 implementation contract is documented in `PHASE-15-AI-PROJECT-MODIFICATION-ENGINE.md`. The engine provides deterministic modification planning and application through a project-store adapter, with path safety, optimistic concurrency, expected-file-hash checks, ALLOW/ASK/DENY policy enforcement, request-to-plan integrity binding, and awaited rollback handling. Implementation PR #20 merged as `6ffde460767fb7f421154643e5bc5f2d99113aa3`; the final branch CI was #459.
+Phase 15 merged as `6ffde460767fb7f421154643e5bc5f2d99113aa3`; documentation closure merged as `c65f9d808f5c750156889557cfa43e1e3950afbb`; final main CI #462 passed.
 
-## Final boundary
+## Phase 16 evidence
 
-**Phase 110 is the V1 roadmap closure point.** After Phase 110, the product enters ordinary maintenance and future-version evolution. Security fixes, provider updates, reliability fixes, and necessary compatibility work continue normally.
-
-<!-- roadmap-generation-trigger -->
+The implementation contract is documented in `PHASE-16-APPLICATION-TESTING-ENGINE.md`. The engine is designed to validate structured suites, generate deterministic plans, enforce ALLOW/ASK/DENY, bind execution to the exact suite definition, execute through a replaceable runner, evaluate assertions/timeouts, bound retries, and preserve diagnostics.
