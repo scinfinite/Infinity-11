@@ -99,8 +99,16 @@ export interface AuthorizationContext {
 }
 
 const idPattern = /^[a-z][a-z0-9_]{0,62}$/;
-const strategies: AuthStrategy[] = ['password', 'magic-link', 'oauth2', 'passkey'];
-const transports: SessionTransport[] = ['secure-cookie', 'authorization-header'];
+const strategies: AuthStrategy[] = [
+  'password',
+  'magic-link',
+  'oauth2',
+  'passkey',
+];
+const transports: SessionTransport[] = [
+  'secure-cookie',
+  'authorization-header',
+];
 const permissionPattern = /^[a-z][a-z0-9_.:-]{0,127}$/;
 
 export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
@@ -143,7 +151,8 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
     issues.push({
       code: 'INVALID_SESSION_TTL',
       path: 'session.ttlSeconds',
-      message: 'Session TTL must be an integer between 60 seconds and 365 days.',
+      message:
+        'Session TTL must be an integer between 60 seconds and 365 days.',
     });
   }
   if (
@@ -155,10 +164,14 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
     issues.push({
       code: 'INVALID_IDLE_TIMEOUT',
       path: 'session.idleTimeoutSeconds',
-      message: 'Idle timeout must be at least 60 seconds and no greater than the session TTL.',
+      message:
+        'Idle timeout must be at least 60 seconds and no greater than the session TTL.',
     });
   }
-  if (spec.session.sameSite === 'none' && spec.session.transport !== 'secure-cookie') {
+  if (
+    spec.session.sameSite === 'none' &&
+    spec.session.transport !== 'secure-cookie'
+  ) {
     issues.push({
       code: 'SAMESITE_NONE_REQUIRES_COOKIE',
       path: 'session.sameSite',
@@ -190,14 +203,18 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
         message: `Unsupported authentication strategy: ${String(provider.strategy)}.`,
       });
     }
-    if (provider.strategy === 'oauth2' && (!provider.issuer || !provider.clientId)) {
+    if (
+      provider.strategy === 'oauth2' &&
+      (!provider.issuer || !provider.clientId)
+    ) {
       issues.push({
         code: 'OAUTH_CONFIG_REQUIRED',
         path: `providers.${provider.id}`,
         message: 'OAuth2 providers require issuer and clientId.',
       });
     }
-    if (provider.issuer?.startsWith('javascript:') || provider.issuer?.startsWith('data:')) {
+    const issuerScheme = provider.issuer?.split(':', 1)[0]?.toLowerCase();
+    if (issuerScheme === 'javascript' || issuerScheme === 'data') {
       issues.push({
         code: 'UNSAFE_ISSUER',
         path: `providers.${provider.id}.issuer`,
@@ -206,7 +223,7 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
     }
   }
 
-  const roles = new Set<string>();
+  const roles = new Map<string, Set<string>>();
   for (const role of spec.roles) {
     if (!idPattern.test(role.name)) {
       issues.push({
@@ -222,7 +239,7 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
         message: `Duplicate role: ${role.name}.`,
       });
     }
-    roles.add(role.name);
+    const permissions = new Set<string>();
     for (const permission of role.permissions) {
       if (!permissionPattern.test(permission)) {
         issues.push({
@@ -231,15 +248,25 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
           message: `Invalid permission: ${permission}.`,
         });
       }
+      permissions.add(permission);
     }
+    roles.set(role.name, permissions);
   }
 
   for (const rule of spec.policies) {
-    if (!rule.resource || !rule.action) {
+    const target = `${rule.resource}.${rule.action}`;
+    if (!permissionPattern.test(rule.resource)) {
       issues.push({
-        code: 'POLICY_TARGET_REQUIRED',
-        path: 'policies',
-        message: 'Policy resource and action are required.',
+        code: 'INVALID_POLICY_RESOURCE',
+        path: 'policies.resource',
+        message: `Invalid policy resource: ${rule.resource}.`,
+      });
+    }
+    if (!permissionPattern.test(rule.action)) {
+      issues.push({
+        code: 'INVALID_POLICY_ACTION',
+        path: 'policies.action',
+        message: `Invalid policy action: ${rule.action}.`,
       });
     }
     if (rule.roles?.some((role) => !roles.has(role))) {
@@ -257,11 +284,27 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
           'A role-scoped deny rule is required; unscoped global denies belong to the central security policy engine.',
       });
     }
+    if (rule.effect === 'allow') {
+      for (const role of rule.roles ?? []) {
+        const permissions = roles.get(role);
+        if (permissions && !permissions.has(target)) {
+          issues.push({
+            code: 'POLICY_PERMISSION_MISMATCH',
+            path: 'policies',
+            message: `Allow rule ${target} is not declared by role ${role}.`,
+          });
+        }
+      }
+    }
   }
 
   if (spec.passwordPolicy) {
     const policy = spec.passwordPolicy;
-    if (!Number.isInteger(policy.minLength) || policy.minLength < 8 || policy.minLength > 256) {
+    if (
+      !Number.isInteger(policy.minLength) ||
+      policy.minLength < 8 ||
+      policy.minLength > 256
+    ) {
       issues.push({
         code: 'INVALID_PASSWORD_LENGTH',
         path: 'passwordPolicy.minLength',
@@ -270,7 +313,8 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
     }
     if (
       policy.maxFailedAttempts !== undefined &&
-      (!Number.isInteger(policy.maxFailedAttempts) || policy.maxFailedAttempts < 1)
+      (!Number.isInteger(policy.maxFailedAttempts) ||
+        policy.maxFailedAttempts < 1)
     ) {
       issues.push({
         code: 'INVALID_LOCKOUT_ATTEMPTS',
@@ -290,7 +334,10 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
     }
   }
 
-  if (spec.providers.some((provider) => provider.strategy === 'password') && !spec.passwordPolicy) {
+  if (
+    spec.providers.some((provider) => provider.strategy === 'password') &&
+    !spec.passwordPolicy
+  ) {
     issues.push({
       code: 'PASSWORD_POLICY_REQUIRED',
       path: 'passwordPolicy',
@@ -320,19 +367,49 @@ function canonical(spec: AuthSpec): string {
         ...role,
         permissions: [...role.permissions].sort(),
       })),
-    policies: [...spec.policies].sort((a, b) =>
+    policies: [...spec.policies]
+      .map((rule) => ({
+        ...rule,
+        roles: rule.roles ? [...rule.roles].sort() : undefined,
+      }))
+      .sort((a, b) =>
+        `${a.resource}:${a.action}:${a.effect}:${(a.roles ?? []).join(',')}`.localeCompare(
+          `${b.resource}:${b.action}:${b.effect}:${(b.roles ?? []).join(',')}`,
+        ),
+      ),
+  };
+  return JSON.stringify(normalized);
+}
+
+function normalizedProviders(spec: AuthSpec): AuthProviderSpec[] {
+  return [...spec.providers].sort((a, b) => a.id.localeCompare(b.id));
+}
+
+function normalizedRoles(spec: AuthSpec): RoleSpec[] {
+  return [...spec.roles]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((role) => ({ ...role, permissions: [...role.permissions].sort() }));
+}
+
+function normalizedPolicies(spec: AuthSpec): PolicyRule[] {
+  return [...spec.policies]
+    .map((rule) => ({
+      ...rule,
+      roles: rule.roles ? [...rule.roles].sort() : undefined,
+    }))
+    .sort((a, b) =>
       `${a.resource}:${a.action}:${a.effect}:${(a.roles ?? []).join(',')}`.localeCompare(
         `${b.resource}:${b.action}:${b.effect}:${(b.roles ?? []).join(',')}`,
       ),
-    ),
-  };
-  return JSON.stringify(normalized);
+    );
 }
 
 export function buildAuthPlan(spec: AuthSpec): AuthPlan {
   const issues = validateAuthSpec(spec);
   if (issues.length) {
-    throw new Error(`Invalid auth specification: ${issues.map((issue) => issue.code).join(', ')}`);
+    throw new Error(
+      `Invalid auth specification: ${issues.map((issue) => issue.code).join(', ')}`,
+    );
   }
 
   const canonicalSpec = canonical(spec);
@@ -340,7 +417,7 @@ export function buildAuthPlan(spec: AuthSpec): AuthPlan {
     {
       id: spec.id,
       revision: spec.revision,
-      providers: spec.providers,
+      providers: normalizedProviders(spec),
       session: spec.session,
       csrfProtection: spec.csrfProtection !== false,
     },
@@ -349,10 +426,8 @@ export function buildAuthPlan(spec: AuthSpec): AuthPlan {
   );
   const policy = JSON.stringify(
     {
-      roles: [...spec.roles].sort((a, b) => a.name.localeCompare(b.name)),
-      policies: [...spec.policies].sort((a, b) =>
-        `${a.resource}:${a.action}`.localeCompare(`${b.resource}:${b.action}`),
-      ),
+      roles: normalizedRoles(spec),
+      policies: normalizedPolicies(spec),
     },
     null,
     2,
