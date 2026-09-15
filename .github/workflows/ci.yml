@@ -45,6 +45,11 @@ jobs:
           pnpm --version
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Format evidence (temporary)
+        run: |
+          pnpm exec prettier --write packages/github/src/index.ts
+          git diff -- packages/github/src/index.ts
+          exit 1
       - name: Format check
         run: pnpm format:check
       - name: Lint
