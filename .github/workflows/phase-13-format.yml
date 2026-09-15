@@ -9,11 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - run: corepack enable
       - uses: actions/setup-node@v6
         with:
           node-version: 22.14.0
-          cache: pnpm
-      - run: corepack enable
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec prettier --write packages/database/package.json packages/database/tsconfig.json packages/database/src/index.ts tests/phase-13-database.test.ts
       - run: |
