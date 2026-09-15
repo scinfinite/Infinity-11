@@ -53,6 +53,7 @@ export interface DatabasePlan {
 
 const idPattern = /^[a-z][a-z0-9_]{0,62}$/;
 const columnTypes: ColumnType[] = ['uuid', 'text', 'integer', 'boolean', 'timestamp', 'json'];
+const dialects: DatabaseDialect[] = ['postgres', 'sqlite'];
 const quoteIdent = (value: string, dialect: DatabaseDialect) =>
   dialect === 'postgres' ? `"${value.replace(/"/g, '""')}"` : `"${value.replace(/"/g, '""')}"`;
 const sqlString = (value: string) => `'${value.replace(/'/g, "''")}'`;
@@ -66,7 +67,7 @@ export function validateDatabaseSpec(spec: DatabaseSpec): ValidationIssue[] {
       message:
         'Database id must be 1–63 lowercase letters, digits, or underscores and start with a letter.',
     });
-  if (!['postgres', 'sqlite'].includes(spec.dialect))
+  if (!dialects.includes(spec.dialect))
     issues.push({
       code: 'UNSUPPORTED_DIALECT',
       path: 'dialect',
@@ -139,6 +140,12 @@ export function validateDatabaseSpec(spec: DatabaseSpec): ValidationIssue[] {
           code: 'INVALID_REFERENCE_COLUMN',
           path: `tables.${table.name}.${column.name}`,
           message: 'Referenced column name is invalid.',
+        });
+      if (column.references?.onDelete === 'set-null' && column.nullable !== true)
+        issues.push({
+          code: 'SET_NULL_REQUIRES_NULLABLE',
+          path: `tables.${table.name}.${column.name}`,
+          message: 'ON DELETE SET NULL requires a nullable referencing column.',
         });
     }
     if (primaryKeys > 1)
@@ -240,11 +247,21 @@ export function generateSchemaSql(spec: DatabaseSpec): string {
 function valueSql(value: string | number | boolean | null): string {
   if (value === null) return 'NULL';
   if (typeof value === 'boolean') return value ? 'TRUE' : 'FALSE';
-  if (typeof value === 'number') return Number.isFinite(value) ? String(value) : 'NULL';
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value)) throw new Error('Seed numeric values must be finite.');
+    return String(value);
+  }
   return sqlString(value);
 }
+
 export function generateSeedSql(spec: DatabaseSpec): string {
-  const seeds = [...(spec.seeds ?? [])];
+  const seeds = [...(spec.seeds ?? [])].sort((a, b) => {
+    const tableOrder = a.table.localeCompare(b.table);
+    if (tableOrder !== 0) return tableOrder;
+    return JSON.stringify(a.values, Object.keys(a.values).sort()).localeCompare(
+      JSON.stringify(b.values, Object.keys(b.values).sort()),
+    );
+  });
   if (!seeds.length) return '';
   const tableMap = new Map(spec.tables.map((t) => [t.name, t]));
   const lines = ['-- Generated deterministic seed data.'];
@@ -281,6 +298,7 @@ export function buildDatabasePlan(spec: DatabaseSpec): DatabasePlan {
         columns: [...t.columns],
         indexes: [...(t.indexes ?? [])].sort((a, b) => a.name.localeCompare(b.name)),
       })),
+    seeds: [...(spec.seeds ?? [])],
   };
   const issues = validateDatabaseSpec(normalized);
   if (issues.length)
@@ -329,6 +347,14 @@ export async function checkDatabaseHealth(
   dialect: DatabaseDialect,
 ): Promise<DatabaseHealth> {
   const started = Date.now();
+  if (!dialects.includes(dialect)) {
+    return {
+      ok: false,
+      latencyMs: Date.now() - started,
+      dialect,
+      error: `Unsupported database dialect: ${String(dialect)}.`,
+    };
+  }
   try {
     await executor.execute('SELECT 1');
     return { ok: true, latencyMs: Date.now() - started, dialect };
