@@ -147,47 +147,100 @@ function normalizeRetries(value: number | undefined): number {
 export function validateTestSuite(suite: TestSuite): TestIssue[] {
   const issues: TestIssue[] = [];
   if (!idPattern.test(suite.id)) {
-    issues.push({ code: 'INVALID_SUITE_ID', path: 'id', message: 'Suite id is invalid.' });
+    issues.push({
+      code: 'INVALID_SUITE_ID',
+      path: 'id',
+      message: 'Suite id is invalid.',
+    });
   }
   if (!idPattern.test(suite.projectId)) {
-    issues.push({ code: 'INVALID_PROJECT_ID', path: 'projectId', message: 'Project id is invalid.' });
+    issues.push({
+      code: 'INVALID_PROJECT_ID',
+      path: 'projectId',
+      message: 'Project id is invalid.',
+    });
   }
   if (!Number.isInteger(suite.revision) || suite.revision < 0) {
-    issues.push({ code: 'INVALID_REVISION', path: 'revision', message: 'Revision must be a non-negative integer.' });
+    issues.push({
+      code: 'INVALID_REVISION',
+      path: 'revision',
+      message: 'Revision must be a non-negative integer.',
+    });
   }
   if (!suite.cases.length) {
-    issues.push({ code: 'TESTS_REQUIRED', path: 'cases', message: 'At least one test case is required.' });
+    issues.push({
+      code: 'TESTS_REQUIRED',
+      path: 'cases',
+      message: 'At least one test case is required.',
+    });
   }
 
   const ids = new Set<string>();
   suite.cases.forEach((test, index) => {
     const prefix = `cases.${index}`;
     if (!idPattern.test(test.id)) {
-      issues.push({ code: 'INVALID_TEST_ID', path: `${prefix}.id`, message: 'Test id is invalid.' });
+      issues.push({
+        code: 'INVALID_TEST_ID',
+        path: `${prefix}.id`,
+        message: 'Test id is invalid.',
+      });
     }
     if (ids.has(test.id)) {
-      issues.push({ code: 'DUPLICATE_TEST_ID', path: `${prefix}.id`, message: 'Test ids must be unique.' });
+      issues.push({
+        code: 'DUPLICATE_TEST_ID',
+        path: `${prefix}.id`,
+        message: 'Test ids must be unique.',
+      });
     }
     ids.add(test.id);
     if (!commandPattern.test(test.command)) {
-      issues.push({ code: 'UNSAFE_COMMAND', path: `${prefix}.command`, message: 'Command must be a simple executable token; shell syntax is not accepted.' });
+      issues.push({
+        code: 'UNSAFE_COMMAND',
+        path: `${prefix}.command`,
+        message: 'Command must be a simple executable token; shell syntax is not accepted.',
+      });
     }
     if (test.cwd !== undefined && !cwdPattern.test(test.cwd)) {
-      issues.push({ code: 'UNSAFE_CWD', path: `${prefix}.cwd`, message: 'Working directory must be a safe project-relative path outside .git.' });
+      issues.push({
+        code: 'UNSAFE_CWD',
+        path: `${prefix}.cwd`,
+        message: 'Working directory must be a safe project-relative path outside .git.',
+      });
     }
     const timeoutMs = normalizeTimeout(test.timeoutMs);
     if (!Number.isInteger(timeoutMs) || timeoutMs < 100 || timeoutMs > maxTimeoutMs) {
-      issues.push({ code: 'INVALID_TIMEOUT', path: `${prefix}.timeoutMs`, message: `Timeout must be an integer between 100 and ${maxTimeoutMs} ms.` });
+      issues.push({
+        code: 'INVALID_TIMEOUT',
+        path: `${prefix}.timeoutMs`,
+        message: `Timeout must be an integer between 100 and ${maxTimeoutMs} ms.`,
+      });
     }
     const retries = normalizeRetries(test.retries);
     if (!Number.isInteger(retries) || retries < 0 || retries > maxRetries) {
-      issues.push({ code: 'INVALID_RETRIES', path: `${prefix}.retries`, message: `Retries must be an integer between 0 and ${maxRetries}.` });
+      issues.push({
+        code: 'INVALID_RETRIES',
+        path: `${prefix}.retries`,
+        message: `Retries must be an integer between 0 and ${maxRetries}.`,
+      });
     }
-    if (test.expectedExitCode !== undefined && (!Number.isInteger(test.expectedExitCode) || test.expectedExitCode < 0 || test.expectedExitCode > 255)) {
-      issues.push({ code: 'INVALID_EXIT_CODE', path: `${prefix}.expectedExitCode`, message: 'Expected exit code must be an integer from 0 through 255.' });
+    if (
+      test.expectedExitCode !== undefined &&
+      (!Number.isInteger(test.expectedExitCode) ||
+        test.expectedExitCode < 0 ||
+        test.expectedExitCode > 255)
+    ) {
+      issues.push({
+        code: 'INVALID_EXIT_CODE',
+        path: `${prefix}.expectedExitCode`,
+        message: 'Expected exit code must be an integer from 0 through 255.',
+      });
     }
     if (test.args?.some((argument) => argument.includes('\u0000'))) {
-      issues.push({ code: 'INVALID_ARGUMENT', path: `${prefix}.args`, message: 'Arguments must not contain NUL bytes.' });
+      issues.push({
+        code: 'INVALID_ARGUMENT',
+        path: `${prefix}.args`,
+        message: 'Arguments must not contain NUL bytes.',
+      });
     }
   });
   return issues;
@@ -206,9 +259,15 @@ export async function buildTestPlan(
   let finalDecision: PolicyDecision = 'allow';
   for (const test of suite.cases.slice().sort(compareCases)) {
     const decision = await policy.evaluate({ projectId: suite.projectId, test });
-    if (decision === 'deny') throw new Error(`POLICY_DENIED: ${test.id}`);
+    if (decision === 'deny') {
+      throw new Error(`POLICY_DENIED: ${test.id}`);
+    }
     if (decision === 'ask') finalDecision = 'ask';
-    planned.push({ test, timeoutMs: normalizeTimeout(test.timeoutMs), retries: normalizeRetries(test.retries) });
+    planned.push({
+      test,
+      timeoutMs: normalizeTimeout(test.timeoutMs),
+      retries: normalizeRetries(test.retries),
+    });
   }
 
   const suiteChecksum = checksum(canonicalSuite(suite));
@@ -227,12 +286,18 @@ export async function buildTestPlan(
 function evaluateResult(test: TestCase, execution: TestExecutionResult): string | undefined {
   const expectedExitCode = test.expectedExitCode ?? 0;
   if (execution.timedOut) return 'TEST_TIMED_OUT';
-  if (execution.exitCode !== expectedExitCode) return `UNEXPECTED_EXIT_CODE: expected ${expectedExitCode}, found ${execution.exitCode}`;
+  if (execution.exitCode !== expectedExitCode) {
+    return `UNEXPECTED_EXIT_CODE: expected ${expectedExitCode}, found ${execution.exitCode}`;
+  }
   for (const expected of test.stdoutIncludes ?? []) {
-    if (!execution.stdout.includes(expected)) return `STDOUT_ASSERTION_FAILED: missing ${JSON.stringify(expected)}`;
+    if (!execution.stdout.includes(expected)) {
+      return `STDOUT_ASSERTION_FAILED: missing ${JSON.stringify(expected)}`;
+    }
   }
   for (const forbidden of test.stderrExcludes ?? []) {
-    if (execution.stderr.includes(forbidden)) return `STDERR_ASSERTION_FAILED: found ${JSON.stringify(forbidden)}`;
+    if (execution.stderr.includes(forbidden)) {
+      return `STDERR_ASSERTION_FAILED: found ${JSON.stringify(forbidden)}`;
+    }
   }
   return undefined;
 }
@@ -243,7 +308,11 @@ export async function runTestPlan(
   runner: TestRunner,
   approveAsk: () => Promise<boolean> | boolean = () => false,
 ): Promise<TestRunResult> {
-  if (plan.suiteId !== suite.id || plan.projectId !== suite.projectId || plan.revision !== suite.revision) {
+  if (
+    plan.suiteId !== suite.id ||
+    plan.projectId !== suite.projectId ||
+    plan.revision !== suite.revision
+  ) {
     throw new Error('PLAN_MISMATCH: test plan does not belong to suite.');
   }
   if (plan.suiteChecksum !== checksum(canonicalSuite(suite))) {
@@ -265,7 +334,11 @@ export async function runTestPlan(
         timeoutMs: planned.timeoutMs,
       });
       const failure = evaluateResult(planned.test, execution);
-      const status: TestStatus = execution.timedOut ? 'timed-out' : failure ? 'failed' : 'passed';
+      const status: TestStatus = execution.timedOut
+        ? 'timed-out'
+        : failure
+          ? 'failed'
+          : 'passed';
       final = {
         id: planned.test.id,
         kind: planned.test.kind,
@@ -293,7 +366,13 @@ export async function runTestPlan(
     planChecksum: plan.checksum,
     passed: failed === 0 && timedOut === 0 && passed === results.length,
     results,
-    summary: { total: results.length, passed, failed, skipped: 0, timedOut },
+    summary: {
+      total: results.length,
+      passed,
+      failed,
+      skipped: 0,
+      timedOut,
+    },
   };
 }
 
