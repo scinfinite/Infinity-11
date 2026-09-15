@@ -39,6 +39,7 @@ export interface ModificationPlan {
   requestId: string;
   projectId: string;
   baseRevision: number;
+  requestChecksum: string;
   operations: PlannedOperation[];
   changedFiles: string[];
   checksum: string;
@@ -70,8 +71,7 @@ export interface ModificationApplyResult {
 }
 
 const idPattern = /^[a-z][a-z0-9_-]{0,63}$/;
-const pathPattern =
-  /^(?!\/)(?!.*\\)(?!.*(?:^|\/)\.\.\/?)(?!.*(?:^|\/)[.]?(?:$|\/))[\x20-\x7e]+$/;
+const pathPattern = /^(?!\/)(?!.*\\)(?!.*(?:^|\/)\.\.\/?)(?!.*(?:^|\/)[.]?(?:$|\/))[\x20-\x7e]+$/;
 
 function assertSafePath(path: string, field: string, issues: ModificationIssue[]): void {
   if (!pathPattern.test(path) || path.startsWith('.git/') || path === '.git') {
@@ -92,17 +92,30 @@ function hash(content: string): string {
   return (value >>> 0).toString(16).padStart(8, '0');
 }
 
-function canonical(request: ModificationRequest, operations: PlannedOperation[]): string {
+function canonicalRequest(request: ModificationRequest): string {
   return JSON.stringify({
     id: request.id,
     projectId: request.projectId,
     baseRevision: request.baseRevision,
     reason: request.reason,
-    operations: operations.map((operation) => ({
-      ...operation,
-      content: operation.content,
-    })),
+    actor: request.actor,
+    operations: [...request.operations].sort(compareOperations),
   });
+}
+
+function canonicalPlan(request: ModificationRequest, operations: PlannedOperation[]): string {
+  return JSON.stringify({
+    request: canonicalRequest(request),
+    operations,
+  });
+}
+
+function compareOperations(a: ModificationOperation, b: ModificationOperation): number {
+  return JSON.stringify(a).localeCompare(JSON.stringify(b));
+}
+
+function comparePlannedOperations(a: PlannedOperation, b: PlannedOperation): number {
+  return compareOperations(a, b);
 }
 
 function checksum(input: string): string {
@@ -245,9 +258,7 @@ export async function buildModificationPlan(
       throw new Error(`FILE_EXISTS: ${operation.path}`);
     }
     if (
-      (operation.kind === 'update' ||
-        operation.kind === 'delete' ||
-        operation.kind === 'rename') &&
+      (operation.kind === 'update' || operation.kind === 'delete' || operation.kind === 'rename') &&
       !before
     ) {
       throw new Error(`FILE_NOT_FOUND: ${operation.path}`);
@@ -266,12 +277,11 @@ export async function buildModificationPlan(
     });
   }
 
+  const operations = [...planned].sort(comparePlannedOperations);
   const changedFiles = [
     ...new Set(
-      planned.flatMap((operation) =>
-        operation.kind === 'rename'
-          ? [operation.path, operation.toPath!]
-          : [operation.path],
+      operations.flatMap((operation) =>
+        operation.kind === 'rename' ? [operation.path, operation.toPath!] : [operation.path],
       ),
     ),
   ].sort();
@@ -279,9 +289,10 @@ export async function buildModificationPlan(
     requestId: request.id,
     projectId: request.projectId,
     baseRevision: request.baseRevision,
-    operations: planned,
+    requestChecksum: checksum(canonicalRequest(request)),
+    operations,
     changedFiles,
-    checksum: checksum(canonical(request, planned)),
+    checksum: checksum(canonicalPlan(request, operations)),
     policy: finalDecision,
   };
 }
@@ -298,6 +309,9 @@ export async function applyModificationPlan(
     plan.baseRevision !== request.baseRevision
   ) {
     throw new Error('PLAN_MISMATCH: plan does not belong to request.');
+  }
+  if (plan.requestChecksum !== checksum(canonicalRequest(request))) {
+    throw new Error('PLAN_MISMATCH: request operations differ from the planned request.');
   }
   if (plan.policy === 'ask' && !(await approveAsk())) {
     throw new Error('APPROVAL_REQUIRED: modification plan was not approved.');
@@ -349,9 +363,7 @@ export function summarizeModification(plan: ModificationPlan): string {
   return plan.operations
     .map((operation) => {
       const target =
-        operation.kind === 'rename'
-          ? `${operation.path} → ${operation.toPath}`
-          : operation.path;
+        operation.kind === 'rename' ? `${operation.path} → ${operation.toPath}` : operation.path;
       return `${operation.kind.toUpperCase()} ${target}`;
     })
     .join('\n');
