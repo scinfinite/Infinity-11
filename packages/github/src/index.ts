@@ -1,4 +1,9 @@
-export type GitHubResourceKind = 'repository' | 'branch' | 'commit' | 'pull-request' | 'issue';
+export type GitHubResourceKind =
+  | 'repository'
+  | 'branch'
+  | 'commit'
+  | 'pull-request'
+  | 'issue';
 export type GitHubPermission = 'read' | 'write';
 export type PolicyDecision = 'allow' | 'ask' | 'deny';
 export type PullRequestState = 'open' | 'closed' | 'merged';
@@ -79,7 +84,11 @@ export interface GitHubApplyResult {
 export interface GitHubAdapter {
   getRepository(repository: GitHubRepositoryRef): Promise<GitHubRepositoryRef>;
   getBranch(repository: GitHubRepositoryRef, branch: string): Promise<GitHubBranchRef>;
-  createBranch(repository: GitHubRepositoryRef, branch: string, fromSha: string): Promise<GitHubBranchRef>;
+  createBranch(
+    repository: GitHubRepositoryRef,
+    branch: string,
+    fromSha: string,
+  ): Promise<GitHubBranchRef>;
   createCommit(
     repository: GitHubRepositoryRef,
     branch: string,
@@ -114,7 +123,12 @@ const refPattern = /^[A-Za-z0-9._/-]+$/;
 const shaPattern = /^[0-9a-f]{7,64}$/i;
 
 function safeRef(value: string): boolean {
-  return value.length > 0 && value.length <= 255 && refPattern.test(value) && !value.includes('..');
+  return (
+    value.length > 0 &&
+    value.length <= 255 &&
+    refPattern.test(value) &&
+    !value.includes('..')
+  );
 }
 
 function safePath(value: string): boolean {
@@ -158,7 +172,11 @@ function canonicalRequest(request: GitHubEngineeringRequest): string {
   });
 }
 
-function canonicalPlan(request: GitHubEngineeringRequest, changes: GitHubChange[], baseSha: string): string {
+function canonicalPlan(
+  request: GitHubEngineeringRequest,
+  changes: GitHubChange[],
+  baseSha: string,
+): string {
   return JSON.stringify({ request: canonicalRequest(request), changes, baseSha });
 }
 
@@ -166,11 +184,17 @@ export function validateGitHubRequest(request: GitHubEngineeringRequest): string
   const errors: string[] = [];
   if (!idPattern.test(request.id)) errors.push('INVALID_REQUEST_ID');
   if (!idPattern.test(request.projectId)) errors.push('INVALID_PROJECT_ID');
-  if (!request.repository.owner || !idPattern.test(request.repository.owner)) errors.push('INVALID_OWNER');
-  if (!request.repository.name || !idPattern.test(request.repository.name)) errors.push('INVALID_REPOSITORY');
+  if (!request.repository.owner || !idPattern.test(request.repository.owner)) {
+    errors.push('INVALID_OWNER');
+  }
+  if (!request.repository.name || !idPattern.test(request.repository.name)) {
+    errors.push('INVALID_REPOSITORY');
+  }
   if (!safeRef(request.baseBranch)) errors.push('INVALID_BASE_BRANCH');
   if (!request.title.trim() || request.title.length > 256) errors.push('INVALID_TITLE');
-  if (!request.description.trim() || request.description.length > 10000) errors.push('INVALID_DESCRIPTION');
+  if (!request.description.trim() || request.description.length > 10000) {
+    errors.push('INVALID_DESCRIPTION');
+  }
   if (!request.changes.length) errors.push('CHANGES_REQUIRED');
 
   const paths = new Set<string>();
@@ -178,11 +202,18 @@ export function validateGitHubRequest(request: GitHubEngineeringRequest): string
     if (!safePath(change.path)) errors.push('UNSAFE_PATH');
     if (paths.has(change.path)) errors.push('DUPLICATE_PATH');
     paths.add(change.path);
-    if ((change.kind === 'create' || change.kind === 'update') && change.content === undefined) {
+    if (
+      (change.kind === 'create' || change.kind === 'update') &&
+      change.content === undefined
+    ) {
       errors.push('CONTENT_REQUIRED');
     }
-    if (change.kind === 'delete' && change.content !== undefined) errors.push('UNEXPECTED_CONTENT');
-    if (change.expectedSha !== undefined && !shaPattern.test(change.expectedSha)) errors.push('INVALID_EXPECTED_SHA');
+    if (change.kind === 'delete' && change.content !== undefined) {
+      errors.push('UNEXPECTED_CONTENT');
+    }
+    if (change.expectedSha !== undefined && !shaPattern.test(change.expectedSha)) {
+      errors.push('INVALID_EXPECTED_SHA');
+    }
   }
   return errors;
 }
@@ -192,7 +223,9 @@ export async function buildGitHubPlan(
   input: GitHubPlanInput,
 ): Promise<GitHubPlan> {
   const errors = validateGitHubRequest(request);
-  if (errors.length) throw new Error(`INVALID_GITHUB_REQUEST: ${errors.join(', ')}`);
+  if (errors.length) {
+    throw new Error(`INVALID_GITHUB_REQUEST: ${errors.join(', ')}`);
+  }
 
   const repository = await input.adapter.getRepository(request.repository);
   const branch = await input.adapter.getBranch(repository, request.baseBranch);
@@ -226,7 +259,11 @@ export async function applyGitHubPlan(
   plan: GitHubPlan,
   input: GitHubPlanInput,
   approveAsk: () => Promise<boolean> | boolean = () => false,
-  options: { branch: string; commitMessage: string; createPullRequest?: boolean } = {
+  options: {
+    branch: string;
+    commitMessage: string;
+    createPullRequest?: boolean;
+  } = {
     branch: '',
     commitMessage: '',
   },
@@ -239,14 +276,24 @@ export async function applyGitHubPlan(
   ) {
     throw new Error('PLAN_MISMATCH: GitHub plan does not match request.');
   }
-  if (plan.policy === 'ask' && !(await approveAsk())) throw new Error('APPROVAL_REQUIRED: GitHub operation was not approved.');
-  if (!safeRef(options.branch) || options.branch === request.baseBranch) throw new Error('INVALID_TARGET_BRANCH');
+  if (plan.policy === 'ask' && !(await approveAsk())) {
+    throw new Error('APPROVAL_REQUIRED: GitHub operation was not approved.');
+  }
+  if (!safeRef(options.branch) || options.branch === request.baseBranch) {
+    throw new Error('INVALID_TARGET_BRANCH');
+  }
   if (!options.commitMessage.trim()) throw new Error('COMMIT_MESSAGE_REQUIRED');
 
   const current = await input.adapter.getBranch(plan.repository, plan.baseBranch);
-  if (current.sha !== plan.baseSha) throw new Error('STALE_PLAN: base branch changed after planning.');
+  if (current.sha !== plan.baseSha) {
+    throw new Error('STALE_PLAN: base branch changed after planning.');
+  }
 
-  const branch = await input.adapter.createBranch(plan.repository, options.branch, plan.baseSha);
+  const branch = await input.adapter.createBranch(
+    plan.repository,
+    options.branch,
+    plan.baseSha,
+  );
   const commit = await input.adapter.createCommit(
     plan.repository,
     branch.name,
