@@ -14,17 +14,19 @@ Give INFINITY-11 a provider-independent database/data-layer builder that can tur
 - Portable PostgreSQL and SQLite schema generation.
 - Strict database/table/column/index/reference validation with fail-closed behavior.
 - Deterministic table/index ordering and migration checksums.
+- Deterministic seed-row ordering and stable seed checksums.
 - Safe identifier quoting and SQL-string escaping.
-- Deterministic seed SQL generation with unknown-column rejection.
+- Rejects non-finite numeric seed values instead of silently coercing them.
+- Rejects `ON DELETE SET NULL` on non-nullable columns.
 - Generated migration and seed file naming contracts.
 - Repository interface contract generation.
 - Database executor and transaction-executor boundaries.
-- Dependency health-check contract with bounded diagnostic output.
+- Runtime health-check contract that rejects unsupported dialects and returns explicit failure status.
 - No database driver is forced into the core package; drivers remain adapters.
 
 ## Security and correctness boundary
 
-The builder rejects invalid identifiers, duplicate schema objects, invalid references, unsupported types/dialects, unknown seed tables/columns, duplicate primary keys, and invalid indexes. It never accepts raw generated credentials. SQL defaults are explicitly supplied schema expressions rather than inferred secrets.
+The builder rejects invalid identifiers, duplicate schema objects, invalid references, unsupported types/dialects, unknown seed tables/columns, duplicate primary keys, invalid indexes, impossible `SET NULL` relationships, and non-finite numeric seed values. It never accepts raw generated credentials. SQL defaults are explicitly supplied schema expressions rather than inferred secrets.
 
 ## Acceptance criteria
 
@@ -44,7 +46,8 @@ The builder rejects invalid identifiers, duplicate schema objects, invalid refer
 - Unit coverage: `tests/phase-13-database.test.ts`
 - Package build: `packages/database/tsconfig.json`
 - Root TypeScript build graph includes the database package.
-- Final branch and post-merge main CI are required before closure.
+- Branch CI is required on the final branch head.
+- Exact post-merge `main` CI is required before closure.
 
 ## Completion gate
 
