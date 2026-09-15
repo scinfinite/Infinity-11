@@ -94,9 +94,7 @@ function isHttpUrl(value: string): boolean {
   try {
     const url = new URL(value);
     return (
-      (url.protocol === 'http:' || url.protocol === 'https:') &&
-      !url.username &&
-      !url.password
+      (url.protocol === 'http:' || url.protocol === 'https:') && !url.username && !url.password
     );
   } catch {
     return false;
@@ -139,9 +137,7 @@ export function validateQaTargets(targets: BrowserTarget[]): string[] {
     }
     if (
       target.waitForMs !== undefined &&
-      (!Number.isInteger(target.waitForMs) ||
-        target.waitForMs < 0 ||
-        target.waitForMs > maxWaitMs)
+      (!Number.isInteger(target.waitForMs) || target.waitForMs < 0 || target.waitForMs > maxWaitMs)
     ) {
       issues.push(`INVALID_WAIT:${index}`);
     }
