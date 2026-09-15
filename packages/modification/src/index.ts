@@ -70,7 +70,8 @@ export interface ModificationApplyResult {
 }
 
 const idPattern = /^[a-z][a-z0-9_-]{0,63}$/;
-const pathPattern = /^(?!\/)(?!.*\\)(?!.*(?:^|\/)\.\.\/?)(?!.*(?:^|\/)[.]?(?:$|\/))[\x20-\x7e]+$/;
+const pathPattern =
+  /^(?!\/)(?!.*\\)(?!.*(?:^|\/)\.\.\/?)(?!.*(?:^|\/)[.]?(?:$|\/))[\x20-\x7e]+$/;
 
 function assertSafePath(path: string, field: string, issues: ModificationIssue[]): void {
   if (!pathPattern.test(path) || path.startsWith('.git/') || path === '.git') {
@@ -111,19 +112,39 @@ function checksum(input: string): string {
 export function validateModificationRequest(request: ModificationRequest): ModificationIssue[] {
   const issues: ModificationIssue[] = [];
   if (!idPattern.test(request.id)) {
-    issues.push({ code: 'INVALID_REQUEST_ID', path: 'id', message: 'Request id is invalid.' });
+    issues.push({
+      code: 'INVALID_REQUEST_ID',
+      path: 'id',
+      message: 'Request id is invalid.',
+    });
   }
   if (!idPattern.test(request.projectId)) {
-    issues.push({ code: 'INVALID_PROJECT_ID', path: 'projectId', message: 'Project id is invalid.' });
+    issues.push({
+      code: 'INVALID_PROJECT_ID',
+      path: 'projectId',
+      message: 'Project id is invalid.',
+    });
   }
   if (!Number.isInteger(request.baseRevision) || request.baseRevision < 0) {
-    issues.push({ code: 'INVALID_BASE_REVISION', path: 'baseRevision', message: 'Base revision must be a non-negative integer.' });
+    issues.push({
+      code: 'INVALID_BASE_REVISION',
+      path: 'baseRevision',
+      message: 'Base revision must be a non-negative integer.',
+    });
   }
   if (!request.reason.trim() || request.reason.length > 4096) {
-    issues.push({ code: 'INVALID_REASON', path: 'reason', message: 'Reason must be non-empty and at most 4096 characters.' });
+    issues.push({
+      code: 'INVALID_REASON',
+      path: 'reason',
+      message: 'Reason must be non-empty and at most 4096 characters.',
+    });
   }
   if (!request.operations.length) {
-    issues.push({ code: 'OPERATIONS_REQUIRED', path: 'operations', message: 'At least one modification operation is required.' });
+    issues.push({
+      code: 'OPERATIONS_REQUIRED',
+      path: 'operations',
+      message: 'At least one modification operation is required.',
+    });
   }
 
   const paths = new Set<string>();
@@ -131,29 +152,53 @@ export function validateModificationRequest(request: ModificationRequest): Modif
     const prefix = `operations.${index}`;
     assertSafePath(operation.path, `${prefix}.path`, issues);
     if (paths.has(operation.path)) {
-      issues.push({ code: 'DUPLICATE_PATH', path: `${prefix}.path`, message: 'A path may be modified only once per request.' });
+      issues.push({
+        code: 'DUPLICATE_PATH',
+        path: `${prefix}.path`,
+        message: 'A path may be modified only once per request.',
+      });
     }
     paths.add(operation.path);
 
     if (operation.kind === 'create' || operation.kind === 'update') {
       if (operation.content === undefined) {
-        issues.push({ code: 'CONTENT_REQUIRED', path: `${prefix}.content`, message: `${operation.kind} operations require content.` });
+        issues.push({
+          code: 'CONTENT_REQUIRED',
+          path: `${prefix}.content`,
+          message: `${operation.kind} operations require content.`,
+        });
       }
     } else if (operation.content !== undefined) {
-      issues.push({ code: 'UNEXPECTED_CONTENT', path: `${prefix}.content`, message: `${operation.kind} operations must not carry content.` });
+      issues.push({
+        code: 'UNEXPECTED_CONTENT',
+        path: `${prefix}.content`,
+        message: `${operation.kind} operations must not carry content.`,
+      });
     }
 
     if (operation.kind === 'rename') {
       if (!operation.toPath) {
-        issues.push({ code: 'RENAME_TARGET_REQUIRED', path: `${prefix}.toPath`, message: 'Rename operations require a destination path.' });
+        issues.push({
+          code: 'RENAME_TARGET_REQUIRED',
+          path: `${prefix}.toPath`,
+          message: 'Rename operations require a destination path.',
+        });
       } else {
         assertSafePath(operation.toPath, `${prefix}.toPath`, issues);
         if (paths.has(operation.toPath)) {
-          issues.push({ code: 'DUPLICATE_PATH', path: `${prefix}.toPath`, message: 'Rename destination conflicts with another operation.' });
+          issues.push({
+            code: 'DUPLICATE_PATH',
+            path: `${prefix}.toPath`,
+            message: 'Rename destination conflicts with another operation.',
+          });
         }
       }
     } else if (operation.toPath !== undefined) {
-      issues.push({ code: 'UNEXPECTED_TARGET', path: `${prefix}.toPath`, message: 'Only rename operations may specify toPath.' });
+      issues.push({
+        code: 'UNEXPECTED_TARGET',
+        path: `${prefix}.toPath`,
+        message: 'Only rename operations may specify toPath.',
+      });
     }
   }
   return issues;
@@ -165,18 +210,30 @@ export async function buildModificationPlan(
   policy: ModificationPolicy,
 ): Promise<ModificationPlan> {
   const issues = validateModificationRequest(request);
-  if (issues.length) throw new Error(`Invalid modification request: ${issues.map((issue) => issue.code).join(', ')}`);
+  if (issues.length) {
+    throw new Error(
+      `Invalid modification request: ${issues.map((issue) => issue.code).join(', ')}`,
+    );
+  }
 
   const currentRevision = await store.revision(request.projectId);
   if (currentRevision !== request.baseRevision) {
-    throw new Error(`STALE_PROJECT_REVISION: expected ${request.baseRevision}, found ${currentRevision}`);
+    throw new Error(
+      `STALE_PROJECT_REVISION: expected ${request.baseRevision}, found ${currentRevision}`,
+    );
   }
 
   const planned: PlannedOperation[] = [];
   let finalDecision: PolicyDecision = 'allow';
   for (const operation of request.operations) {
-    const decision = await policy.evaluate({ projectId: request.projectId, actor: request.actor, operation });
-    if (decision === 'deny') throw new Error(`POLICY_DENIED: ${operation.kind} ${operation.path}`);
+    const decision = await policy.evaluate({
+      projectId: request.projectId,
+      actor: request.actor,
+      operation,
+    });
+    if (decision === 'deny') {
+      throw new Error(`POLICY_DENIED: ${operation.kind} ${operation.path}`);
+    }
     if (decision === 'ask') finalDecision = 'ask';
 
     const before = await store.read(request.projectId, operation.path);
@@ -184,13 +241,22 @@ export async function buildModificationPlan(
     if (operation.expectedHash !== undefined && operation.expectedHash !== beforeHash) {
       throw new Error(`STALE_FILE: ${operation.path}`);
     }
-    if (operation.kind === 'create' && before) throw new Error(`FILE_EXISTS: ${operation.path}`);
-    if ((operation.kind === 'update' || operation.kind === 'delete' || operation.kind === 'rename') && !before) {
+    if (operation.kind === 'create' && before) {
+      throw new Error(`FILE_EXISTS: ${operation.path}`);
+    }
+    if (
+      (operation.kind === 'update' ||
+        operation.kind === 'delete' ||
+        operation.kind === 'rename') &&
+      !before
+    ) {
       throw new Error(`FILE_NOT_FOUND: ${operation.path}`);
     }
     if (operation.kind === 'rename') {
       const target = await store.read(request.projectId, operation.toPath!);
-      if (target) throw new Error(`RENAME_TARGET_EXISTS: ${operation.toPath}`);
+      if (target) {
+        throw new Error(`RENAME_TARGET_EXISTS: ${operation.toPath}`);
+      }
     }
 
     planned.push({
@@ -200,7 +266,15 @@ export async function buildModificationPlan(
     });
   }
 
-  const changedFiles = [...new Set(planned.flatMap((operation) => operation.kind === 'rename' ? [operation.path, operation.toPath!] : [operation.path]))].sort();
+  const changedFiles = [
+    ...new Set(
+      planned.flatMap((operation) =>
+        operation.kind === 'rename'
+          ? [operation.path, operation.toPath!]
+          : [operation.path],
+      ),
+    ),
+  ].sort();
   return {
     requestId: request.id,
     projectId: request.projectId,
@@ -218,19 +292,27 @@ export async function applyModificationPlan(
   store: ProjectStore,
   approveAsk: () => Promise<boolean> | boolean = () => false,
 ): Promise<ModificationApplyResult> {
-  if (plan.requestId !== request.id || plan.projectId !== request.projectId || plan.baseRevision !== request.baseRevision) {
+  if (
+    plan.requestId !== request.id ||
+    plan.projectId !== request.projectId ||
+    plan.baseRevision !== request.baseRevision
+  ) {
     throw new Error('PLAN_MISMATCH: plan does not belong to request.');
   }
   if (plan.policy === 'ask' && !(await approveAsk())) {
     throw new Error('APPROVAL_REQUIRED: modification plan was not approved.');
   }
   const currentRevision = await store.revision(request.projectId);
-  if (currentRevision !== plan.baseRevision) throw new Error('STALE_PLAN: project changed after planning.');
+  if (currentRevision !== plan.baseRevision) {
+    throw new Error('STALE_PLAN: project changed after planning.');
+  }
 
   const backups = new Map<string, ProjectFile | null>();
   for (const operation of plan.operations) {
     backups.set(operation.path, await store.read(request.projectId, operation.path));
-    if (operation.toPath) backups.set(operation.toPath, await store.read(request.projectId, operation.toPath));
+    if (operation.toPath) {
+      backups.set(operation.toPath, await store.read(request.projectId, operation.toPath));
+    }
   }
 
   try {
@@ -245,8 +327,11 @@ export async function applyModificationPlan(
     }
   } catch (error) {
     for (const [path, file] of backups) {
-      if (file) await store.write(request.projectId, path, file.content);
-      else if (await store.read(request.projectId, path)) await store.remove(request.projectId, path);
+      if (file) {
+        await store.write(request.projectId, path, file.content);
+      } else if (await store.read(request.projectId, path)) {
+        await store.remove(request.projectId, path);
+      }
     }
     throw error;
   }
@@ -261,8 +346,13 @@ export async function applyModificationPlan(
 }
 
 export function summarizeModification(plan: ModificationPlan): string {
-  return plan.operations.map((operation) => {
-    const target = operation.kind === 'rename' ? `${operation.path} → ${operation.toPath}` : operation.path;
-    return `${operation.kind.toUpperCase()} ${target}`;
-  }).join('\n');
+  return plan.operations
+    .map((operation) => {
+      const target =
+        operation.kind === 'rename'
+          ? `${operation.path} → ${operation.toPath}`
+          : operation.path;
+      return `${operation.kind.toUpperCase()} ${target}`;
+    })
+    .join('\n');
 }
