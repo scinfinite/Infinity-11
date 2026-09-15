@@ -78,7 +78,7 @@ describe('phase 14 authentication and authorization builder', () => {
         sameSite: 'none',
       },
       providers: [
-        { id: 'oidc', strategy: 'oauth2', issuer: 'javascript:alert(1)' },
+        { id: 'oidc', strategy: 'oauth2', issuer: 'JaVaScRiPt:alert(1)' },
       ],
     });
     expect(issues.map((i) => i.code)).toEqual(
@@ -89,6 +89,21 @@ describe('phase 14 authentication and authorization builder', () => {
         'UNSAFE_ISSUER',
       ]),
     );
+  });
+
+  it('rejects allow rules that exceed a role permission grant', () => {
+    const issues = validateAuthSpec({
+      ...base,
+      policies: [
+        {
+          resource: 'project',
+          action: 'delete',
+          effect: 'allow',
+          roles: ['viewer'],
+        },
+      ],
+    });
+    expect(issues.map((i) => i.code)).toContain('POLICY_PERMISSION_MISMATCH');
   });
 
   it('uses explicit deny precedence in authorization decisions', () => {
