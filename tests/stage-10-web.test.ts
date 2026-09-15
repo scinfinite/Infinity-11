@@ -62,6 +62,7 @@ describe('stage 10 web workspace', () => {
     expect(worker).toContain("event.request.method !== 'GET'");
     expect(worker).toContain('requestUrl.origin !== self.location.origin');
     expect(worker).toContain('STATIC_PATHS');
+    expect(worker).toContain("'/branding.css'");
     expect(worker).toContain('caches.match(event.request)');
     expect(worker).toContain('self.skipWaiting()');
   });
