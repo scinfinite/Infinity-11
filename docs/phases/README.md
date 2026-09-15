@@ -2,9 +2,9 @@
 
 ## Current status
 
-**Phases 1–17: COMPLETE, merged into `main`, and verified by CI.**
+**Phases 1–18: COMPLETE, merged into `main`, and verified by CI.**
 
-**Phase 18 — Application Improvement Engine: IN PROGRESS.** Evidence-driven improvement planning, deterministic prioritization, policy-controlled application, revision/evidence binding, and adapter-based mutation are being implemented.
+**Phase 18 — Application Improvement Engine: COMPLETE.** Evidence-driven improvement planning, deterministic prioritization, policy-controlled application, revision/evidence binding, and adapter-based mutation are implemented and verified.
 
 ## V1 sequence
 
@@ -26,7 +26,7 @@
 15 AI Project Modification Engine           ← COMPLETE
 16 Application Testing Engine               ← COMPLETE
 17 Browser and Visual QA Engine              ← COMPLETE
-18 Application Improvement Engine           ← IN PROGRESS
+18 Application Improvement Engine           ← COMPLETE
 19 Application Templates and Scaffolding
 20–26 GitHub, CI/CD, deployment, operations, mobile, desktop
 27–31 Multimodal creation
@@ -75,9 +75,9 @@ Phase 16 implementation PR #22 merged into `main` as `f61b2d88c4746569c09bf0ad72
 
 Phase 17 implementation PR #24 merged into `main` as `b48ca3f133a84a655e2ca0941173f1a853647729`; documentation closure PR #25 merged as `cb6424d52e83581400b1413a2d2d74763c453b48`; final synchronized main CI #488 passed.
 
-## Phase 18 scope
+## Phase 18 evidence
 
-Phase 18 turns verified testing/visual/security/reliability/performance/accessibility/UX evidence into deterministic improvement candidates. It ranks work, enforces ALLOW/ASK/DENY, binds plans to the exact project revision and evidence set, and delegates actual mutation to an adapter.
+Phase 18 implementation PR #26 merged into `main` as `3ba4987b89d9f86dbc1292d31db3fe876aea9c2d`; implementation CI #491 passed all required gates. The implementation provides evidence validation, deterministic improvement candidates and ranking, ALLOW/ASK/DENY policy, revision and evidence binding, explicit approval, adapter-based application, and regression coverage.
 
 ## Next verified phase
 
