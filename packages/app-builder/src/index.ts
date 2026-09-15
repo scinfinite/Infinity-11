@@ -80,13 +80,7 @@ const APP_LANGUAGES: AppLanguage[] = [
   'swift',
 ];
 
-const APP_TARGETS: AppTarget[] = [
-  'web',
-  'mobile',
-  'desktop',
-  'backend',
-  'full-stack',
-];
+const APP_TARGETS: AppTarget[] = ['web', 'mobile', 'desktop', 'backend', 'full-stack'];
 
 const APP_FRAMEWORKS: AppFramework[] = [
   'react',
@@ -203,8 +197,7 @@ export function validateApplicationSpec(spec: ApplicationSpec): ValidationIssue[
     issues.push({
       code: 'FRAMEWORK_LANGUAGE_MISMATCH',
       field: 'framework',
-      message:
-        `${spec.framework} does not support ${spec.language} in the Phase 11 foundation contract.`,
+      message: `${spec.framework} does not support ${spec.language} in the Phase 11 foundation contract.`,
       severity: 'error',
     });
   }
