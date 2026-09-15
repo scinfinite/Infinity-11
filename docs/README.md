@@ -1,120 +1,66 @@
 # INFINITY-11 Documentation
 
-INFINITY-11 is a **FREE-FIRST, BYOK-first multimodal AI engineering, creation, and automation operating system** for chat, coding, research, design, media generation, agents, teams, automation, app/web building, integrations, remote execution, verification, deployment, and continuous operation.
+## Current status
 
-The product is being designed before implementation. The documentation set is the source of truth for product intent and architecture until coding begins.
+INFINITY-11 is in active implementation. **Phases 1–10 are complete, merged into `main`, and verified by CI. Phase 11 is next.**
 
-## Canonical design baseline
+## Authoritative documents
 
-**`docs/architecture/INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md` is now the canonical pre-implementation architecture baseline.** It freezes the product thesis, architectural planes, execution semantics, AI Workforce, Automation Fabric, security/governance, verification/quality model, UX contracts, provider abstractions, free-first economics, multiplatform strategy, and implementation invariants.
+| Document | Purpose | Status |
+|---|---|---|
+| `../INFINITY-11-V1-ROADMAP.md` | Complete Phase 1–110 V1 implementation plan | **Authoritative** |
+| `description/INFINITY-11-DETAILED-DESCRIPTION.md` | Detailed product and architectural behavior | Active |
+| `description/INFINITY-11-ARCHITECTURE-AND-SCREENS.md` | System planes, boundaries, flows, and UI contracts | Active |
+| `description/INFINITY-11-SHORT-DESCRIPTION-AND-MINDMAP.md` | Product summary and strategic map | Active |
+| `architecture/INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md` | Canonical architecture baseline | Baseline |
+| `architecture/INFINITY-11-PRE-CODING-AUDIT.md` | Original architecture/audit gate | Historical baseline |
+| `architecture/INFINITY-11-IMPLEMENTATION-ROADMAP.md` | Dependency sequence and completion policy | Synchronized |
+| `architecture/INFINITY-11-MIGRATION-AND-VERSIONING.md` | Migration/versioning rules | Active |
+| `phases/README.md` | Phase status policy and sequence | Synchronized |
 
-The latest research amendment remains the source for the research history and competitive rationale; the final blueprint is the normalized architectural decision layer derived from it.
+## Product definition
 
-## Documentation map
-
-- `docs/architecture/INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md` — **canonical pre-implementation architecture baseline**.
-- `docs/description/INFINITY-11-DETAILED-DESCRIPTION.md` — foundational product, capability, competitive, economic, security, and execution specification.
-- `docs/description/INFINITY-11-ARCHITECTURE-AND-SCREENS.md` — detailed system architecture, application targets, and UI/screen specification.
-- `docs/description/INFINITY-11-SHORT-DESCRIPTION-AND-MINDMAP.md` — concise product definition and strategic mindmap.
-- `docs/description/INFINITY-11-LATEST-RESEARCH-AMENDMENTS.md` — latest Make/cto.new/CrewAI/automation/workforce/best-output research amendment layer.
-- `docs/architecture/README.md` — governing architecture principles and subsystem boundaries.
-- `docs/phases/README.md` — implementation-planning boundary; the implementation roadmap is intentionally deferred until the canonical baseline is audited.
-
-## Current design status
-
-**Stage: PRE-IMPLEMENTATION / PRODUCT + ARCHITECTURE DEFINITION**
-
-No application implementation is intentionally being started yet. The product thesis, core architecture, execution model, automation model, workforce model, verification model, security boundaries, UX information architecture, free-first economics, and provider abstractions are now defined in the canonical blueprint.
-
-The remaining pre-coding gate is an evidence-based repository/documentation audit against the blueprint, followed by an acceptance-driven implementation dependency graph and roadmap.
-
-## Hard product requirements
-
-### 1. No mandatory paid subscription initially
-
-The initial INFINITY-11 web product is designed to operate without an INFINITY-11 paid subscription. The architecture is **FREE-FIRST + OPEN-SOURCE-FIRST + BYOK-FIRST**.
-
-This does not mean unlimited third-party compute or AI usage is free. Cost ownership must remain explicit.
-
-### 2. BYOK and cost ownership
-
-Users may bring their own AI/API credentials and, where needed, their own sandbox/compute credentials. INFINITY-11 should not silently absorb unlimited provider usage costs.
-
-The architecture must distinguish:
+INFINITY-11 is a provider-independent AI engineering, creation, automation, and operations operating system.
 
 ```text
-INFINITY-11 platform cost
-User AI/API cost
-User compute/sandbox cost
-Free-tier resource
-Optional future managed-service cost
+CREATE + ENGINEER + AUTOMATE + OPERATE
 ```
 
-### 3. Remote execution for heavy workloads
+It combines AI chat, multimodal creation, advanced application building, AI agents and teams, reusable skills, tools and MCP, durable automation, research, knowledge, Project Brain, code intelligence, GitHub engineering, deployment, operations, security, governance, cost intelligence, marketplace extensibility, CLI/SDK interoperability, and cross-platform application delivery.
 
-The user's device is primarily the **control and visualization surface**. Heavy workloads should execute remotely when possible:
+## Non-negotiable architecture
 
-- dependency installation
-- compilation
-- builds
-- tests
-- application servers
-- browser automation
-- visual QA
-- large repository analysis/indexing
-- packaging
+- BYOK-first and multi-provider.
+- Multiple credentials per provider.
+- Local/self-hosted paths where technically feasible.
+- No mandatory proprietary model.
+- No mandatory paid AI gateway.
+- E2B is an execution adapter, not the architecture.
+- Supabase is a database adapter, not the architecture.
+- Vercel is a deployment adapter, not the architecture.
+- Central security policy uses ALLOW / ASK / DENY.
+- Untrusted code uses controlled execution boundaries.
+- Verification evidence is required before completion claims.
+- UI is presentation/interaction; backend/runtime owns policy and execution.
+- Competitor research informs patterns but does not authorize copying implementation or proprietary material.
 
-The execution layer must support multiple providers rather than treating one sandbox vendor as the platform itself.
+## Current web baseline
 
-### 4. Heavy-application capability
+Phase 10 delivered the core web/PWA product UX, including responsive application shell/navigation, Command Center, AI Workspace, Projects, Runs, Approvals, Artifacts, Usage, Settings, accessibility behavior, PWA metadata/offline shell behavior, and regression contracts. Surfaces that are not yet backed by runtime services are intentionally represented as boundaries rather than fabricated live functionality.
 
-INFINITY-11 must be designed to create serious applications, including multi-service systems with frontend, backend, APIs, databases, authentication, integrations, tests, security checks, and deployment workflows. It must not be limited to simple landing pages or toy demos.
+## Documentation rule
 
-### 5. Multiplatform capability
+Documentation status must follow repository evidence. When a phase changes architecture, update the relevant architecture/description document in the same completion cycle. Do not leave old statements such as "no coding yet" after implementation has started.
 
-The architecture must support application targets including Web, Mobile, Desktop, Backend/services, and Shared packages/contracts. Language and framework selection remains capability-driven. Java is explicitly within the intended supported development language scope.
-
-### 6. Best-possible-output requirement
-
-INFINITY-11 must not optimize merely for a decent first output. It should seek the best practically achievable **verified** result within the user's requirements, resources, policy, cost, and execution constraints.
-
-### 7. Automation as a first-class subsystem
-
-INFINITY-11 must support n8n/Make-like visual automation while extending it with AI-native capabilities: visual workflows, natural-language workflow generation, schedules, webhooks, event triggers, deterministic steps, autonomous agents, hybrid workflows, parallel execution, approvals, retries, durable state, resume, MCP/tool integration, and bounded self-healing.
-
-### 8. AI workforce
-
-INFINITY-11 must support persistent, governed teams of specialized AI workers. Teams are dynamically composed around project requirements rather than being limited to fixed personas.
-
-### 9. Deterministic + autonomous orchestration
-
-The runtime supports:
+## Completion gate
 
 ```text
-DETERMINISTIC
-AUTONOMOUS
-HYBRID
+inspect → reproduce / verify → diagnose → implement → format → lint
+→ typecheck → unit → integration → build → E2E/runtime
+→ security → regression → UX/accessibility → documentation
+→ final main CI → close phase
 ```
 
-Hybrid execution is the preferred model for serious production automation.
+## Final V1 boundary
 
-## Source-of-truth rule
-
-```text
-Canonical architecture baseline
-→ docs/architecture/INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md
-
-Product requirements / detailed behavior
-→ docs/description/
-
-Architecture principles / boundaries
-→ docs/architecture/README.md
-
-Research history / competitive amendments
-→ docs/description/INFINITY-11-LATEST-RESEARCH-AMENDMENTS.md
-
-Implementation status / acceptance roadmap
-→ docs/phases/ (after the pre-coding gate)
-```
-
-Root `README.md` and `AGENTS.md` must remain consistent with this hierarchy.
+The complete V1 roadmap ends at **Phase 110 — V1.0 Launch and Roadmap Closure**. After that point, ordinary maintenance, security updates, provider compatibility, reliability work, and future-version development continue without moving the V1 completion boundary.
