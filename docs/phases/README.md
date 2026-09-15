@@ -2,9 +2,9 @@
 
 ## Current status
 
-**Phases 1–19: COMPLETE, merged into `main`, and verified by CI.**
+**Phases 1–20: COMPLETE, merged into `main`, and verified by CI.**
 
-**Phase 19 — Application Templates and Scaffolding: COMPLETE.** Deterministic template registration, compatibility validation, revision/version binding, safe scaffold planning, checksum evidence, policy-controlled application, explicit ASK approval, conflict handling, and adapter-only mutation are implemented and verified.
+**Phase 20 — GitHub Engineering Integration: COMPLETE.** Provider-neutral repository, branch, commit, pull-request, and issue contracts; deterministic plans; safe refs/paths; policy-controlled writes; explicit ASK approval; stale-base protection; and adapter-only mutations are implemented and verified.
 
 ## V1 sequence
 
@@ -28,7 +28,8 @@
 17 Browser and Visual QA Engine              ← COMPLETE
 18 Application Improvement Engine            ← COMPLETE
 19 Application Templates and Scaffolding     ← COMPLETE
-20–26 GitHub, CI/CD, deployment, operations, mobile, desktop
+20 GitHub Engineering Integration            ← COMPLETE
+21–26 CI/CD, deployment, operations, mobile, desktop
 27–31 Multimodal creation
 32–42 advanced agents and automation
 43–46 research, knowledge, Project Brain, context
@@ -83,6 +84,10 @@ Phase 18 implementation PR #26 merged into `main` as `3ba4987b89d9f86dbc1292d31d
 
 Phase 19 implementation PR #28 merged into `main` as `61217b031eda49ab3e4512a8c57bffc9b580fa05`. Implementation verification run #505 passed format, lint, typecheck, all 126 tests across 27 test files, build, dependency security audit, and Gitleaks. Documentation closure PR #29 merged as `be6c0acc694d7396ad58b50044cf1cfbc84274cc`; final synchronized `main` CI run #509 passed all required gates. The dedicated phase document is `docs/phases/PHASE-19-APPLICATION-TEMPLATES.md`.
 
+## Phase 20 evidence
+
+Phase 20 implementation and documentation are staged together on the Phase 20 branch. Final merge and post-merge CI evidence will be recorded here only after all required verification gates pass.
+
 ## Next verified phase
 
-Phase 20 — GitHub, CI/CD, deployment, and operations sequence.
+Phase 21 — CI/CD Intelligence.
