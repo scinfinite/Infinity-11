@@ -6,7 +6,7 @@
 
 **Phase 10 — Core Web/PWA Product UX: COMPLETE.** The current web shell, responsive UX, PWA metadata/offline shell behavior, accessibility contracts, and regression coverage are part of the verified baseline.
 
-**Phase 11 — Advanced Application Builder Foundation: NEXT.**
+**Phase 11 — Advanced Application Builder Foundation: IN PROGRESS.** The Phase 11 branch and PR #14 are open. The first CI run exposed a formatting failure; the implementation is being hardened and re-verified before merge.
 
 ## Canonical V1 planning baseline
 
@@ -36,7 +36,15 @@ Every capability is an independent numbered phase. There are no hidden `11.1`, `
 08 Project Brain + Context + Knowledge
 09 Verification + Browser/Visual QA
 10 Core Web/PWA Product UX
-11–19 Advanced application builder
+11 Advanced Application Builder Foundation   ← IN PROGRESS
+12 Full-Stack Code Generation
+13 Database and Data Layer Builder
+14 Authentication and Authorization Builder
+15 AI Project Modification Engine
+16 Application Testing Engine
+17 Browser and Visual QA Engine
+18 Application Improvement Engine
+19 Application Templates and Scaffolding
 20–26 GitHub, CI/CD, deployment, operations, mobile, desktop
 27–31 Multimodal creation
 32–42 advanced agents and automation
@@ -68,7 +76,9 @@ inspect
 → regression
 → UX / accessibility
 → documentation
-→ final main CI
+→ CI
+→ merge
+→ post-merge main CI
 → close phase
 ```
 
