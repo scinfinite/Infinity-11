@@ -1,1 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#111522"/><path d="M17 22c7-9 17-9 24 0 7 9 7 11 0 20-7 9-17 9-24 0-7-9-7-11 0-20Zm30 0c-7-9-17-9-24 0-7 9-7 11 0 20 7 9 17 9 24 0 7-9 7-11 0-20Z" fill="none" stroke="#bdb5ff" stroke-width="5" stroke-linecap="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">INFINITY-11</title>
+  <desc id="desc">A luminous infinity symbol crossing a stylized double-one mark.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#050711"/>
+      <stop offset="1" stop-color="#0d1020"/>
+    </linearGradient>
+    <linearGradient id="infinity" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16d9ff"/>
+      <stop offset="0.42" stop-color="#1768ff"/>
+      <stop offset="0.72" stop-color="#6d35ff"/>
+      <stop offset="1" stop-color="#d15cff"/>
+    </linearGradient>
+    <linearGradient id="ones" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#25dfff"/>
+      <stop offset="0.55" stop-color="#316cff"/>
+      <stop offset="1" stop-color="#7b4dff"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+
+  <path d="M194 116 228 92v108l-34 25zm92-24 34-24v132l-34 25z" fill="url(#ones)" opacity=".9" filter="url(#glow)"/>
+
+  <path d="M96 190c43-54 99-54 143 0l17 21 17-21c44-54 100-54 143 0 35 44 35 88 0 132-43 54-99 54-143 0l-17-21-17 21c-44 54-100 54-143 0-35-44-35-88 0-132Zm31 23c-20 25-20 61 0 86 27 34 58 34 85 0l44-54-44-54c-27-34-58-34-85 0Zm173 32-44 54 44 54c27 34 58 34 85 0 20-25 20-61 0-86-27-34-58-34-85 0Z" fill="none" stroke="#5d45ff" stroke-width="28" opacity=".42" filter="url(#softGlow)"/>
+
+  <path d="M96 190c43-54 99-54 143 0l17 21 17-21c44-54 100-54 143 0 35 44 35 88 0 132-43 54-99 54-143 0l-17-21-17 21c-44 54-100 54-143 0-35-44-35-88 0-132Z" fill="none" stroke="url(#infinity)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+
+  <path d="M99 188c42-50 96-50 138 2l19 24 19-24c42-52 96-52 138-2" fill="none" stroke="#b8f7ff" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+</svg>
