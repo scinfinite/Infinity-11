@@ -76,6 +76,12 @@ describe('Phase 11 application builder foundation', () => {
     expect(first.directories).toContain('src/api');
     expect(first.files.map((file) => file.path)).toContain('docs/requirements.md');
     expect(first.files.map((file) => file.path)).toContain('src/app.ts');
+    expect(first.traceability).toEqual([
+      {
+        requirementId: 'tasks',
+        filePaths: first.files.map((file) => file.path),
+      },
+    ]);
     expect(first.commands).toEqual(['install', 'dev', 'build', 'test', 'lint']);
     expect(first.verification.length).toBeGreaterThanOrEqual(4);
   });
