@@ -55,6 +55,7 @@ The generator itself does not claim those commands passed; it records the contra
 - Unit coverage: `tests/phase-12-codegen.test.ts`
 - Package build: `packages/codegen/tsconfig.json`
 - Root TypeScript build graph includes `packages/codegen/tsconfig.json`.
+- Branch CI is configured to verify Phase 12 pushes; formatting is treated as a hard gate.
 
 ## Remaining gate
 
