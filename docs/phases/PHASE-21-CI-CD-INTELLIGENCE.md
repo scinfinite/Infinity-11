@@ -25,8 +25,11 @@ CI providers are adapters. The analysis core receives already-authorized run/job
 
 ## Verification
 
-The standard phase gate is format, lint, typecheck, unit/contract tests, build, dependency security audit, Gitleaks, regression, documentation, PR merge, and final synchronized `main` CI.
+- Implementation PR #35 merged into `main` as `9250c38803a1f683d67f29aa0dfdc6f490614b86`.
+- PR verification run #533 passed format, lint, typecheck, 138 tests across 29 test files, build, dependency security audit, and Gitleaks after one deterministic-order regression was corrected.
+- Final synchronized post-merge `main` CI run #534 passed format, lint, typecheck, 138 tests across 29 test files, build, dependency security audit, and Gitleaks.
+- The temporary formatter-evidence CI step was removed before merge; the canonical CI workflow remains unchanged.
 
 ## Completion rule
 
-Phase 21 is complete only after implementation and documentation are merged and final `main` CI passes every required gate. Deployment mutation and provider-specific workflow editing remain downstream adapter capabilities rather than implicit behavior of the intelligence core.
+Phase 21 is fully closed: implementation, regression coverage, documentation, audit/remediation, merge, and synchronized post-merge `main` CI are all verified. Deployment mutation and provider-specific workflow editing remain downstream adapter capabilities rather than implicit behavior of the intelligence core.
