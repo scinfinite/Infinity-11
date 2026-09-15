@@ -1,5 +1,5 @@
 const CACHE = 'infinity-11-shell-v1';
-const STATIC_PATHS = new Set(['/', '/index.html', '/styles.css', '/index.js', '/manifest.webmanifest', '/icon.svg', '/sw.js']);
+const STATIC_PATHS = new Set(['/', '/index.html', '/styles.css', '/branding.css', '/index.js', '/manifest.webmanifest', '/icon.svg', '/sw.js']);
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll([...STATIC_PATHS])));
