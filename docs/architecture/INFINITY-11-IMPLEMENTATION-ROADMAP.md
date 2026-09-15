@@ -1,12 +1,13 @@
 # INFINITY-11 — Implementation Roadmap
 
-> **Status:** Active V1 implementation roadmap
-> **Authoritative detailed plan:** `INFINITY-11-V1-ROADMAP.md`
+> **Status:** Active V1 implementation dependency roadmap
+> **Authoritative detailed plan:** `docs/architecture/INFINITY-11-V1-ROADMAP.md`
 > **Current verified baseline:** Phases 1–10 complete; Phase 11 is next.
+> **Strategy:** FREE-FIRST + OPEN-SOURCE-FIRST + BYOK-FIRST.
 
 ## Purpose
 
-This document defines the dependency model and engineering completion policy. The complete phase-by-phase plan is maintained in the repository-root `INFINITY-11-V1-ROADMAP.md`.
+This document summarizes dependency order and the engineering completion policy. The complete phase-by-phase specification is maintained in `docs/architecture/INFINITY-11-V1-ROADMAP.md`.
 
 ## Current sequence
 
@@ -52,7 +53,7 @@ This document defines the dependency model and engineering completion policy. Th
 39 Agentic Automation Engine                      TODO
 40 Durable Workflow Execution                     TODO
 41 Event and Trigger Fabric                       TODO
-42 Automation Self-Healing                       TODO
+42 Automation Self-Healing                        TODO
 43 Research Engine                                TODO
 44 Knowledge Intelligence                         TODO
 45 Project Brain                                  TODO
@@ -102,80 +103,103 @@ This document defines the dependency model and engineering completion policy. Th
 89 Universal Agent Interoperability                TODO
 90 AI App Distribution                            TODO
 91 Application Versioning                          TODO
-92 Production Release System                      TODO
+92 Production Release System                     TODO
 93 Backup and Disaster Recovery                   TODO
 94 Advanced Analytics                             TODO
 95 Personal AI Operating System                   TODO
-96 Autonomous Automation Marketplace               TODO
+96 Autonomous Automation Marketplace              TODO
 97 End-to-End Product Intelligence                TODO
 98 Full-System Quality Evaluation                 TODO
 99 Production Security Audit                      TODO
 100 Production Performance Audit                  TODO
 101 Cross-Platform Compatibility Audit             TODO
-102 Full End-to-End Verification                   TODO
+102 Full End-to-End Verification                  TODO
 103 Documentation and Developer Experience Completion TODO
 104 Final Architecture Audit                      TODO
 105 Final Integration and Regression              TODO
-106 Production Hardening                           TODO
-107 Release Candidate                              TODO
-108 Final Production Certification                 TODO
-109 INFINITY-11 V1.0 Completion                    TODO
+106 Production Hardening                          TODO
+107 Release Candidate                             TODO
+108 Final Production Certification               TODO
+109 INFINITY-11 V1.0 Completion                   TODO
 110 V1.0 Launch and Roadmap Closure               TODO
 ```
 
-## Architectural dependency rules
+## Dependency model
 
-1. The web application is an experience surface, not a second orchestration engine.
-2. AI inference crosses the AI Gateway and provider adapter boundaries.
-3. Credentials are separate from providers and are independently routable.
-4. Sandboxes are selected through an execution abstraction.
-5. Deployments are selected through a deployment abstraction.
-6. Agents, workflows, and tools use central policy and audit facilities.
-7. Project Brain and context services are shared intelligence infrastructure.
-8. Verification is an evidence-producing system, not a textual claim.
-9. All major long-running work is observable and durable where required.
-10. External services remain replaceable adapters.
+```text
+Contracts / CI
+      ↓
+Identity / Persistence / Events
+      ↓
+AI Gateway / Providers / Credentials
+      ↓
+Model Registry / Routing / Failover
+      ↓
+Execution Fabric
+      ↓
+Agent Runtime / Workforce
+      ↓
+Automation / Durable Workflows
+      ↓
+Project Brain / Context / Knowledge
+      ↓
+Verification / Browser QA
+      ↓
+Core Web/PWA UX
+      ↓
+Application Builder
+      ↓
+GitHub / CI/CD / Deployment / Operations
+      ↓
+Multiplatform + Multimodal Creation
+      ↓
+Advanced Agents / Automation / Engineering Intelligence
+      ↓
+Security / Governance / Observability / Scale
+      ↓
+Interoperability / Distribution / Analytics
+      ↓
+Final audits / verification / certification
+```
 
 ## Engineering completion policy
 
-For every phase:
+Every phase follows:
 
 ```text
-inspect
-→ reproduce / verify
-→ diagnose root cause
-→ implement minimal maintainable change
-→ format
-→ lint
-→ typecheck
-→ unit tests
-→ integration tests
-→ build
-→ E2E / runtime verification
-→ security
-→ regression
-→ UX / accessibility
-→ documentation
-→ final main CI
-→ close
+inspect → reproduce / verify → diagnose root cause → implement
+→ format → lint → typecheck → unit → integration → build
+→ E2E/runtime → security → regression → UX/accessibility
+→ documentation → final main CI → close
 ```
 
-If CI fails, the failure is investigated and corrected before the next phase begins. A phase is never declared complete because a command merely returned success; relevant output and artifacts are inspected.
+A roadmap entry is planning information. It is not implementation evidence. The phase status table in the authoritative V1 roadmap must be updated only after accepted repository evidence exists.
 
-## Product invariants
+## Architectural constraints
 
-- BYOK-first.
-- Free-first.
-- Open-source-first.
-- Provider-independent.
-- Multi-provider and multi-key.
-- Local/self-hosted capable where technically feasible.
-- Secure-by-boundary.
-- Human approval for high-impact actions.
-- Observable and auditable.
-- Best-practically-achievable verified output.
-- No wholesale copying of competitor implementation or proprietary material.
+- Preserve provider independence.
+- Preserve BYOK and multiple credentials per provider.
+- Preserve local/self-hosted alternatives where practical.
+- Keep E2B, Supabase, Vercel, and other vendors behind adapters.
+- Keep browser presentation separate from backend orchestration and policy.
+- Keep privileged actions behind ALLOW / ASK / DENY controls.
+- Keep untrusted code in controlled execution environments.
+- Keep verification independent from model claims.
+- Keep long-running work durable and observable.
+- Preserve the four pillars: CREATE, ENGINEER, AUTOMATE, OPERATE.
 
-## Phase 11 handoff
+## Documentation hierarchy
 
-The current next implementation boundary is **Phase 11 — Advanced Application Builder Foundation**. Before coding, audit the live `main` branch and use the V1 roadmap plus the canonical blueprint as the acceptance baseline.
+```text
+description/INFINITY-11-DETAILED-DESCRIPTION.md
+            ↓
+description/INFINITY-11-ARCHITECTURE-AND-SCREENS.md
+            ↓
+architecture/INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md
+            ↓
+architecture/INFINITY-11-V1-ROADMAP.md
+            ↓
+repository implementation + tests + runtime evidence + CI
+```
+
+The detailed roadmap is now under `docs/architecture` so architecture and phase planning remain together without changing the product thesis.
