@@ -5,6 +5,7 @@
 **Phase merge commit:** `228798473d621ab07e8109c426f2aad436607959`
 **Authoritative roadmap sync:** `4ae0b6effe899140fdcc0ea3417184f20179df70`
 **Current synchronized main before this final verification commit:** `a178652a8a95d9617f06c5b531cd5af478d5ef87`
+**Final documentation commit:** `a1dd69a9ced9884641e40a733a69c7b5bb5a6d56`
 
 ## Branch verification
 
@@ -36,4 +37,4 @@ Main CI run **#397** passed all verification jobs after the merged Phase 12 impl
 
 ## Final synchronized-main gate
 
-The final documentation synchronization is complete. Main CI run **#400** is the required final verification run for the synchronized main branch head. Phase 12 is closed only after run #400 is green.
+Main CI run **#400** also passed on the synchronized documentation line. The final documentation-only commit above is followed by main CI run **#401**, which is the final closure gate for the exact current main head. Phase 12 is closed only after run #401 is green.
