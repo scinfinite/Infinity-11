@@ -2,9 +2,9 @@
 
 ## Current status
 
-**Phases 1–15: COMPLETE, merged into `main`, and verified by CI.**
+**Phases 1–16: COMPLETE, merged into `main`, and verified by CI.**
 
-**Phase 16 — Application Testing Engine: IN PROGRESS.** Deterministic test planning, bounded execution policy, assertion evaluation, retries, timeout diagnostics, and runner-adapter boundaries are being implemented.
+**Phase 16 — Application Testing Engine: COMPLETE.** Deterministic test planning, bounded execution policy, assertion evaluation, retries, timeout diagnostics, suite/plan integrity binding, and runner-adapter boundaries are implemented and verified.
 
 ## V1 sequence
 
@@ -24,7 +24,7 @@
 13 Database and Data Layer Builder          ← COMPLETE
 14 Authentication and Authorization Builder ← COMPLETE
 15 AI Project Modification Engine           ← COMPLETE
-16 Application Testing Engine               ← IN PROGRESS
+16 Application Testing Engine               ← COMPLETE
 17 Browser and Visual QA Engine
 18 Application Improvement Engine
 19 Application Templates and Scaffolding
@@ -73,4 +73,8 @@ Phase 15 merged as `6ffde460767fb7f421154643e5bc5f2d99113aa3`; documentation clo
 
 ## Phase 16 evidence
 
-The implementation contract is documented in `PHASE-16-APPLICATION-TESTING-ENGINE.md`. The engine is designed to validate structured suites, generate deterministic plans, enforce ALLOW/ASK/DENY, bind execution to the exact suite definition, execute through a replaceable runner, evaluate assertions/timeouts, bound retries, and preserve diagnostics.
+Phase 16 implementation PR #22 merged into `main` as `f61b2d88c4746569c09bf0ad729e410285709107`. The implementation adds deterministic test suite/plan validation, ALLOW/ASK/DENY enforcement, explicit ASK approval, safe command/cwd validation, suite tamper binding, adapter-based execution, assertion evaluation, bounded retries, timeout handling, diagnostics, and regression coverage. The documentation closure records the implementation audit and final synchronized main CI as the authoritative completion gate.
+
+## Next verified phase
+
+**Phase 17 — Browser and Visual QA Engine.**
