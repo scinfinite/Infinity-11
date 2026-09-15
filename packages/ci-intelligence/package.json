@@ -1,0 +1,10 @@
+{
+  "name": "@infinity-11/ci-intelligence",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Provider-neutral CI/CD intelligence contracts and deterministic failure analysis.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  }
+}

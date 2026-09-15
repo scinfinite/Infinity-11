@@ -4,7 +4,7 @@
 
 **Phases 1–20: COMPLETE, merged into `main`, and verified by CI.**
 
-**Phase 20 — GitHub Engineering Integration: COMPLETE.** Provider-neutral repository, branch, commit, pull-request, and issue contracts; deterministic plans; safe refs/paths; policy-controlled writes; explicit ASK approval; stale-base protection; and adapter-only mutations are implemented and verified.
+**Phase 21 — CI/CD Intelligence: IN PROGRESS.** The provider-neutral CI intelligence package and regression tests are implemented; final CI, merge, and closure evidence remain the acceptance gate.
 
 ## V1 sequence
 
@@ -29,7 +29,12 @@
 18 Application Improvement Engine            ← COMPLETE
 19 Application Templates and Scaffolding     ← COMPLETE
 20 GitHub Engineering Integration            ← COMPLETE
-21–26 CI/CD, deployment, operations, mobile, desktop
+21 CI/CD Intelligence                       ← IN PROGRESS
+22 Deployment Fabric
+23 Application Operations
+24 Mobile Application Builder
+25 Desktop Application Builder
+26 Cross-Platform Project Engine
 27–31 Multimodal creation
 32–42 advanced agents and automation
 43–46 research, knowledge, Project Brain, context
@@ -88,6 +93,10 @@ Phase 19 implementation PR #28 merged into `main` as `61217b031eda49ab3e4512a8c5
 
 Phase 20 implementation PR #31 merged as `8440ad17551370cba72440e122d8bb5b00560654`. Its first post-merge main CI run #513 caught formatter drift in the new GitHub package. The exact Prettier output was captured, applied, and the temporary evidence step was removed before merge. Remediation PR #33 merged as `e5866d3996afd877e6e444a670cb114cd2d0aaed`; remediation CI #520 passed all required gates. Final synchronized post-merge `main` CI run #522 passed format, lint, typecheck, tests, build, dependency security audit, and Gitleaks. The dedicated phase document is `docs/phases/PHASE-20-GITHUB-ENGINEERING-INTEGRATION.md`.
 
+## Phase 21 evidence
+
+Phase 21 implementation is on the dedicated `phase-21-ci-cd-intelligence` branch. The package is provider-neutral and performs bounded, deterministic CI failure analysis with stale-run protection and regression coverage. Final CI and merge evidence will be recorded here only after all required verification gates pass.
+
 ## Next verified phase
 
-Phase 21 — CI/CD Intelligence.
+Phase 22 — Deployment Fabric.
