@@ -41,9 +41,20 @@ describe('stage 10 web workspace', () => {
     expect(html).toContain('rel="manifest"');
     expect(html).toContain('id="app"');
     expect(html).toContain('styles.css');
+    expect(html).toContain('branding.css');
     expect(html).toContain('index.js');
+    expect(html).toContain('Smarter Agents. Bigger Possibilities.');
     expect(manifest).toContain('"display": "standalone"');
     expect(manifest).toContain('"start_url": "./"');
+    expect(manifest).toContain('./icon.svg');
+  });
+
+  it('ships the transparent infinity-11 brand mark', () => {
+    const icon = readPublic('icon.svg');
+    expect(icon).toContain('<title id="title">INFINITY-11 brand mark</title>');
+    expect(icon).toContain('linearGradient id="infinity"');
+    expect(icon).toContain('linearGradient id="ones"');
+    expect(icon).not.toContain('<rect');
   });
 
   it('keeps the offline worker scoped to safe same-origin shell requests', () => {
@@ -51,15 +62,19 @@ describe('stage 10 web workspace', () => {
     expect(worker).toContain("event.request.method !== 'GET'");
     expect(worker).toContain('requestUrl.origin !== self.location.origin');
     expect(worker).toContain('STATIC_PATHS');
+    expect(worker).toContain("'/branding.css'");
     expect(worker).toContain('caches.match(event.request)');
     expect(worker).toContain('self.skipWaiting()');
   });
 
   it('supports mobile navigation and reduced-motion preferences in CSS', () => {
     const css = readPublic('styles.css');
+    const branding = readPublic('branding.css');
     expect(css).toContain('@media(max-width:620px)');
     expect(css).toContain('prefers-reduced-motion:reduce');
     expect(css).toContain('focus-visible');
     expect(css).toContain('html[data-reduced-motion="true"]');
+    expect(branding).toContain('.brand-mark');
+    expect(branding).toContain('background:transparent');
   });
 });

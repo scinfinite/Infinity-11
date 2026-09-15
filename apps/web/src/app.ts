@@ -23,6 +23,8 @@ const ACTIVITY = [
   ['AI Gateway', 'Routed to fallback model', '22m ago', 'info'],
 ] as const;
 
+const BRAND_TAGLINE = 'Smarter Agents. Bigger Possibilities.';
+
 let preferences: WebPreferences = { ...DEFAULT_PREFERENCES };
 
 function icon(name: string): string {
@@ -104,7 +106,7 @@ function render(): void {
   root.innerHTML = `
     <div class="app-shell ${preferences.sidebarCollapsed ? 'sidebar-collapsed' : ''}">
       <aside class="sidebar" aria-label="Primary navigation">
-        <div class="brand"><span class="brand-mark">∞</span><span class="brand-name">INFINITY<span>-11</span></span></div>
+        <div class="brand"><img class="brand-mark" src="./icon.svg" alt="INFINITY-11" width="38" height="38"/><div class="brand-copy"><span class="brand-name">INFINITY<span>-11</span></span><small>${BRAND_TAGLINE}</small></div></div>
         <button class="workspace-switcher" aria-label="Current workspace"><span class="avatar">SI</span><span><strong>SC Infinite</strong><small>Personal workspace</small></span><span class="chevron">⌄</span></button>
         <nav class="nav">${navMarkup()}</nav>
         <div class="sidebar-bottom"><button class="nav-item" data-action="toggle-motion">${icon('settings')}<span>${preferences.reducedMotion ? 'Motion reduced' : 'Motion enabled'}</span></button><div class="security-note"><span>●</span><span><strong>Governed</strong><small>Policy controls active</small></span></div></div>
