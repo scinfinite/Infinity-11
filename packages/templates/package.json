@@ -1,0 +1,10 @@
+{
+  "name": "@infinity-11/templates",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic, policy-controlled application templates and scaffolding for INFINITY-11.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  }
+}
