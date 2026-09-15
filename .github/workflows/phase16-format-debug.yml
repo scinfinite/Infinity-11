@@ -1,0 +1,21 @@
+name: Phase 16 formatter debug
+
+on:
+  pull_request:
+    types: [synchronize]
+
+jobs:
+  format-debug:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22.14.0
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - name: Format and print diff
+        run: |
+          cp packages/testing/src/index.ts /tmp/index.ts.before
+          pnpm exec prettier packages/testing/src/index.ts --write
+          diff -u /tmp/index.ts.before packages/testing/src/index.ts || true
