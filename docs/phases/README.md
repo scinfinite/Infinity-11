@@ -4,7 +4,7 @@
 
 **Phases 1–16: COMPLETE, merged into `main`, and verified by CI.**
 
-**Phase 16 — Application Testing Engine: COMPLETE.** Deterministic test planning, bounded execution policy, assertion evaluation, retries, timeout diagnostics, suite/plan integrity binding, and runner-adapter boundaries are implemented and verified.
+**Phase 17 — Browser and Visual QA Engine: IN PROGRESS.** Deterministic browser-target planning, policy-controlled navigation, screenshot comparison, console/network/accessibility evidence, and visual regression reporting are being implemented.
 
 ## V1 sequence
 
@@ -25,7 +25,7 @@
 14 Authentication and Authorization Builder ← COMPLETE
 15 AI Project Modification Engine           ← COMPLETE
 16 Application Testing Engine               ← COMPLETE
-17 Browser and Visual QA Engine
+17 Browser and Visual QA Engine              ← IN PROGRESS
 18 Application Improvement Engine
 19 Application Templates and Scaffolding
 20–26 GitHub, CI/CD, deployment, operations, mobile, desktop
@@ -67,14 +67,14 @@ A phase is not complete merely because code compiles, a screen renders, or an ag
 - Web is the control/experience surface; runtime owns policy and execution.
 - V1 completion boundary remains Phase 110.
 
-## Phase 15 evidence
-
-Phase 15 merged as `6ffde460767fb7f421154643e5bc5f2d99113aa3`; documentation closure merged as `c65f9d808f5c750156889557cfa43e1e3950afbb`; final main CI #462 passed.
-
 ## Phase 16 evidence
 
-Phase 16 implementation PR #22 merged into `main` as `f61b2d88c4746569c09bf0ad729e410285709107`. The implementation adds deterministic test suite/plan validation, ALLOW/ASK/DENY enforcement, explicit ASK approval, safe command/cwd validation, suite tamper binding, adapter-based execution, assertion evaluation, bounded retries, timeout handling, diagnostics, and regression coverage. The documentation closure records the implementation audit and final synchronized main CI as the authoritative completion gate.
+Phase 16 implementation PR #22 merged into `main` as `f61b2d88c4746569c09bf0ad729e410285709107`; documentation closure PR #23 merged as `34a1a9d5459bff4ae9899b67939da5245509b8f1`; final synchronized main CI #476 passed.
+
+## Phase 17 scope
+
+Phase 17 provides a provider-independent browser/visual verification boundary with safe HTTP(S) target validation, deterministic plans, ALLOW/ASK/DENY policy enforcement, explicit approval, browser observation adapters, screenshot baseline comparison, console/network/accessibility evidence, content/title/URL assertions, and explicit visual regression diagnostics.
 
 ## Next verified phase
 
-**Phase 17 — Browser and Visual QA Engine.**
+Phase 18 — Application Improvement Engine.
