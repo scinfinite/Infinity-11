@@ -2,9 +2,9 @@
 
 ## Current status
 
-**Phases 1–20: COMPLETE, merged into `main`, and verified by CI.**
+**Phases 1–21: COMPLETE, merged into `main`, and verified by CI.**
 
-**Phase 21 — CI/CD Intelligence: IN PROGRESS.** The provider-neutral CI intelligence package and regression tests are implemented; final CI, merge, and closure evidence remain the acceptance gate.
+**Phase 21 — CI/CD Intelligence: COMPLETE.** Provider-neutral CI run/job contracts, bounded deterministic failure analysis, stable fingerprints, stale-run protection, severity classification, and regression coverage are implemented and verified.
 
 ## V1 sequence
 
@@ -29,7 +29,7 @@
 18 Application Improvement Engine            ← COMPLETE
 19 Application Templates and Scaffolding     ← COMPLETE
 20 GitHub Engineering Integration            ← COMPLETE
-21 CI/CD Intelligence                       ← IN PROGRESS
+21 CI/CD Intelligence                       ← COMPLETE
 22 Deployment Fabric
 23 Application Operations
 24 Mobile Application Builder
@@ -95,7 +95,7 @@ Phase 20 implementation PR #31 merged as `8440ad17551370cba72440e122d8bb5b005606
 
 ## Phase 21 evidence
 
-Phase 21 implementation is on the dedicated `phase-21-ci-cd-intelligence` branch. The package is provider-neutral and performs bounded, deterministic CI failure analysis with stale-run protection and regression coverage. Final CI and merge evidence will be recorded here only after all required verification gates pass.
+Phase 21 implementation PR #35 merged as `9250c38803a1f683d67f29aa0dfdc6f490614b86`. PR verification run #533 passed all required gates after one deterministic-order regression was corrected. Final synchronized post-merge `main` CI run #534 passed format, lint, typecheck, 138 tests across 29 test files, build, dependency security audit, and Gitleaks. The dedicated phase document is `docs/phases/PHASE-21-CI-CD-INTELLIGENCE.md`.
 
 ## Next verified phase
 
