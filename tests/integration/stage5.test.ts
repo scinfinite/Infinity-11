@@ -84,7 +84,7 @@ describe('stage 5 execution fabric', () => {
         command: [
           process.execPath,
           '-e',
-          'setInterval(() => process.stdout.write("1234567890"), 1)',
+          'process.stdout.write("1234567890".repeat(10)); setInterval(() => {}, 1000)',
         ],
         network: 'allow',
         limits: { timeoutMs: 50, maxOutputBytes: 32 },
