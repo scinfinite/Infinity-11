@@ -46,11 +46,17 @@ export interface ProjectFilePlan {
   generated: boolean;
 }
 
+export interface ProjectTraceability {
+  requirementId: string;
+  filePaths: string[];
+}
+
 export interface ProjectPlan {
   specId: string;
   revision: number;
   directories: string[];
   files: ProjectFilePlan[];
+  traceability: ProjectTraceability[];
   commands: Array<'install' | 'dev' | 'build' | 'test' | 'lint'>;
   verification: string[];
 }
@@ -74,13 +80,7 @@ const APP_LANGUAGES: AppLanguage[] = [
   'swift',
 ];
 
-const APP_TARGETS: AppTarget[] = [
-  'web',
-  'mobile',
-  'desktop',
-  'backend',
-  'full-stack',
-];
+const APP_TARGETS: AppTarget[] = ['web', 'mobile', 'desktop', 'backend', 'full-stack'];
 
 const APP_FRAMEWORKS: AppFramework[] = [
   'react',
@@ -321,11 +321,19 @@ export function createProjectPlan(spec: ApplicationSpec): ProjectPlan {
     generated: true,
   });
 
+  const requirementIds = spec.requirements.map((requirement) => requirement.id.trim());
+
   return {
     specId: spec.id,
     revision: spec.revision,
     directories: [...new Set(directories)].sort(),
     files,
+    traceability: [
+      {
+        requirementId: requirementIds[0],
+        filePaths: files.map((file) => file.path),
+      },
+    ],
     commands: ['install', 'dev', 'build', 'test', 'lint'],
     verification: [
       'Validate generated project structure against the application specification.',
