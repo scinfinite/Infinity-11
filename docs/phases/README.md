@@ -37,7 +37,7 @@ Every capability is an independent numbered phase. There are no hidden `11.1`, `
 09 Verification + Browser/Visual QA
 10 Core Web/PWA Product UX
 11 Advanced Application Builder Foundation   ← COMPLETE
-12 Full-Stack Code Generation              ← IN PROGRESS
+12 Full-Stack Code Generation              ← COMPLETE
 13 Database and Data Layer Builder
 14 Authentication and Authorization Builder
 15 AI Project Modification Engine
