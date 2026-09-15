@@ -26,6 +26,8 @@ GitHub is an external adapter, not a privileged orchestration layer. The package
 
 ## Verification
 
+The initial merged Phase 20 CI run identified formatter drift in the GitHub package. The formatting correction is isolated to source layout and introduces no behavioral change. The corrected branch is re-verified before phase closure.
+
 The phase acceptance gate is the repository's standard format, lint, typecheck, unit/contract tests, build, dependency security audit, Gitleaks, regression, documentation, PR merge, and final synchronized `main` CI verification.
 
 ## Completion rule
