@@ -3,8 +3,8 @@
 **Status:** IMPLEMENTATION IN PROGRESS  
 **Canonical branch:** `phase-11-advanced-application-builder`  
 **Base:** `main` at `f255523b4be3749afd48ccaba0d451020e54cf84`  
-**Current head:** `91a72febeac139138abfcf5d0470cbc0ec028d56`  
-**CI verification:** FAILED on initial phase head; fix cycle in progress
+**Current head:** `8cb0f315880ee3a69bbf8e78bc81d6b79b1fb080`  
+**CI verification:** clean final-head CI pending
 
 ## Objective
 
@@ -32,11 +32,12 @@ The application builder is a domain capability. It must not move orchestration o
 - Deterministic normalization of user/project specification data.
 - Fail-closed runtime validation, including unsupported language/framework/target values.
 - Deterministic project-plan generation.
+- Explicit requirement-to-file traceability in project plans.
 - Language-aware source-file extensions instead of silently planning TypeScript files for every language.
 - Initial directory/file planning for web and full-stack applications.
 - Verification requirements embedded in the generated plan.
 - Root TypeScript project registration.
-- Automated contract tests covering valid input, invalid combinations, duplicates, normalization, deterministic planning, runtime fail-closed behavior, and Java planning.
+- Automated contract tests covering valid input, invalid combinations, duplicates, normalization, deterministic planning, runtime fail-closed behavior, traceability, and Java planning.
 
 ## Supported foundation languages
 
@@ -49,10 +50,12 @@ React, Next.js, Vue, Svelte, Express, FastAPI, Spring Boot, and Gin are represen
 ## Verification evidence so far
 
 - The initial PR was created against the verified Phase 1–10 `main` baseline.
-- Initial PR CI ran automatically and exposed a formatting failure before deeper checks could execute.
+- Initial PR CI exposed a formatting failure before deeper checks could execute.
 - Secret scanning passed on the initial head.
-- The first implementation audit found two correctness gaps beyond formatting: runtime-invalid framework values could throw instead of failing closed, and the planner always emitted `.ts` source paths despite advertising nine languages.
-- The current fix cycle hardens both boundaries and expands regression coverage.
+- The implementation audit found two correctness gaps beyond formatting: runtime-invalid framework values could throw instead of failing closed, and the planner always emitted `.ts` source paths despite advertising nine languages.
+- The fix cycle hardened both boundaries, added explicit traceability, and expanded regression coverage.
+- A temporary CI-only Prettier inspection was used to obtain canonical formatting from the repository toolchain; it was removed before the final-head verification cycle.
+- The temporary verification run demonstrated: formatting, lint, typecheck, all 69 tests across 19 test files, build, and the high-severity dependency audit all passed. The audit reported two moderate vulnerabilities, which do not fail the configured `--audit-level=high` gate and remain a known dependency-health item.
 
 ## Acceptance criteria
 
@@ -66,7 +69,8 @@ React, Next.js, Vue, Svelte, Express, FastAPI, Spring Boot, and Gin are represen
 - [x] Phase-specific automated tests exist.
 - [x] Language-aware planner behavior is covered for Java.
 - [x] Runtime-invalid framework values fail closed instead of throwing unexpectedly.
-- [ ] Full formatting/lint/typecheck/test/build/security CI is green on the final phase head.
+- [x] Requirement-to-file traceability is explicit in the project-plan contract.
+- [ ] Full formatting/lint/typecheck/test/build/security CI is green on the final phase head without temporary CI modifications.
 - [ ] Final regression verification against Phases 1–10 is complete.
 - [ ] Phase documentation and roadmap status are updated after accepted CI evidence.
 - [ ] Phase branch is merged to `main`.
