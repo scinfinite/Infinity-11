@@ -58,6 +58,6 @@ describe('stage 10 web workspace', () => {
     expect(css).toContain('@media(max-width:620px)');
     expect(css).toContain('prefers-reduced-motion:reduce');
     expect(css).toContain('focus-visible');
-    expect(css).toContain('viewport');
+    expect(css).toContain('html[data-reduced-motion="true"]');
   });
 });
