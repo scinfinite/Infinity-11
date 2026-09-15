@@ -61,12 +61,8 @@ describe('phase 14 authentication and authorization builder', () => {
 
   it('fails closed for password auth without an explicit password policy', () => {
     const issues = validateAuthSpec({ ...base, passwordPolicy: undefined });
-    expect(
-      issues.some((issue) => issue.code === 'PASSWORD_POLICY_REQUIRED'),
-    ).toBe(true);
-    expect(() =>
-      buildAuthPlan({ ...base, passwordPolicy: undefined }),
-    ).toThrow();
+    expect(issues.some((issue) => issue.code === 'PASSWORD_POLICY_REQUIRED')).toBe(true);
+    expect(() => buildAuthPlan({ ...base, passwordPolicy: undefined })).toThrow();
   });
 
   it('rejects unsafe session and OAuth configurations', () => {
@@ -77,9 +73,7 @@ describe('phase 14 authentication and authorization builder', () => {
         ttlSeconds: 30,
         sameSite: 'none',
       },
-      providers: [
-        { id: 'oidc', strategy: 'oauth2', issuer: 'JaVaScRiPt:alert(1)' },
-      ],
+      providers: [{ id: 'oidc', strategy: 'oauth2', issuer: 'JaVaScRiPt:alert(1)' }],
     });
     expect(issues.map((i) => i.code)).toEqual(
       expect.arrayContaining([
@@ -107,33 +101,16 @@ describe('phase 14 authentication and authorization builder', () => {
   });
 
   it('uses explicit deny precedence in authorization decisions', () => {
-    expect(
-      authorize(
-        { subject: 'u1', roles: ['viewer'] },
-        'project',
-        'read',
-        base.policies,
-      ),
-    ).toBe(true);
-    expect(
-      authorize(
-        { subject: 'u1', roles: ['viewer'] },
-        'project',
-        'write',
-        base.policies,
-      ),
-    ).toBe(false);
-    expect(
-      authorize(
-        { subject: 'u2', roles: ['admin'] },
-        'project',
-        'write',
-        base.policies,
-      ),
-    ).toBe(true);
-    expect(
-      authorize({ subject: 'u3', roles: [] }, 'project', 'read', base.policies),
-    ).toBe(false);
+    expect(authorize({ subject: 'u1', roles: ['viewer'] }, 'project', 'read', base.policies)).toBe(
+      true,
+    );
+    expect(authorize({ subject: 'u1', roles: ['viewer'] }, 'project', 'write', base.policies)).toBe(
+      false,
+    );
+    expect(authorize({ subject: 'u2', roles: ['admin'] }, 'project', 'write', base.policies)).toBe(
+      true,
+    );
+    expect(authorize({ subject: 'u3', roles: [] }, 'project', 'read', base.policies)).toBe(false);
   });
 
   it('rejects unknown roles and malformed permissions', () => {
