@@ -192,10 +192,7 @@ export function validateGitHubRequest(request: GitHubEngineeringRequest): string
     if (!safePath(change.path)) errors.push('UNSAFE_PATH');
     if (paths.has(change.path)) errors.push('DUPLICATE_PATH');
     paths.add(change.path);
-    if (
-      (change.kind === 'create' || change.kind === 'update') &&
-      change.content === undefined
-    ) {
+    if ((change.kind === 'create' || change.kind === 'update') && change.content === undefined) {
       errors.push('CONTENT_REQUIRED');
     }
     if (change.kind === 'delete' && change.content !== undefined) {
@@ -277,11 +274,7 @@ export async function applyGitHubPlan(
     throw new Error('STALE_PLAN: base branch changed after planning.');
   }
 
-  const branch = await input.adapter.createBranch(
-    plan.repository,
-    options.branch,
-    plan.baseSha,
-  );
+  const branch = await input.adapter.createBranch(plan.repository, options.branch, plan.baseSha);
   const commit = await input.adapter.createCommit(
     plan.repository,
     branch.name,
