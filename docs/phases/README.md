@@ -2,9 +2,9 @@
 
 ## Current status
 
-**Phases 1–16: COMPLETE, merged into `main`, and verified by CI.**
+**Phases 1–17: COMPLETE, merged into `main`, and verified by CI.**
 
-**Phase 17 — Browser and Visual QA Engine: IN PROGRESS.** Deterministic browser-target planning, policy-controlled navigation, screenshot comparison, console/network/accessibility evidence, and visual regression reporting are being implemented.
+**Phase 17 — Browser and Visual QA Engine: COMPLETE.** Deterministic browser-target planning, policy-controlled navigation, screenshot comparison, actual page-content assertions, console/network/accessibility evidence, baseline binding, and visual regression reporting are implemented and verified.
 
 ## V1 sequence
 
@@ -25,7 +25,7 @@
 14 Authentication and Authorization Builder ← COMPLETE
 15 AI Project Modification Engine           ← COMPLETE
 16 Application Testing Engine               ← COMPLETE
-17 Browser and Visual QA Engine              ← IN PROGRESS
+17 Browser and Visual QA Engine              ← COMPLETE
 18 Application Improvement Engine
 19 Application Templates and Scaffolding
 20–26 GitHub, CI/CD, deployment, operations, mobile, desktop
@@ -71,9 +71,9 @@ A phase is not complete merely because code compiles, a screen renders, or an ag
 
 Phase 16 implementation PR #22 merged into `main` as `f61b2d88c4746569c09bf0ad729e410285709107`; documentation closure PR #23 merged as `34a1a9d5459bff4ae9899b67939da5245509b8f1`; final synchronized main CI #476 passed.
 
-## Phase 17 scope
+## Phase 17 evidence
 
-Phase 17 provides a provider-independent browser/visual verification boundary with safe HTTP(S) target validation, deterministic plans, ALLOW/ASK/DENY policy enforcement, explicit approval, browser observation adapters, screenshot baseline comparison, console/network/accessibility evidence, content/title/URL assertions, and explicit visual regression diagnostics.
+Phase 17 implementation PR #24 merged into `main` as `b48ca3f133a84a655e2ca0941173f1a853647729`; implementation branch CI #485 passed all required gates. The implementation provides safe HTTP(S) target validation, deterministic plans, ALLOW/ASK/DENY enforcement, explicit approval, browser observation adapters, screenshot baseline comparison, body-content assertions, console/network/accessibility evidence, baseline binding, and explicit visual regression diagnostics. A temporary formatter audit was removed before closure.
 
 ## Next verified phase
 
