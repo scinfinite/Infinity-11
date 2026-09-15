@@ -1,4 +1,10 @@
-export type ImprovementKind = 'bug' | 'performance' | 'reliability' | 'accessibility' | 'security' | 'ux';
+export type ImprovementKind =
+  | 'bug'
+  | 'performance'
+  | 'reliability'
+  | 'accessibility'
+  | 'security'
+  | 'ux';
 export type ImprovementPriority = 'low' | 'medium' | 'high' | 'critical';
 export type PolicyDecision = 'allow' | 'ask' | 'deny';
 
@@ -54,7 +60,14 @@ export interface ImprovementResult {
 const idPattern = /^[a-z][a-z0-9_-]{0,63}$/;
 const pathPattern = /^(?!\/)(?!.*\\)(?!.*(?:^|\/)\.\.\/?)(?!.*(?:^|\/)[.]?(?:$|\/))[\x20-\x7e]+$/;
 const priorities: ImprovementPriority[] = ['low', 'medium', 'high', 'critical'];
-const kinds: ImprovementKind[] = ['bug', 'performance', 'reliability', 'accessibility', 'security', 'ux'];
+const kinds: ImprovementKind[] = [
+  'bug',
+  'performance',
+  'reliability',
+  'accessibility',
+  'security',
+  'ux',
+];
 
 function hash(input: string): string {
   let value = 2166136261;
@@ -83,7 +96,13 @@ function score(candidate: ImprovementCandidate): number {
   return priority * 100 + confidence * 50 - candidate.effort * 10;
 }
 
-function canonicalPlan(planId: string, projectId: string, revision: number, candidates: ImprovementCandidate[], evidenceChecksum: string): string {
+function canonicalPlan(
+  planId: string,
+  projectId: string,
+  revision: number,
+  candidates: ImprovementCandidate[],
+  evidenceChecksum: string,
+): string {
   return JSON.stringify({
     planId,
     projectId,
@@ -100,8 +119,12 @@ export function validateEvidence(evidence: ImprovementEvidence[]): string[] {
     if (!idPattern.test(item.id)) issues.push(`INVALID_EVIDENCE_ID:${index}`);
     if (ids.has(item.id)) issues.push(`DUPLICATE_EVIDENCE_ID:${item.id}`);
     ids.add(item.id);
-    if (!item.source.trim() || item.source.length > 512) issues.push(`INVALID_EVIDENCE_SOURCE:${item.id}`);
-    if (!item.summary.trim() || item.summary.length > 4096) issues.push(`INVALID_EVIDENCE_SUMMARY:${item.id}`);
+    if (!item.source.trim() || item.source.length > 512) {
+      issues.push(`INVALID_EVIDENCE_SOURCE:${item.id}`);
+    }
+    if (!item.summary.trim() || item.summary.length > 4096) {
+      issues.push(`INVALID_EVIDENCE_SUMMARY:${item.id}`);
+    }
     if (!Number.isFinite(item.confidence) || item.confidence < 0 || item.confidence > 1) {
       issues.push(`INVALID_EVIDENCE_CONFIDENCE:${item.id}`);
     }
@@ -113,19 +136,31 @@ export function validateCandidate(candidate: ImprovementCandidate): string[] {
   const issues: string[] = [];
   if (!idPattern.test(candidate.id)) issues.push('INVALID_CANDIDATE_ID');
   if (!idPattern.test(candidate.projectId)) issues.push('INVALID_PROJECT_ID');
-  if (!Number.isInteger(candidate.revision) || candidate.revision < 0) issues.push('INVALID_REVISION');
+  if (!Number.isInteger(candidate.revision) || candidate.revision < 0) {
+    issues.push('INVALID_REVISION');
+  }
   if (!kinds.includes(candidate.kind)) issues.push('INVALID_KIND');
   if (!priorities.includes(candidate.priority)) issues.push('INVALID_PRIORITY');
   if (!candidate.title.trim() || candidate.title.length > 512) issues.push('INVALID_TITLE');
-  if (!candidate.rationale.trim() || candidate.rationale.length > 4096) issues.push('INVALID_RATIONALE');
-  if (!candidate.expectedBenefit.trim() || candidate.expectedBenefit.length > 2048) issues.push('INVALID_BENEFIT');
+  if (!candidate.rationale.trim() || candidate.rationale.length > 4096) {
+    issues.push('INVALID_RATIONALE');
+  }
+  if (!candidate.expectedBenefit.trim() || candidate.expectedBenefit.length > 2048) {
+    issues.push('INVALID_BENEFIT');
+  }
   if (!candidate.evidenceIds.length) issues.push('EVIDENCE_REQUIRED');
   if (!candidate.affectedPaths.length) issues.push('AFFECTED_PATHS_REQUIRED');
   for (const path of candidate.affectedPaths) {
-    if (!pathPattern.test(path) || path === '.git' || path.startsWith('.git/')) issues.push(`UNSAFE_PATH:${path}`);
+    if (!pathPattern.test(path) || path === '.git' || path.startsWith('.git/')) {
+      issues.push(`UNSAFE_PATH:${path}`);
+    }
   }
-  if (!Number.isFinite(candidate.risk) || candidate.risk < 0 || candidate.risk > 1) issues.push('INVALID_RISK');
-  if (!Number.isFinite(candidate.effort) || candidate.effort < 0 || candidate.effort > 100) issues.push('INVALID_EFFORT');
+  if (!Number.isFinite(candidate.risk) || candidate.risk < 0 || candidate.risk > 1) {
+    issues.push('INVALID_RISK');
+  }
+  if (!Number.isFinite(candidate.effort) || candidate.effort < 0 || candidate.effort > 100) {
+    issues.push('INVALID_EFFORT');
+  }
   return issues;
 }
 
@@ -137,11 +172,18 @@ export async function buildImprovementPlan(
   candidates: ImprovementCandidate[],
   policy: ImprovementPolicy,
 ): Promise<ImprovementPlan> {
-  if (!idPattern.test(planId) || !idPattern.test(projectId) || !Number.isInteger(baseRevision) || baseRevision < 0) {
+  if (
+    !idPattern.test(planId) ||
+    !idPattern.test(projectId) ||
+    !Number.isInteger(baseRevision) ||
+    baseRevision < 0
+  ) {
     throw new Error('INVALID_PLAN_IDENTITY');
   }
   const evidenceIssues = validateEvidence(evidence);
-  if (evidenceIssues.length) throw new Error(`INVALID_EVIDENCE:${evidenceIssues.join(',')}`);
+  if (evidenceIssues.length) {
+    throw new Error(`INVALID_EVIDENCE:${evidenceIssues.join(',')}`);
+  }
   const evidenceIds = new Set(evidence.map((item) => item.id));
   const candidateIds = new Set<string>();
   const accepted: ImprovementCandidate[] = [];
@@ -149,11 +191,17 @@ export async function buildImprovementPlan(
 
   for (const candidate of candidates) {
     const issues = validateCandidate(candidate);
-    if (candidate.projectId !== projectId || candidate.revision !== baseRevision) issues.push('CANDIDATE_REVISION_MISMATCH');
+    if (candidate.projectId !== projectId || candidate.revision !== baseRevision) {
+      issues.push('CANDIDATE_REVISION_MISMATCH');
+    }
     if (candidateIds.has(candidate.id)) issues.push('DUPLICATE_CANDIDATE_ID');
     candidateIds.add(candidate.id);
-    if (candidate.evidenceIds.some((id) => !evidenceIds.has(id))) issues.push('UNKNOWN_EVIDENCE');
-    if (issues.length) throw new Error(`INVALID_CANDIDATE:${candidate.id}:${issues.join(',')}`);
+    if (candidate.evidenceIds.some((id) => !evidenceIds.has(id))) {
+      issues.push('UNKNOWN_EVIDENCE');
+    }
+    if (issues.length) {
+      throw new Error(`INVALID_CANDIDATE:${candidate.id}:${issues.join(',')}`);
+    }
     const decision = await policy.evaluate({ projectId, candidate });
     if (decision === 'deny') throw new Error(`POLICY_DENIED:${candidate.id}`);
     if (decision === 'ask') finalPolicy = 'ask';
@@ -183,7 +231,9 @@ export async function applyImprovementPlan(
   if (currentRevision !== plan.baseRevision) throw new Error('STALE_PLAN');
   const evidenceChecksum = hash(canonicalEvidence(evidence));
   if (evidenceChecksum !== plan.evidenceChecksum) throw new Error('EVIDENCE_CHANGED');
-  if (plan.policy === 'ask' && !(await approveAsk())) throw new Error('APPROVAL_REQUIRED');
+  if (plan.policy === 'ask' && !(await approveAsk())) {
+    throw new Error('APPROVAL_REQUIRED');
+  }
 
   const applied: ImprovementCandidate[] = [];
   try {
@@ -192,7 +242,11 @@ export async function applyImprovementPlan(
       applied.push(candidate);
     }
   } catch (error) {
-    throw new Error(`IMPROVEMENT_APPLY_FAILED:${applied.length}:${error instanceof Error ? error.message : 'unknown'}`);
+    throw new Error(
+      `IMPROVEMENT_APPLY_FAILED:${applied.length}:${
+        error instanceof Error ? error.message : 'unknown'
+      }`,
+    );
   }
   return {
     planId: plan.id,
@@ -205,6 +259,9 @@ export async function applyImprovementPlan(
 
 export function summarizeImprovements(plan: ImprovementPlan): string {
   return plan.candidates
-    .map((candidate) => `${candidate.priority.toUpperCase()} ${candidate.kind.toUpperCase()} ${candidate.id}: ${candidate.title}`)
+    .map(
+      (candidate) =>
+        `${candidate.priority.toUpperCase()} ${candidate.kind.toUpperCase()} ${candidate.id}: ${candidate.title}`,
+    )
     .join('\n');
 }
