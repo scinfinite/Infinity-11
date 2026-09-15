@@ -29,21 +29,25 @@ function icon(name: string): string {
   const paths: Record<string, string> = {
     command: '<path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/>',
     chat: '<path d="M4 5.5A3.5 3.5 0 0 1 7.5 2h9A3.5 3.5 0 0 1 20 5.5v6a3.5 3.5 0 0 1-3.5 3.5H12l-4.5 3v-3.1A3.5 3.5 0 0 1 4 11.5z"/>',
-    projects: '<path d="M3 6.5A2.5 2.5 0 0 1 5.5 4H10l2 2h6.5A2.5 2.5 0 0 1 21 8.5v8A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z"/>',
+    projects:
+      '<path d="M3 6.5A2.5 2.5 0 0 1 5.5 4H10l2 2h6.5A2.5 2.5 0 0 1 21 8.5v8A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z"/>',
     runs: '<path d="M5 4v16l14-8z"/>',
     approvals: '<path d="m5 12 4 4L19 6"/>',
     artifacts: '<path d="M4 5h16v14H4zM8 9h8M8 13h5"/>',
     usage: '<path d="M5 19V9M12 19V5M19 19v-7"/>',
-    settings: '<path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0-6v3m0 14v3M4.2 4.2l2.1 2.1m11.4 11.4 2.1 2.1M2 12h3m14 0h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>',
+    settings:
+      '<path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0-6v3m0 14v3M4.2 4.2l2.1 2.1m11.4 11.4 2.1 2.1M2 12h3m14 0h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>',
   };
   return `<svg viewBox="0 0 24 24" aria-hidden="true">${paths[name] ?? ''}</svg>`;
 }
 
 function navMarkup(): string {
-  return NAV_ITEMS.map((item) => `
+  return NAV_ITEMS.map(
+    (item) => `
     <button class="nav-item ${preferences.navigation === item.id ? 'active' : ''}" data-nav="${item.id}" aria-current="${preferences.navigation === item.id ? 'page' : 'false'}" title="${item.label}">
       ${icon(item.id)}<span>${item.label}</span>
-    </button>`).join('');
+    </button>`,
+  ).join('');
 }
 
 function commandMarkup(): string {
@@ -112,21 +116,25 @@ function render(): void {
     </div>
     <div class="toast" role="status" aria-live="polite" aria-atomic="true"></div>`;
 
-  root.querySelectorAll<HTMLElement>('[data-nav]').forEach((element) => element.addEventListener('click', () => {
-    const id = element.dataset.nav as NavigationId | undefined;
-    if (id && NAV_ITEMS.some((item) => item.id === id)) {
-      preferences = navigate(preferences, id);
+  root.querySelectorAll<HTMLElement>('[data-nav]').forEach((element) =>
+    element.addEventListener('click', () => {
+      const id = element.dataset.nav as NavigationId | undefined;
+      if (id && NAV_ITEMS.some((item) => item.id === id)) {
+        preferences = navigate(preferences, id);
+        render();
+      }
+    }),
+  );
+  root.querySelectorAll<HTMLElement>('[data-action]').forEach((element) =>
+    element.addEventListener('click', () => {
+      const action = element.dataset.action;
+      if (action === 'toggle-sidebar') preferences = toggleSidebar(preferences);
+      if (action === 'toggle-motion') preferences = toggleReducedMotion(preferences);
+      if (action === 'new-run') showToast('Run composer ready — describe your task to begin.');
+      if (action === 'notifications') showToast('No blocking notifications.');
       render();
-    }
-  }));
-  root.querySelectorAll<HTMLElement>('[data-action]').forEach((element) => element.addEventListener('click', () => {
-    const action = element.dataset.action;
-    if (action === 'toggle-sidebar') preferences = toggleSidebar(preferences);
-    if (action === 'toggle-motion') preferences = toggleReducedMotion(preferences);
-    if (action === 'new-run') showToast('Run composer ready — describe your task to begin.');
-    if (action === 'notifications') showToast('No blocking notifications.');
-    render();
-  }));
+    }),
+  );
 }
 
 function showToast(message: string): void {

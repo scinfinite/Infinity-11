@@ -23,10 +23,7 @@ export const DEFAULT_PREFERENCES: WebPreferences = {
   reducedMotion: false,
 };
 
-export function navigate(
-  preferences: WebPreferences,
-  navigation: NavigationId,
-): WebPreferences {
+export function navigate(preferences: WebPreferences, navigation: NavigationId): WebPreferences {
   return { ...preferences, navigation };
 }
 
@@ -34,9 +31,7 @@ export function toggleSidebar(preferences: WebPreferences): WebPreferences {
   return { ...preferences, sidebarCollapsed: !preferences.sidebarCollapsed };
 }
 
-export function toggleReducedMotion(
-  preferences: WebPreferences,
-): WebPreferences {
+export function toggleReducedMotion(preferences: WebPreferences): WebPreferences {
   return { ...preferences, reducedMotion: !preferences.reducedMotion };
 }
 
