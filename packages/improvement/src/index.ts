@@ -115,7 +115,8 @@ function canonicalPlan(
 export function validateEvidence(evidence: ImprovementEvidence[]): string[] {
   const issues: string[] = [];
   const ids = new Set<string>();
-  for (const [index, item] of evidence.entries()) {
+  for (let index = 0; index < evidence.length; index += 1) {
+    const item = evidence[index];
     if (!idPattern.test(item.id)) issues.push(`INVALID_EVIDENCE_ID:${index}`);
     if (ids.has(item.id)) issues.push(`DUPLICATE_EVIDENCE_ID:${item.id}`);
     ids.add(item.id);
