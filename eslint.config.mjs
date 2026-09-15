@@ -19,7 +19,12 @@ export default tseslint.config(
   {
     files: ['apps/web/public/sw.js'],
     languageOptions: {
-      globals: { ...globals.serviceworker },
+      globals: {
+        caches: 'readonly',
+        clients: 'readonly',
+        fetch: 'readonly',
+        self: 'readonly',
+      },
     },
   },
 );
