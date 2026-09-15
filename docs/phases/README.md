@@ -101,3 +101,5 @@ The roadmap table is updated only from repository evidence.
 ## Final boundary
 
 **Phase 110 is the V1 roadmap closure point.** After Phase 110, the product enters ordinary maintenance and future-version evolution. Security fixes, provider updates, reliability fixes, and necessary compatibility work continue normally.
+
+<!-- roadmap-generation-trigger -->
