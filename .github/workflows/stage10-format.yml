@@ -1,0 +1,29 @@
+name: Stage 10 formatter
+
+on:
+  push:
+    branches:
+      - stage-10-core-web-pwa-ux
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[auto-format]') }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22.14.0
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec prettier --write apps/web/src/app.ts apps/web/src/state.ts apps/web/tsconfig.json
+      - name: Commit formatting
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/web/src/app.ts apps/web/src/state.ts apps/web/tsconfig.json
+          git diff --cached --quiet || git commit -m "chore(stage-10): format web sources [auto-format]"
+          git push
