@@ -2,11 +2,15 @@
 
 ## Current status
 
-**Phases 1–11: COMPLETE, merged into `main`, and verified by CI.**
+**Phases 1–13: COMPLETE, merged into `main`, and verified by CI.**
 
 **Phase 11 — Advanced Application Builder Foundation: COMPLETE.** The Phase 11 application specification/foundation is part of the verified baseline.
 
 **Phase 12 — Full-Stack Code Generation: COMPLETE.** Deterministic project generation, requirement traceability, generated-project security auditing, multi-framework coverage, branch CI, merge, and post-merge main CI are verified.
+
+**Phase 13 — Database and Data Layer Builder: COMPLETE.** Deterministic PostgreSQL/SQLite schema and seed generation, fail-closed validation, repository/executor/transaction/health contracts, branch verification, merge, and final exact-head main CI are verified.
+
+**Next phase: Phase 14 — Authentication and Authorization Builder.**
 
 ## Canonical V1 planning baseline
 
@@ -38,7 +42,7 @@ Every capability is an independent numbered phase. There are no hidden `11.1`, `
 10 Core Web/PWA Product UX
 11 Advanced Application Builder Foundation   ← COMPLETE
 12 Full-Stack Code Generation              ← COMPLETE
-13 Database and Data Layer Builder
+13 Database and Data Layer Builder          ← COMPLETE
 14 Authentication and Authorization Builder
 15 AI Project Modification Engine
 16 Application Testing Engine
@@ -108,9 +112,9 @@ The roadmap table is updated only from repository evidence.
 - Web is the control/experience surface; runtime owns policy and execution.
 - V1 completion boundary remains Phase 110.
 
-## Phase 12 evidence
+## Phase 13 evidence
 
-The Phase 12 implementation contract is documented in `PHASE-12-FULL-STACK-CODE-GENERATION.md`. The generator covers deterministic project output, requirements traceability, supported web/backend/full-stack targets, and generated-project security auditing. Phase 12 is `COMPLETE` after final branch CI, merge, and post-merge main CI verification.
+The Phase 13 implementation contract is documented in `PHASE-13-DATABASE-DATA-LAYER-BUILDER.md`. The builder covers deterministic schema and seed generation, strict validation, migration/checksum metadata, repository contracts, adapter-independent execution boundaries, and explicit database health results. Phase 13 is `COMPLETE` after final branch verification, merge, and post-merge main CI verification.
 
 ## Final boundary
 
