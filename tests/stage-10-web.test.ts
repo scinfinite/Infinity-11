@@ -46,9 +46,11 @@ describe('stage 10 web workspace', () => {
     expect(manifest).toContain('"start_url": "./"');
   });
 
-  it('keeps the offline worker scoped to safe GET requests', () => {
+  it('keeps the offline worker scoped to safe same-origin shell requests', () => {
     const worker = readPublic('sw.js');
     expect(worker).toContain("event.request.method !== 'GET'");
+    expect(worker).toContain('requestUrl.origin !== self.location.origin');
+    expect(worker).toContain('STATIC_PATHS');
     expect(worker).toContain('caches.match(event.request)');
     expect(worker).toContain('self.skipWaiting()');
   });
