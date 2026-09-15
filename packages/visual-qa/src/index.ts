@@ -2,6 +2,7 @@ export type QaPolicyDecision = 'allow' | 'ask' | 'deny';
 export type VisualStatus = 'passed' | 'failed' | 'skipped';
 
 export interface BrowserTarget {
+  id: string;
   url: string;
   viewport: { width: number; height: number; deviceScaleFactor?: number };
   waitForMs?: number;
@@ -29,6 +30,7 @@ export interface QaPlan {
 export interface BrowserObservation {
   title: string;
   url: string;
+  bodyText: string;
   screenshotHash: string;
   consoleErrors: string[];
   failedRequests: string[];
@@ -48,6 +50,7 @@ export interface QaPolicy {
 }
 
 export interface QaTargetResult {
+  targetId: string;
   url: string;
   status: VisualStatus;
   visualMatch?: boolean;
@@ -67,8 +70,9 @@ export interface QaRunResult {
 }
 
 const idPattern = /^[a-z][a-z0-9_-]{0,63}$/;
-const httpUrlPattern = /^https?:\/\/[^\s]+$/i;
 const maxViewport = 8_000;
+const maxDeviceScaleFactor = 4;
+const maxWaitMs = 60_000;
 
 function hash(value: string): string {
   let result = 2166136261;
@@ -80,24 +84,56 @@ function hash(value: string): string {
 }
 
 function canonicalTargets(targets: BrowserTarget[]): string {
-  return JSON.stringify(targets.slice().sort((a, b) => a.url.localeCompare(b.url)));
+  return JSON.stringify(targets.slice().sort((a, b) => a.id.localeCompare(b.id)));
+}
+
+function isHttpUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return (url.protocol === 'http:' || url.protocol === 'https:') && !url.username && !url.password;
+  } catch {
+    return false;
+  }
 }
 
 export function validateQaTargets(targets: BrowserTarget[]): string[] {
   const issues: string[] = [];
   if (!targets.length) issues.push('TARGETS_REQUIRED');
-  const seen = new Set<string>();
+  const seenIds = new Set<string>();
+  const seenUrls = new Set<string>();
   targets.forEach((target, index) => {
-    if (!httpUrlPattern.test(target.url)) issues.push(`INVALID_URL:${index}`);
-    if (seen.has(target.url)) issues.push(`DUPLICATE_URL:${index}`);
-    seen.add(target.url);
-    if (!Number.isInteger(target.viewport.width) || target.viewport.width < 1 || target.viewport.width > maxViewport) {
+    if (!idPattern.test(target.id)) issues.push(`INVALID_TARGET_ID:${index}`);
+    if (seenIds.has(target.id)) issues.push(`DUPLICATE_TARGET_ID:${index}`);
+    seenIds.add(target.id);
+    if (!isHttpUrl(target.url)) issues.push(`INVALID_URL:${index}`);
+    if (seenUrls.has(target.url)) issues.push(`DUPLICATE_URL:${index}`);
+    seenUrls.add(target.url);
+    if (
+      !Number.isInteger(target.viewport.width) ||
+      target.viewport.width < 1 ||
+      target.viewport.width > maxViewport
+    ) {
       issues.push(`INVALID_VIEWPORT_WIDTH:${index}`);
     }
-    if (!Number.isInteger(target.viewport.height) || target.viewport.height < 1 || target.viewport.height > maxViewport) {
+    if (
+      !Number.isInteger(target.viewport.height) ||
+      target.viewport.height < 1 ||
+      target.viewport.height > maxViewport
+    ) {
       issues.push(`INVALID_VIEWPORT_HEIGHT:${index}`);
     }
-    if (target.waitForMs !== undefined && (!Number.isInteger(target.waitForMs) || target.waitForMs < 0 || target.waitForMs > 60_000)) {
+    if (
+      target.viewport.deviceScaleFactor !== undefined &&
+      (!Number.isFinite(target.viewport.deviceScaleFactor) ||
+        target.viewport.deviceScaleFactor <= 0 ||
+        target.viewport.deviceScaleFactor > maxDeviceScaleFactor)
+    ) {
+      issues.push(`INVALID_DEVICE_SCALE_FACTOR:${index}`);
+    }
+    if (
+      target.waitForMs !== undefined &&
+      (!Number.isInteger(target.waitForMs) || target.waitForMs < 0 || target.waitForMs > maxWaitMs)
+    ) {
       issues.push(`INVALID_WAIT:${index}`);
     }
   });
@@ -116,8 +152,9 @@ export async function buildQaPlan(
   }
   const issues = validateQaTargets(targets);
   if (issues.length) throw new Error(`INVALID_QA_TARGETS: ${issues.join(', ')}`);
+  const orderedTargets = targets.slice().sort((a, b) => a.id.localeCompare(b.id));
   let decision: QaPolicyDecision = 'allow';
-  for (const target of targets.slice().sort((a, b) => a.url.localeCompare(b.url))) {
+  for (const target of orderedTargets) {
     const targetDecision = await policy.evaluate(target);
     if (targetDecision === 'deny') throw new Error(`POLICY_DENIED: ${target.url}`);
     if (targetDecision === 'ask') decision = 'ask';
@@ -126,7 +163,7 @@ export async function buildQaPlan(
     id,
     projectId,
     revision,
-    targets: targets.slice().sort((a, b) => a.url.localeCompare(b.url)),
+    targets: orderedTargets,
     checksum: hash(JSON.stringify({ projectId, revision, id, targets: canonicalTargets(targets) })),
     policy: decision,
   };
@@ -143,24 +180,37 @@ export async function runQaPlan(
   const results: QaTargetResult[] = [];
   for (const target of plan.targets) {
     const observation = await browser.open(target);
-    const baseline = baselines.get(target.url);
+    const baseline = baselines.get(target.id);
     let visualMatch: boolean | undefined;
     let visualDifference: number | undefined;
     if (baseline) {
+      if (baseline.targetId !== target.id) throw new Error(`BASELINE_TARGET_MISMATCH:${target.id}`);
       const diff = await visualDiff.compare(observation.screenshotHash, baseline);
+      if (!Number.isFinite(diff.difference) || diff.difference < 0) {
+        throw new Error(`INVALID_VISUAL_DIFF:${target.id}`);
+      }
       visualMatch = diff.match;
       visualDifference = diff.difference;
     }
     const failures: string[] = [];
-    if (target.expectedTitle !== undefined && observation.title !== target.expectedTitle) failures.push('TITLE_MISMATCH');
-    if (target.expectedUrl !== undefined && observation.url !== target.expectedUrl) failures.push('URL_MISMATCH');
-    if (target.requiredText?.some((text) => !observation.title.includes(text) && !observation.url.includes(text))) failures.push('REQUIRED_TEXT_MISSING');
-    if (target.forbiddenText?.some((text) => observation.title.includes(text) || observation.url.includes(text))) failures.push('FORBIDDEN_TEXT_FOUND');
+    if (target.expectedTitle !== undefined && observation.title !== target.expectedTitle) {
+      failures.push('TITLE_MISMATCH');
+    }
+    if (target.expectedUrl !== undefined && observation.url !== target.expectedUrl) {
+      failures.push('URL_MISMATCH');
+    }
+    if (target.requiredText?.some((text) => !observation.bodyText.includes(text))) {
+      failures.push('REQUIRED_TEXT_MISSING');
+    }
+    if (target.forbiddenText?.some((text) => observation.bodyText.includes(text))) {
+      failures.push('FORBIDDEN_TEXT_FOUND');
+    }
     if (observation.consoleErrors.length) failures.push('CONSOLE_ERRORS');
     if (observation.failedRequests.length) failures.push('FAILED_REQUESTS');
     if (observation.accessibilityViolations.length) failures.push('ACCESSIBILITY_VIOLATIONS');
     if (visualMatch === false) failures.push('VISUAL_DIFF');
     results.push({
+      targetId: target.id,
       url: target.url,
       status: failures.length ? 'failed' : 'passed',
       visualMatch,
@@ -171,5 +221,11 @@ export async function runQaPlan(
       ...(failures.length ? { failure: failures.join(',') } : {}),
     });
   }
-  return { projectId: plan.projectId, revision: plan.revision, planChecksum: plan.checksum, passed: results.every((result) => result.status === 'passed'), results };
+  return {
+    projectId: plan.projectId,
+    revision: plan.revision,
+    planChecksum: plan.checksum,
+    passed: results.every((result) => result.status === 'passed'),
+    results,
+  };
 }
