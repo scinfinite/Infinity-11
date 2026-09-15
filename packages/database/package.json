@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "description": "Provider-independent schema, migration, seed, repository, and database-health contracts for INFINITY-11.",
   "scripts": {
     "build": "tsc -p tsconfig.json"
   }
