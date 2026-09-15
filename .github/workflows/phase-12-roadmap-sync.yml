@@ -15,37 +15,30 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Synchronize authoritative roadmap status
-        env:
-          MERGE_SHA: 228798473d621ab07e8109c426f2aad436607959
         run: |
           python - <<'PY'
           from pathlib import Path
-          import re
 
           path = Path('docs/architecture/INFINITY-11-V1-ROADMAP.md')
           text = path.read_text()
-          text = text.replace(
-              '> **Verified current main:** `c1a628ab60af2b987c9fedcba6eeedbcaae66448`.',
-              '> **Verified current main:** `228798473d621ab07e8109c426f2aad436607959`.'
-          )
-          text = text.replace(
-              '> **Current product position:** Phases 1–10 are recorded as completed; Phase 11 is the next planned implementation phase.',
-              '> **Current product position:** Phases 1–12 are completed and verified; Phase 13 is the next planned implementation phase.'
-          )
-          text = text.replace(
-              '| 11 | Advanced Application Builder Foundation | NOT COMPLETED | PENDING — phase not started |',
-              '| 11 | Advanced Application Builder Foundation | COMPLETED | VERIFIED — merged main; green post-merge CI |'
-          )
-          text = text.replace(
-              '| 12 | Full-Stack Code Generation | NOT COMPLETED | PENDING — phase not started |',
-              '| 12 | Full-Stack Code Generation | COMPLETED | VERIFIED — merged main; green post-merge CI |'
-          )
-          for phase in (11, 12):
-              pattern = rf'(# Phase {phase} — [^\\n]+\\n\\n)\\*\\*Status:\\*\\* NOT COMPLETED\\n\\*\\*CI verification:\\*\\* PENDING — phase not started'
-              replacement = rf'\\1**Status:** COMPLETED\\n**CI verification:** VERIFIED — merged main; green post-merge CI'
-              text, count = re.subn(pattern, replacement, text, count=1)
-              if count != 1:
-                  raise SystemExit(f'Could not update detailed Phase {phase} status')
+          replacements = {
+              '> **Verified current main:** `c1a628ab60af2b987c9fedcba6eeedbcaae66448`.':
+              '> **Verified current main:** `228798473d621ab07e8109c426f2aad436607959`.',
+              '> **Current product position:** Phases 1–10 are recorded as completed; Phase 11 is the next planned implementation phase.':
+              '> **Current product position:** Phases 1–12 are completed and verified; Phase 13 is the next planned implementation phase.',
+              '| 11 | Advanced Application Builder Foundation | NOT COMPLETED | PENDING — phase not started |':
+              '| 11 | Advanced Application Builder Foundation | COMPLETED | VERIFIED — merged main; green post-merge CI |',
+              '| 12 | Full-Stack Code Generation | NOT COMPLETED | PENDING — phase not started |':
+              '| 12 | Full-Stack Code Generation | COMPLETED | VERIFIED — merged main; green post-merge CI |',
+              '# Phase 11 — Advanced Application Builder Foundation\n\n**Status:** NOT COMPLETED\n**CI verification:** PENDING — phase not started':
+              '# Phase 11 — Advanced Application Builder Foundation\n\n**Status:** COMPLETED\n**CI verification:** VERIFIED — merged main; green post-merge CI',
+              '# Phase 12 — Full-Stack Code Generation\n\n**Status:** NOT COMPLETED\n**CI verification:** PENDING — phase not started':
+              '# Phase 12 — Full-Stack Code Generation\n\n**Status:** COMPLETED\n**CI verification:** VERIFIED — merged main; green post-merge CI',
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'Missing expected roadmap text: {old}')
+              text = text.replace(old, new, 1)
           path.write_text(text)
           PY
       - name: Commit roadmap synchronization and remove temporary workflow
