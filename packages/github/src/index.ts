@@ -1,9 +1,4 @@
-export type GitHubResourceKind =
-  | 'repository'
-  | 'branch'
-  | 'commit'
-  | 'pull-request'
-  | 'issue';
+export type GitHubResourceKind = 'repository' | 'branch' | 'commit' | 'pull-request' | 'issue';
 export type GitHubPermission = 'read' | 'write';
 export type PolicyDecision = 'allow' | 'ask' | 'deny';
 export type PullRequestState = 'open' | 'closed' | 'merged';
@@ -123,12 +118,7 @@ const refPattern = /^[A-Za-z0-9._/-]+$/;
 const shaPattern = /^[0-9a-f]{7,64}$/i;
 
 function safeRef(value: string): boolean {
-  return (
-    value.length > 0 &&
-    value.length <= 255 &&
-    refPattern.test(value) &&
-    !value.includes('..')
-  );
+  return value.length > 0 && value.length <= 255 && refPattern.test(value) && !value.includes('..');
 }
 
 function safePath(value: string): boolean {
@@ -223,9 +213,7 @@ export async function buildGitHubPlan(
   input: GitHubPlanInput,
 ): Promise<GitHubPlan> {
   const errors = validateGitHubRequest(request);
-  if (errors.length) {
-    throw new Error(`INVALID_GITHUB_REQUEST: ${errors.join(', ')}`);
-  }
+  if (errors.length) throw new Error(`INVALID_GITHUB_REQUEST: ${errors.join(', ')}`);
 
   const repository = await input.adapter.getRepository(request.repository);
   const branch = await input.adapter.getBranch(repository, request.baseBranch);
