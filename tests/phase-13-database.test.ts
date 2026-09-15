@@ -69,6 +69,46 @@ describe('Phase 13 database builder', () => {
     expect(() =>
       generateSeedSql({ ...spec, seeds: [{ table: 'tasks', values: { nope: 'x' } }] }),
     ).toThrow(/Unknown seed column/);
+
+    const reordered = {
+      ...spec,
+      seeds: [
+        { table: 'tasks', values: { title: "O'Reilly", done: true } },
+        { table: 'tasks', values: { title: 'first', done: false } },
+      ],
+    };
+    const reversed = { ...reordered, seeds: [...reordered.seeds].reverse() };
+    expect(generateSeedSql(reordered)).toBe(generateSeedSql(reversed));
+    expect(generateSeedSql(reordered)).toContain("'O''Reilly'");
+    expect(() =>
+      generateSeedSql({ ...spec, seeds: [{ table: 'tasks', values: { done: Number.NaN } }] }),
+    ).toThrow(/finite/);
+  });
+
+  it('rejects an impossible ON DELETE SET NULL relationship', () => {
+    const invalid: DatabaseSpec = {
+      ...spec,
+      tables: [
+        {
+          name: 'users',
+          columns: [{ name: 'id', type: 'uuid', primaryKey: true }],
+        },
+        {
+          name: 'tasks',
+          columns: [
+            { name: 'id', type: 'uuid', primaryKey: true },
+            {
+              name: 'owner_id',
+              type: 'uuid',
+              references: { table: 'users', column: 'id', onDelete: 'set-null' },
+            },
+          ],
+        },
+      ],
+    };
+    expect(validateDatabaseSpec(invalid).some((i) => i.code === 'SET_NULL_REQUIRES_NULLABLE')).toBe(
+      true,
+    );
   });
 
   it('reports dependency health without leaking executor internals', async () => {
@@ -84,5 +124,9 @@ describe('Phase 13 database builder', () => {
     );
     expect(failed.ok).toBe(false);
     expect(failed.error).toBe('connection refused');
+
+    const unsupported = await checkDatabaseHealth({ execute: async () => undefined }, 'mysql' as never);
+    expect(unsupported.ok).toBe(false);
+    expect(unsupported.error).toContain('Unsupported database dialect');
   });
 });
