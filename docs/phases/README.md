@@ -10,16 +10,18 @@
 
 ## Canonical V1 planning baseline
 
-The complete V1 implementation plan is:
+The authoritative detailed V1 implementation plan is:
 
-- `INFINITY-11-V1-ROADMAP.md` — authoritative Phase 1–110 roadmap;
-- `docs/architecture/INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md` — architectural baseline;
-- `docs/architecture/INFINITY-11-PRE-CODING-AUDIT.md` — original implementation gate;
-- `docs/architecture/INFINITY-11-IMPLEMENTATION-ROADMAP.md` — dependency-oriented implementation history.
+- `../architecture/INFINITY-11-V1-ROADMAP.md` — complete Phase 1–110 roadmap;
+- `../architecture/INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md` — canonical architectural baseline;
+- `../architecture/INFINITY-11-PRE-CODING-AUDIT.md` — original implementation gate;
+- `../architecture/INFINITY-11-IMPLEMENTATION-ROADMAP.md` — dependency-oriented implementation history;
+- `../description/INFINITY-11-DETAILED-DESCRIPTION.md` — detailed product/web specification;
+- `../description/INFINITY-11-ARCHITECTURE-AND-SCREENS.md` — active architecture and screen contract.
 
 ## Phase model
 
-Every capability is an independent numbered phase. Do not create hidden `11.1`, `11.2`, or similar nested phases. A phase may contain implementation tasks internally, but the roadmap identity remains one numbered phase.
+Every capability is an independent numbered phase. There are no hidden `11.1`, `11.2`, or similar roadmap phases. A phase may contain internal engineering tasks, but the roadmap identity remains one numbered phase.
 
 ## V1 sequence
 
@@ -70,7 +72,7 @@ inspect
 → close phase
 ```
 
-A phase is not complete merely because code compiles or a UI exists. Completion requires actual evidence for the phase's acceptance boundary and regression protection for earlier phases.
+A phase is not complete merely because code compiles, a screen renders, or an agent claims success. Completion requires evidence for the phase acceptance boundary and regression protection for earlier phases.
 
 ## Status discipline
 
@@ -79,7 +81,7 @@ A phase is not complete merely because code compiles or a UI exists. Completion 
 - `NOT COMPLETED` means planned work has not been accepted as complete.
 - `BLOCKED` means a dependency or external constraint prevents safe completion.
 
-The roadmap table may be updated only from repository evidence.
+The roadmap table is updated only from repository evidence.
 
 ## Product invariants
 
@@ -93,6 +95,8 @@ The roadmap table may be updated only from repository evidence.
 - Evidence-first verification.
 - No provider-specific orchestration in the web UI.
 - No wholesale copying of competitor source, prompts, proprietary workflows, or architecture.
+- Web is the control/experience surface; runtime owns policy and execution.
+- V1 completion boundary remains Phase 110.
 
 ## Final boundary
 
