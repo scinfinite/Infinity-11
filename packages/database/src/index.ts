@@ -54,8 +54,8 @@ export interface DatabasePlan {
 const idPattern = /^[a-z][a-z0-9_]{0,62}$/;
 const columnTypes: ColumnType[] = ['uuid', 'text', 'integer', 'boolean', 'timestamp', 'json'];
 const quoteIdent = (value: string, dialect: DatabaseDialect) =>
-  dialect === 'postgres' ? `"${value.replaceAll('"', '""')}"` : `"${value.replaceAll('"', '""')}"`;
-const sqlString = (value: string) => `'${value.replaceAll("'", "''")}'`;
+  dialect === 'postgres' ? `"${value.replace(/"/g, '""')}"` : `"${value.replace(/"/g, '""')}"`;
+const sqlString = (value: string) => `'${value.replace(/'/g, "''")}'`;
 
 export function validateDatabaseSpec(spec: DatabaseSpec): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
