@@ -13,30 +13,101 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Expand roadmap
+      - name: Generate complete architecture roadmap
         shell: python
         run: |
           from pathlib import Path
           import re
-          p = Path('INFINITY-11-V1-ROADMAP.md')
-          text = p.read_text(encoding='utf-8')
+          source = Path('INFINITY-11-V1-ROADMAP.md')
+          target = Path('docs/architecture/INFINITY-11-V1-ROADMAP.md')
+          text = source.read_text(encoding='utf-8')
           rows = re.findall(r'^\| (\d+) \| (.*?) \| (COMPLETED|NOT COMPLETED) \| (.*?) \|$', text, re.M)
           if len(rows) != 110:
               raise SystemExit(f'Expected 110 phase rows, found {len(rows)}')
-          table_end = text.index('\n# 2. How to Use This Roadmap') if '\n# 2. How to Use This Roadmap' in text else None
-          header = text[:table_end] if table_end else text
-          out = [header.rstrip(), '', '# 2. How to Use This Roadmap', '', '- Work in numerical order unless a documented dependency decision proves otherwise.', '- Audit the live repository before each phase.', '- Treat repository state, tests, build output, and CI as implementation truth.', '- Keep each phase independently verifiable; do not create hidden numbered sub-phases.', '- Synchronize documentation with implementation and final CI evidence.']
+          table_end = text.index('\n# 2. How to Use This Roadmap')
+          header = text[:table_end].replace('`INFINITY-11-V1-ROADMAP.md`', '`docs/architecture/INFINITY-11-V1-ROADMAP.md`')
+          out = [header.rstrip(), '', '# 2. How to Use This Roadmap', '',
+                 '- Work in numerical order unless a documented dependency decision proves otherwise.',
+                 '- Repository state, tests, build output, security checks, runtime evidence, and CI are implementation truth.',
+                 '- Never create hidden numbered sub-phases.',
+                 '- Preserve the core product thesis and architecture invariants.',
+                 '- Synchronize status and documentation with accepted implementation evidence.']
+          common = [
+            'Define capability boundary, actors, inputs, outputs, lifecycle, state transitions, errors, cancellation, timeouts, retries, recovery, and audit requirements.',
+            'Implement the required domain/runtime behavior and durable state using existing contracts rather than a parallel architecture.',
+            'Implement the required web/PWA control surface while keeping policy and orchestration out of the browser.',
+            'Integrate projects, runs, artifacts, agents, tools, providers, execution, verification, governance, and Project Brain where applicable.',
+            'Preserve FREE-FIRST + OPEN-SOURCE-FIRST + BYOK-FIRST operation and local/self-hosted alternatives where technically feasible.',
+            'Cover loading, empty, success, warning, unavailable, error, retry, cancellation, permission, accessibility, responsive, and reduced-motion states where applicable.',
+            'Use the shared AI Gateway and routing contracts for model work; never invent pricing, quota, capability, or verification evidence.',
+            'Apply least privilege and ALLOW / ASK / DENY policy; protect secrets and isolate untrusted execution.',
+            'Emit structured lifecycle events and preserve diagnostics sufficient for root-cause analysis and recovery.',
+            'Add unit, integration, regression, security, E2E/runtime/browser/visual/accessibility/performance tests as applicable.',
+            'Require format, lint, typecheck, tests, build, security, regression, applicable runtime checks, documentation, and final main CI before completion.',
+            'Record known limitations explicitly; a mock, compile, or agent claim is never completion evidence.'
+          ]
           for n, name, status, ci in rows:
-              out += ['', f'# Phase {n} — {name}', '', f'**Status:** {status}', f'**CI verification:** {ci}', '', '## Objective', '', f'Phase {n} delivers the complete {name} capability as a production-oriented, maintainable subsystem.', 'It must integrate with the existing INFINITY-11 contracts without duplicating orchestration or bypassing policy.', '', '## Functional scope', '', '- Define the domain boundary, stable inputs, stable outputs, lifecycle, errors, cancellation, timeouts, and recovery.', '- Implement the user-facing experience required by this capability.', '- Implement the server/runtime behavior and durable state required by this capability.', '- Integrate with existing projects, workspaces, runs, artifacts, agents, tools, providers, and policies where applicable.', '- Preserve provider independence and use adapters for external vendors.', '- Preserve BYOK-first, free-first, and open-source-first operation.', '- Support local/self-hosted alternatives whenever technically feasible.', '', '## User experience', '', '- Provide clear entry points, configuration, progress, loading, empty, success, warning, unavailable, error, retry, and permission states.', '- Preserve desktop, tablet, mobile, PWA, keyboard, focus, accessibility, and reduced-motion behavior.', '- Show observable execution state rather than fabricated completion.', '- Expose useful evidence, logs, artifacts, and verification state without exposing secrets or private chain-of-thought.', '', '## Architecture', '', '- Reuse shared contracts and domain boundaries established by earlier phases.', '- Keep presentation separate from policy, orchestration, and execution.', '- Keep intelligence separate from execution.', '- Keep external services behind replaceable adapters.', '- Make long-running work durable and observable where applicable.', '- Make state transitions explicit and auditable.', '', '## AI and routing', '', '- Use the AI Gateway and model/credential routing rather than provider-specific UI logic.', '- Respect capability, context, policy, provider health, credential health, quota signals, cost, latency, and historical performance when relevant.', '- Never invent unavailable pricing, quota, or capability information.', '- Use bounded fallback and normalized error classification where inference is involved.', '', '## Security', '', '- Apply least privilege and ALLOW / ASK / DENY policy.', '- Protect secrets and prevent raw credential exposure.', '- Validate untrusted inputs and external outputs.', '- Isolate generated or untrusted execution through the ExecutionManager.', '- Record privileged actions and security-relevant decisions.', '- Do not permit the capability to bypass existing approval or audit controls.', '', '## Observability', '', '- Emit structured events for important lifecycle transitions.', '- Record run identifiers, timestamps, actors, targets, outcomes, and failure information as appropriate.', '- Make failures diagnosable and preserve enough evidence for root-cause analysis.', '', '## Verification', '', '- Unit tests cover core behavior and edge cases.', '- Integration tests cover domain boundaries and provider/adaptor contracts.', '- Regression tests protect completed phases.', '- Security tests cover relevant abuse and permission boundaries.', '- E2E/runtime/browser tests are required when the phase affects executable or visual behavior.', '- Performance checks are required when latency, throughput, resource usage, or scale is relevant.', '- Build and packaging checks are required for deliverables.', '', '## Acceptance', '', '- Requirements are implemented and traceable.', '- Error, empty, permission, and recovery states are real.', '- Existing architecture invariants remain intact.', '- Documentation is synchronized.', '- Format, lint, typecheck, tests, build, security, regression, and applicable runtime checks pass.', '- Final main-branch CI is green before the phase is marked complete.', '', '## Engineering workflow', '', '```text', 'Inspect → Reproduce / Verify → Diagnose → Plan → Implement', '→ Test → Build → Runtime / E2E → Security → Regression', '→ Review → Document → Final CI → Close phase', '```', '', '## Completion rule', '', 'A phase is not complete because code exists, a mock renders, or an agent claims success. Completion requires implementation evidence and a green final CI result for the accepted change.', '', '## Dependency rule', '', 'The phase may consume completed capabilities from earlier phases, but it must not silently redefine their contracts. Changes that affect a previous invariant require explicit regression coverage and documentation updates.', '', '## Deliverables', '', '- Production-oriented implementation.', '- Automated verification.', '- Regression protection.', '- Security and permission coverage.', '- Observability and audit integration where applicable.', '- Updated documentation and phase status.', '- Final CI evidence.', '', '## Exit state', '', 'The capability is ready for the next numbered phase, with known limitations recorded rather than hidden.']
-          p.write_text('\n'.join(out) + '\n', encoding='utf-8')
-      - name: Verify roadmap size
+              out += ['', f'# Phase {n} — {name}', '', f'**Status:** {status}', f'**CI verification:** {ci}', '',
+                      '## Objective', '', f'Phase {n} delivers the complete production-oriented {name} capability.', '',
+                      '## Detailed scope', ''] + [f'- {x}' for x in common] + ['',
+                      '## Functional design', '',
+                      '- Define primary user journeys and machine-readable contracts.',
+                      '- Define happy path, edge cases, invalid input, unavailable dependency, partial success, cancellation, timeout, and recovery behavior.',
+                      '- Define interoperability with earlier phases and identify downstream consumers.', '',
+                      '## Web and PWA contract', '',
+                      '- The web is the unified presentation and interaction surface: Command Center, context, configuration, progress, evidence, approvals, and results.',
+                      '- Browser code must not become a second orchestration engine or bypass server policy.',
+                      '- Preserve desktop, tablet, mobile, installable PWA, keyboard, focus, semantic controls, readable contrast, and reduced-motion requirements.', '',
+                      '## Architecture contract', '',
+                      '```text',
+                      'Experience → Control → Intelligence → Execution → Adapter → Data',
+                      '```',
+                      '- External providers are replaceable adapters. Long-running work has durable identity. State transitions are explicit. Privileged effects are policy-controlled.', '',
+                      '## Data and state', '',
+                      '- Define ownership, identifiers, relationships, retention, migration, concurrency, idempotency, and deletion behavior.',
+                      '- Do not leak secrets into client code, logs, prompts, artifacts, telemetry, or generated documentation.', '',
+                      '## Failure and recovery', '',
+                      '| Failure | Required behavior | Evidence |',
+                      '|---|---|---|',
+                      '| Invalid input | Reject safely | Validation result |',
+                      '| Dependency unavailable | Fail clearly or use bounded fallback | Health/error record |',
+                      '| Permission denied | Stop before side effect | Policy/audit event |',
+                      '| Execution failure | Preserve diagnostics; retry only when safe | Run evidence |',
+                      '| Timeout | Stop or recover by policy | Timeout event |',
+                      '| Verification failure | Do not claim completion | Verification report |', '',
+                      '## Acceptance criteria', '',
+                      '- Requirements are traceable to implementation and tests.',
+                      '- Existing completed phases remain regression-safe.',
+                      '- Security, observability, accessibility, and UX boundaries are preserved.',
+                      '- Documentation is synchronized with repository truth.',
+                      '- Final main-branch CI is green.', '',
+                      '## Engineering workflow', '',
+                      '```text',
+                      'Inspect → Reproduce / Verify → Diagnose → Plan → Implement',
+                      '→ Format → Lint → Typecheck → Test → Build',
+                      '→ Runtime / E2E → Security → Regression → UX / A11y',
+                      '→ Review → Document → Final CI → Close',
+                      '```', '',
+                      '## Deliverables', '',
+                      '- Production implementation and stable contracts.',
+                      '- Automated verification and regression protection.',
+                      '- Security/permission and observability integration.',
+                      '- Updated documentation and status evidence.',
+                      '- Final CI record.', '',
+                      '## Exit state', '',
+                      'The capability is implemented or explicitly recorded as incomplete, verified to the accepted boundary, and safe for the next numbered phase.']
+          target.parent.mkdir(parents=True, exist_ok=True)
+          target.write_text('\n'.join(out) + '\n', encoding='utf-8')
+          source.unlink()
+      - name: Verify roadmap
         run: |
-          test "$(wc -l < INFINITY-11-V1-ROADMAP.md)" -gt 5000
-          test "$(grep -c '^# Phase [0-9]' INFINITY-11-V1-ROADMAP.md)" -eq 110
+          test "$(wc -l < docs/architecture/INFINITY-11-V1-ROADMAP.md)" -gt 5000
+          test "$(grep -c '^# Phase [0-9]' docs/architecture/INFINITY-11-V1-ROADMAP.md)" -eq 110
+          test "$(grep -c '^| [0-9][0-9]* |' docs/architecture/INFINITY-11-V1-ROADMAP.md)" -eq 110
       - name: Commit generated roadmap
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add INFINITY-11-V1-ROADMAP.md
+          git add docs/architecture/INFINITY-11-V1-ROADMAP.md INFINITY-11-V1-ROADMAP.md
           git diff --cached --quiet || git commit -m 'docs: generate complete V1 roadmap'
           git push
