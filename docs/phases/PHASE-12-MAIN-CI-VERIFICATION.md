@@ -3,7 +3,8 @@
 **Phase:** 12 — Full-Stack Code Generation
 **Merged PR:** #15
 **Phase merge commit:** `228798473d621ab07e8109c426f2aad436607959`
-**Roadmap/documentation sync commit:** `4ae0b6effe899140fdcc0ea3417184f20179df70`
+**Authoritative roadmap sync:** `4ae0b6effe899140fdcc0ea3417184f20179df70`
+**Current synchronized main before this final verification commit:** `a178652a8a95d9617f06c5b531cd5af478d5ef87`
 
 ## Branch verification
 
@@ -23,7 +24,7 @@ PR #15 was squash-merged only after the final branch verification completed succ
 
 ## Post-merge verification
 
-Main CI run **#396** on the post-merge main line passed all verification jobs:
+Main CI run **#397** passed all verification jobs after the merged Phase 12 implementation reached main:
 
 - format check: PASS
 - lint: PASS
@@ -33,8 +34,6 @@ Main CI run **#396** on the post-merge main line passed all verification jobs:
 - dependency security audit: PASS
 - Gitleaks secret scan: PASS
 
-The remaining commits after that run are documentation-only synchronization records; no implementation or CI configuration was changed after the verified Phase 12 merge path.
+## Final synchronized-main gate
 
-## Final gate
-
-Phase 12 is closed only after the final main-branch CI run for the synchronized repository head is green.
+The final documentation synchronization is complete. Main CI run **#400** is the required final verification run for the synchronized main branch head. Phase 12 is closed only after run #400 is green.
