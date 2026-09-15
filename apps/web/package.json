@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json && cp -R public/. dist/"
   },
   "dependencies": {
     "@infinity-11/types": "workspace:*"

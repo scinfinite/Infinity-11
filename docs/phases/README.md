@@ -2,13 +2,11 @@
 
 ## Current status
 
-**Stages 0–8: COMPLETE and merged into `main`.**
+**Stages 0–9: COMPLETE and merged into `main`.**
 
 **Stage 9 — Verification + Browser/Visual QA: COMPLETE, merged into `main`, and final CI verified.**
 
-**Final green `main` CI run:** `34899369786`
-
-**Stage 10 — Core Web/PWA Product UX: NEXT.**
+**Stage 10 — Core Web/PWA Product UX: IN PROGRESS.**
 
 ## Canonical planning baseline
 
@@ -29,7 +27,7 @@
 7  Automation Fabric + durable workflows     COMPLETE
 8  Project Brain + Context + Knowledge       COMPLETE
 9  Verification + Browser/Visual QA          COMPLETE
-10 Core Web/PWA product UX                    NEXT
+10 Core Web/PWA product UX                    IN PROGRESS
 11 Heavy Application Builder                  TODO
 12 GitHub + Deployment + OPERATE              TODO
 13 Multiplatform packaging                    TODO

@@ -16,4 +16,15 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'error',
     },
   },
+  {
+    files: ['apps/web/public/sw.js'],
+    languageOptions: {
+      globals: {
+        caches: 'readonly',
+        clients: 'readonly',
+        fetch: 'readonly',
+        self: 'readonly',
+      },
+    },
+  },
 );

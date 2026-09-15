@@ -1,0 +1,10 @@
+{
+  "name": "INFINITY-11",
+  "short_name": "INFINITY-11",
+  "description": "Governed AI engineering workspace",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#07090d",
+  "theme_color": "#07090d",
+  "icons": [{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
