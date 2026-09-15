@@ -340,13 +340,15 @@ export async function applyModificationPlan(
       }
     }
   } catch (error) {
-    backups.forEach(async (file, path) => {
-      if (file) {
-        await store.write(request.projectId, path, file.content);
-      } else if (await store.read(request.projectId, path)) {
-        await store.remove(request.projectId, path);
-      }
-    });
+    await Promise.all(
+      Array.from(backups.entries()).map(async ([path, file]) => {
+        if (file) {
+          await store.write(request.projectId, path, file.content);
+        } else if (await store.read(request.projectId, path)) {
+          await store.remove(request.projectId, path);
+        }
+      }),
+    );
     throw error;
   }
 
