@@ -156,7 +156,12 @@ export async function buildQaPlan(
   targets: BrowserTarget[],
   policy: QaPolicy,
 ): Promise<QaPlan> {
-  if (!idPattern.test(id) || !idPattern.test(projectId) || !Number.isInteger(revision) || revision < 0) {
+  if (
+    !idPattern.test(id) ||
+    !idPattern.test(projectId) ||
+    !Number.isInteger(revision) ||
+    revision < 0
+  ) {
     throw new Error('INVALID_PLAN_IDENTITY');
   }
   const issues = validateQaTargets(targets);
