@@ -1,5 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
-import { analyzeCiRun, validateCiRun, type CiAdapter, type CiRunRef } from '../packages/ci-intelligence/src/index.js';
+import {
+  analyzeCiRun,
+  validateCiRun,
+  type CiAdapter,
+  type CiRunRef,
+} from '../packages/ci-intelligence/src/index.js';
 
 const run: CiRunRef = {
   provider: 'github-actions',
