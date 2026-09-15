@@ -321,6 +321,7 @@ export function createProjectPlan(spec: ApplicationSpec): ProjectPlan {
     generated: true,
   });
 
+  const filePaths = files.map((file) => file.path);
   const requirementIds = spec.requirements.map((requirement) => requirement.id.trim());
 
   return {
@@ -328,12 +329,10 @@ export function createProjectPlan(spec: ApplicationSpec): ProjectPlan {
     revision: spec.revision,
     directories: [...new Set(directories)].sort(),
     files,
-    traceability: [
-      {
-        requirementId: requirementIds[0],
-        filePaths: files.map((file) => file.path),
-      },
-    ],
+    traceability: requirementIds.map((requirementId) => ({
+      requirementId,
+      filePaths,
+    })),
     commands: ['install', 'dev', 'build', 'test', 'lint'],
     verification: [
       'Validate generated project structure against the application specification.',
