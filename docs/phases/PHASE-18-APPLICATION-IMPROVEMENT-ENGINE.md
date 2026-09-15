@@ -1,23 +1,28 @@
 # Phase 18 — Application Improvement Engine
 
-**Status:** IN PROGRESS
+**Status:** COMPLETE
 **Implementation branch:** `phase-18-application-improvement-engine`
-**Baseline:** Phase 17 is closed on `main` at `cb6424d52e83581400b1413a2d2d74763c453b48` with final main CI #488 passed.
+**Documentation branch:** `phase-18-documentation-closure`
+**Baseline:** Phase 17 closed on `main` at `cb6424d52e83581400b1413a2d2d74763c453b48`; final main CI #488 passed.
+**Implementation PR:** #26 — merged into `main` as `3ba4987b89d9f86dbc1292d31db3fe876aea9c2d`.
+**Implementation CI:** run #491 passed all required gates.
 
 ## Objective
 
 Turn verified application evidence into deterministic, policy-controlled improvement work without allowing an AI claim to become an unverified side effect.
 
-## Acceptance boundary
+## Delivered scope
 
-1. ingest structured evidence from testing, visual QA, security, reliability, performance, accessibility, and UX systems;
-2. validate evidence confidence, identity, and provenance;
-3. create deterministic improvement candidates with explicit affected paths, risk, effort, and expected benefit;
-4. rank candidates deterministically;
-5. enforce ALLOW / ASK / DENY before application;
-6. bind application to the exact project revision and evidence set used for planning;
-7. delegate actual modification to an adapter rather than executing arbitrary commands in the core;
-8. preserve concrete application diagnostics and regression protection.
+- Evidence contracts with confidence and provenance.
+- Candidate contracts covering bug, performance, reliability, accessibility, security, and UX improvements.
+- Candidate validation for identity, revision, paths, risk, effort, and evidence references.
+- Deterministic priority/score ordering with stable ID tie-breaking.
+- ALLOW / ASK / DENY policy integration before application.
+- Evidence checksum binding so changed observations invalidate a plan.
+- Exact project-revision binding and stale-plan protection.
+- Explicit ASK approval before side effects.
+- Adapter-based application boundary; the core does not execute shell commands or mutate files directly.
+- Regression tests for invalid evidence, unsafe paths, deterministic planning, policy denial, approval, stale revisions, changed evidence, and successful application.
 
 ## Security invariants
 
@@ -30,19 +35,27 @@ Turn verified application evidence into deterministic, policy-controlled improve
 - The core does not execute shell commands or mutate project files directly.
 - Improvement planning remains provider-independent.
 
-## Delivered scope
+## Audit findings and fixes
 
-- Evidence contracts with confidence and provenance.
-- Candidate contracts covering bug, performance, reliability, accessibility, security, and UX improvements.
-- Candidate validation for identity, revision, paths, risk, effort, and evidence references.
-- Deterministic priority/score ordering with stable ID tie-breaking.
-- ALLOW / ASK / DENY policy integration.
-- Evidence checksum binding.
-- Revision binding and stale-plan protection.
-- Explicit ASK approval.
-- Adapter-based application boundary.
-- Regression tests for invalid evidence, unsafe paths, deterministic plans, policy denial, approval, stale revisions, changed evidence, and successful application.
+1. Branch CI initially exposed Prettier drift; exact formatter output was applied and re-verified.
+2. The first implementation used an iterator form incompatible with the repository's TypeScript target; it was replaced with an index loop after CI exposed the error.
+3. No temporary formatter/debug workflow was left in the repository.
+4. Regression coverage was retained for the complete security and lifecycle boundary.
+
+## Verification evidence
+
+Implementation PR #26 was merged into `main` as `3ba4987b89d9f86dbc1292d31db3fe876aea9c2d` after implementation CI run #491 passed:
+
+- Format check
+- Lint
+- Typecheck
+- Unit and contract tests — 26 files / 116 tests passed
+- Build
+- Dependency security audit
+- Secret scanning / Gitleaks
+
+The exact synchronized `main` head after implementation merge is the authoritative baseline for documentation closure.
 
 ## Final completion gate
 
-Phase 18 is complete only after implementation audit, branch CI, documentation synchronization, merge, and exact synchronized `main` CI all pass.
+Phase 18 is complete only after documentation synchronization, documentation PR merge, and exact synchronized `main` CI pass.
