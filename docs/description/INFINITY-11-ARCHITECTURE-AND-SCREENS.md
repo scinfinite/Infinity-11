@@ -1,16 +1,16 @@
 # INFINITY-11 — Architecture & Screen Specification
 
-> **Status:** Research-aligned architecture definition
-> **Implementation status:** Design only; no application coding is authorized yet
-> **Strategy:** FREE-FIRST + OPEN-SOURCE-FIRST + BYOK-FIRST
-> **Scope:** System boundaries, control planes, runtime architecture, data flows, screen contracts, security surfaces, and responsive behavior
-> **Non-scope:** Implementation code, deployment commands, and a delivery roadmap
+> **Status:** Active canonical architecture and screen contract.
+> **Implementation baseline:** Phases 1–10 complete, merged into `main`, and verified by CI; Phase 11 is next.
+> **V1 roadmap:** `docs/architecture/INFINITY-11-V1-ROADMAP.md`, Phases 1–110.
+> **Strategy:** FREE-FIRST + OPEN-SOURCE-FIRST + BYOK-FIRST.
+> **Scope:** System planes, domain boundaries, control/data flows, runtime semantics, security, verification, web screen contracts, responsive behavior, and adapter boundaries.
 
 ---
 
 ## 1. Architectural intent
 
-INFINITY-11 is an AI engineering operating system and multimodal application builder. The architecture must remain independent of any single model provider, sandbox provider, database vendor, deployment platform, or agent harness.
+INFINITY-11 is a provider-independent AI engineering, creation, automation, and operations operating system. The architecture must remain independent of any single model provider, database vendor, sandbox vendor, deployment platform, browser harness, or agent framework.
 
 The central invariant is:
 
@@ -19,135 +19,193 @@ User intent
     ↓
 Experience / API
     ↓
-Identity + Policy + Context
+Identity + Workspace + Policy
     ↓
-AI Intelligence Gateway
+Context + Intelligence
     ↓
-Model / Credential / Provider selection
+AI Gateway + Model/Credential Router
     ↓
-Agent / Tool / Execution runtime
+Agent / Workflow / Direct Task
+    ↓
+Execution Fabric
     ↓
 Verification
     ↓
 Artifacts / Repository / Deployment
     ↓
-Observability + Memory + Project Brain
+Observability + Audit + Project Brain
     ↓
 User-visible result
 ```
 
-Chat, Code, Build, Design, Media, Research, Agents, and Workflows must share the same underlying execution semantics.
+The same semantic model must underlie Chat, Code, Build, Design, Media, Research, Agents, Workflows, and Operations.
 
 ---
 
-## 2. Architectural planes
+## 2. Core architectural principles
 
-```text
-┌──────────────────────────────────────────────────────────────┐
-│ EXPERIENCE PLANE                                             │
-│ Chat • Code • Build • Design • Research • Media • Command   │
-│ Center • PWA • Responsive UI • Context Inspector             │
-├──────────────────────────────────────────────────────────────┤
-│ CONTROL PLANE                                                │
-│ Identity • Policy • Security • Permissions • Cost • Audit    │
-│ Observability • Approval • Feature configuration             │
-├──────────────────────────────────────────────────────────────┤
-│ INTELLIGENCE PLANE                                           │
-│ AI Gateway • Router • Context • Project Brain • Memory       │
-│ Knowledge • Evaluation • Model Performance                    │
-├──────────────────────────────────────────────────────────────┤
-│ EXECUTION PLANE                                              │
-│ Agents • Tasks • Tools • MCP • Browser • Terminal            │
-│ Sandboxes • Worktrees • Workflows • Background Jobs          │
-├──────────────────────────────────────────────────────────────┤
-│ ADAPTER PLANE                                                │
-│ AI Providers • Local Models • GitHub • Supabase • E2B        │
-│ Vercel • Deployment Targets • Storage • Future Integrations  │
-├──────────────────────────────────────────────────────────────┤
-│ DATA PLANE                                                   │
-│ PostgreSQL • Object Storage • Events • Usage • Audit         │
-│ Knowledge Index • Execution State                             │
-└──────────────────────────────────────────────────────────────┘
-```
+1. **Provider independence:** providers are adapters, never the product's center.
+2. **BYOK-first:** user credentials are first-class and can exist in multiple independent entries per provider.
+3. **Free-first:** useful operation must be possible without a mandatory platform subscription.
+4. **Open-source-first:** open technologies and replaceable interfaces are preferred where practical.
+5. **Evidence-first:** completion is established by verification evidence, not model claims.
+6. **Policy-first:** privileged actions pass through centralized authorization and approval.
+7. **Execution isolation:** untrusted generated code is controlled before execution.
+8. **Durability:** long-running work has durable identities and resumable state where safe.
+9. **Observability:** important state transitions are inspectable and auditable.
+10. **Web boundary:** the browser is a presentation/interaction surface, not a second orchestration engine.
+11. **Adapter boundary:** external vendors are replaceable implementations behind stable contracts.
+12. **Incremental evolution:** completed phase contracts are preserved unless evidence requires a deliberate change with regression coverage.
+13. **Interoperability:** OpenCode, Codex, Claude Code, Cline, Termux, IDE tooling, and future systems are integration targets, not architectural dependencies.
+14. **Security by construction:** secrets, permissions, execution, and supply-chain trust are modeled explicitly.
+15. **Maintainability:** architecture favors clear domain ownership and small stable contracts over hidden coupling.
 
 ---
 
-## 3. Free-first deployment topology
-
-The architecture must work in at least three modes.
-
-### Mode A — local / $0 development
+## 3. Architectural planes
 
 ```text
-Browser
- ↓
-Local web/API
- ↓
-Local PostgreSQL or Supabase-compatible database
- ↓
-Local model / user BYOK provider
- ↓
-Docker / local sandbox
- ↓
-GitHub
+┌──────────────────────────────────────────────────────────────────┐
+│ EXPERIENCE PLANE                                                 │
+│ Web/PWA • Command Center • Chat • Code • Build • Design         │
+│ Research • Media • Agents • Workflows • Runs • Operations       │
+├──────────────────────────────────────────────────────────────────┤
+│ CONTROL PLANE                                                    │
+│ Identity • Workspace • Policy • Permissions • Approval          │
+│ Security • Secrets • Cost • Audit • Feature configuration       │
+├──────────────────────────────────────────────────────────────────┤
+│ INTELLIGENCE PLANE                                               │
+│ AI Gateway • Model Registry • Router • Context • Project Brain  │
+│ Knowledge • Memory • Evaluation • Quality • Code Intelligence   │
+├──────────────────────────────────────────────────────────────────┤
+│ EXECUTION PLANE                                                  │
+│ Agents • Tasks • Tools • MCP • Browser • Terminal • Workflows   │
+│ Sandboxes • Worktrees • Background Jobs • Build/Test            │
+├──────────────────────────────────────────────────────────────────┤
+│ ADAPTER PLANE                                                    │
+│ AI Providers • Local Models • GitHub • Databases • Storage      │
+│ Sandboxes • Browser Providers • Deployment Targets              │
+├──────────────────────────────────────────────────────────────────┤
+│ DATA PLANE                                                       │
+│ Relational State • Object Storage • Events • Usage • Audit      │
+│ Knowledge Index • Execution State • Artifacts                   │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
-### Mode B — free hosted development
-
-```text
-Browser
- ↓
-Free hosting where available
- ↓
-Supabase Free / equivalent
- ↓
-User BYOK provider
- ↓
-Optional E2B / other sandbox
-```
-
-Supabase currently documents a Free plan with 500 MB database, 1 GB file storage, 5 GB egress, 50,000 MAU, and two active projects; inactive free projects may pause. citeturn0search1turn0search3
-
-### Mode C — paid scale
-
-Managed services may be added for scale, but they must remain adapters rather than hard dependencies.
+No plane is allowed to silently absorb responsibilities belonging to another plane.
 
 ---
 
-## 4. Core domain boundaries
+## 4. System control flow
+
+A normal request follows this conceptual sequence:
 
 ```text
-Identity & Workspace
+Intent
+ ↓
+Identity
+ ↓
+Workspace / Project
+ ↓
+Policy
+ ↓
+Context requirements
+ ↓
+Capability requirements
+ ↓
+Model / Agent / Workflow selection
+ ↓
+Credential eligibility
+ ↓
+Execution plan
+ ↓
+Approval if required
+ ↓
+Execution
+ ↓
+Verification
+ ↓
+Artifact / external effect
+ ↓
+Audit + usage + telemetry
+ ↓
+Project Brain update
+```
+
+The sequence can branch for workflows, parallel workers, retries, approvals, or external events, but the security and verification boundaries remain.
+
+---
+
+## 5. Domain model
+
+Core domains are:
+
+```text
+Identity
+Workspace
 Project
 Conversation
+Message
 Artifact
 Provider
 Credential
 Model
-Route Decision
+RouteDecision
 Agent
 Skill
 Tool
-MCP Server
+MCPServer
 Task
-Agent Run
+AgentRun
 Workflow
-Workflow Run
+WorkflowVersion
+WorkflowRun
+Execution
 Sandbox
 Repository
+Worktree
 Deployment
-Knowledge Source
+KnowledgeSource
+KnowledgeItem
 Memory
 Evaluation
-Audit Event
-Usage Record
+Verification
+AuditEvent
+UsageRecord
+Notification
 ```
 
-Each domain owns its state and exposes stable contracts to neighboring domains.
+Each domain owns its state and publishes stable events/contracts instead of allowing unrelated modules to mutate internal state directly.
 
 ---
 
-## 5. AI Intelligence Gateway
+## 6. Identity and workspace boundary
+
+Identity determines who is acting. Workspace determines where the action is allowed to occur.
+
+A project belongs to a workspace and inherits applicable policies while allowing project-specific restrictions.
+
+Security context should conceptually include:
+
+```text
+actor
+workspace
+project
+role
+permissions
+policy
+credential scope
+execution scope
+resource scope
+```
+
+Every privileged operation must evaluate this context server-side.
+
+---
+
+## 7. AI Intelligence Gateway
+
+The AI Gateway is the normalized inference boundary.
 
 ```text
 Request
@@ -185,21 +243,19 @@ Verification
 Usage + audit
 ```
 
-The Gateway is the only conceptual inference boundary. UI code must not contain provider-specific inference logic.
+The browser does not call provider APIs directly as the system's architectural inference path.
 
 ---
 
-## 6. Provider and model architecture
+## 8. Provider adapter contract
 
-OpenCode's current provider model shows that a provider-neutral system can support dozens of providers and local OpenAI-compatible endpoints. citeturn0search0turn0search4
-
-INFINITY-11 should use:
+Conceptually:
 
 ```text
 ProviderAdapter
+├── validateCredential()
 ├── discoverModels()
 ├── discoverCapabilities()
-├── validateCredential()
 ├── generateText()
 ├── streamText()
 ├── generateImage()
@@ -210,9 +266,15 @@ ProviderAdapter
 └── health()
 ```
 
-Not every provider implements every operation.
+Not every provider implements every operation. Capability metadata determines eligibility.
 
-Model metadata:
+Provider-specific request/response formats are normalized at the adapter boundary.
+
+---
+
+## 9. Model registry
+
+The model registry contains normalized metadata:
 
 ```text
 provider
@@ -224,32 +286,44 @@ context_window
 max_output
 tool_support
 streaming
-reasoning
+reasoning_support
 pricing
-health
 availability
+health
 metadata_source
+last_observed
 ```
 
-Metadata source must identify provider-reported, observed, estimated, or unknown values.
+Metadata provenance matters. Values may be:
+
+```text
+PROVIDER_REPORTED
+OBSERVED
+ESTIMATED
+UNKNOWN
+```
+
+Unknown must remain unknown.
 
 ---
 
-## 7. Credential architecture
+## 10. Credential architecture
+
+One provider may contain many credentials.
 
 ```text
 Provider
 ├── Credential A
-│   ├── model X
-│   └── model Y
+│   ├── Model X
+│   └── Model Y
 ├── Credential B
-│   ├── model X
-│   └── model Z
+│   ├── Model X
+│   └── Model Z
 └── Credential C
-    └── model Y
+    └── Model Y
 ```
 
-Credential state:
+Credential lifecycle:
 
 ```text
 ACTIVE
@@ -264,20 +338,21 @@ UNKNOWN
 
 Rules:
 
-- raw secrets never appear in normal UI after entry;
-- invalid credentials are quarantined;
-- cooldowns expire according to policy;
+- raw secrets never appear in ordinary UI after entry;
+- secrets do not enter ordinary telemetry or logs;
 - credentials are independently routable;
-- one provider may contain many credentials;
-- one credential may expose many models;
-- routing records the credential identity without exposing its secret.
+- invalid credentials can be quarantined;
+- cooldowns are policy-controlled;
+- credential identity may be referenced by run records without exposing secret material.
 
 ---
 
-## 8. Router architecture
+## 11. Model and credential routing
+
+Routing applies hard constraints first.
 
 ```text
-User request
+Request
  ↓
 Hard constraints
  ↓
@@ -287,61 +362,116 @@ Policy filter
  ↓
 Credential filter
  ↓
-Health / quota filter
+Provider health
  ↓
-Preference scoring
+Quota signal
+ ↓
+Cost / latency policy
  ↓
 Historical performance
  ↓
+Preference scoring
+ ↓
 Selected route
  ↓
-Fallback chain
+Bounded fallback chain
 ```
 
-Routing modes:
+Supported routing concepts include manual, automatic, quality-first, speed-first, cost-first, free-only, local-only, provider-preferred, capability-first, and custom policy.
 
-- Manual.
-- Auto.
-- Quality-first.
-- Speed-first.
-- Cost-first.
-- Free-only.
-- Local-only.
-- Provider-preferred.
-- Capability-first.
-- Custom policy.
-
-Fallback must be bounded and loop-free.
+Fallback must be bounded, loop-free, and compatible with the original task requirements.
 
 ---
 
-## 9. Explainable routing screen model
+## 12. Explainable routing
 
-The Router UI should expose:
+Users should be able to inspect safe routing evidence:
 
 ```text
 REQUEST
-  ↓
+ ↓
 REQUIREMENTS
-  ↓
+ ↓
 ELIGIBLE MODELS
-  ↓
+ ↓
 ELIGIBLE CREDENTIALS
-  ↓
+ ↓
 POLICY / HEALTH / COST SIGNALS
-  ↓
+ ↓
 SELECTED ROUTE
-  ↓
+ ↓
 FALLBACKS
 ```
 
-The UI explains decisions using observable metadata. It never exposes private model reasoning.
+The explanation describes observable decision inputs. It never exposes private model chain-of-thought.
 
 ---
 
-## 10. Agent runtime
+## 13. Context architecture
 
-An agent run is a durable state machine.
+Context is assembled from:
+
+```text
+Conversation
+Repository
+Symbols
+Project Brain
+Skills
+Memory
+Knowledge
+Tools
+Policies
+        ↓
+Retrieve
+        ↓
+Rank
+        ↓
+Compress
+        ↓
+Budget
+        ↓
+Assemble
+```
+
+Context assembly is policy-aware. A resource can be omitted because it is irrelevant, too large, restricted, unavailable, or outside the task's permission scope.
+
+The context inspector exposes metadata about inclusion/exclusion without revealing private reasoning.
+
+---
+
+## 14. Project Brain architecture
+
+Project Brain is the structured long-lived intelligence of a project.
+
+It can contain:
+
+```text
+requirements
+architecture
+architecture decisions
+conventions
+dependencies
+codebase map
+test map
+known bugs
+failed approaches
+successful patterns
+security findings
+performance findings
+deployments
+agent history
+model performance
+lessons learned
+incidents
+```
+
+Project Brain entries should preserve provenance, confidence/evidence state, scope, and applicability when useful.
+
+---
+
+## 15. Agent runtime
+
+Agents are durable workers.
 
 ```text
 CREATED
@@ -363,7 +493,7 @@ VERIFYING
 COMPLETED
 ```
 
-Terminal alternatives:
+Terminal/exception states:
 
 ```text
 FAILED
@@ -371,33 +501,38 @@ CANCELLED
 TIMED_OUT
 BUDGET_EXCEEDED
 POLICY_DENIED
+BLOCKED
 ```
+
+An agent run stores enough state to resume or diagnose according to policy.
 
 ---
 
-## 11. Agent workforce
+## 16. Agent workforce
+
+The workforce is a coordinated set of governed agents.
 
 ```text
 Event
  ↓
 Task
  ↓
-Planner
+Planner / Team Lead
  ↓
 Agent selection
  ↓
 Parallel workers
  ↓
-Synthesis
+Dependency-aware synthesis
  ↓
 Verification
  ↓
-Approval if needed
+Approval if required
  ↓
 External effect
 ```
 
-Workers have:
+Agent package:
 
 ```text
 identity
@@ -405,57 +540,303 @@ role
 capabilities
 skills
 tools
-model policy
-context policy
-memory policy
-permission policy
-execution profile
-verification policy
-budget policy
-schedule
-workspace
-history
+model_policy
+context_policy
+memory_policy
+permission_policy
+execution_profile
+verification_policy
+budget_policy
 ```
+
+Parallel workers must not silently overwrite one another. Shared resources require explicit coordination.
 
 ---
 
-## 12. Parallel task graph
+## 17. Automation fabric
+
+Automation is a first-class execution domain.
 
 ```text
-                 ┌── Research ──┐
-                 │              │
-Request → Plan ──┼── Code ──────┼→ Synthesis → Verify
-                 │              │
-                 ├── Design ────┤
-                 │              │
-                 └── Security ──┘
+Trigger
+ ↓
+Workflow
+ ↓
+Agent / Tool / Action
+ ↓
+Decision
+ ↓
+Condition / Branch
+ ↓
+Parallel / Loop
+ ↓
+Approval
+ ↓
+Verification
+ ↓
+Retry / Recovery
+ ↓
+Resume
+ ↓
+Audit
 ```
 
-Independent nodes may execute concurrently. Dependencies are explicit. Failed nodes remain visible rather than disappearing into a single generic failure.
-
----
-
-## 13. Tool runtime
-
-Every tool has:
+Node types:
 
 ```text
-name
-version
-input schema
-output schema
-permission policy
-timeout
-retry policy
-side-effect classification
-observability hooks
+TRIGGER
+ACTION
+CONDITION
+LOOP
+PARALLEL
+WAIT
+APPROVAL
+AGENT
+SUB-AGENT
+MODEL
+TOOL
+MCP
+SANDBOX
+CODE
+BROWSER
+GITHUB
+DATABASE
+HTTP
+WEBHOOK
+VERIFY
+RETRY
+RECOVER
 ```
 
-Tool discovery never grants permission.
+Natural-language workflow generation must produce a visible workflow representation that the user can inspect and edit.
 
 ---
 
-## 14. MCP runtime and supply chain
+## 18. Durable workflow state
+
+Workflow runs persist state at meaningful boundaries.
+
+A workflow should support, where safe:
+
+- retries;
+- checkpoints;
+- resume;
+- cancellation;
+- timeout;
+- approval wait;
+- partial completion;
+- recovery;
+- idempotent re-entry.
+
+Self-healing is bounded and cannot become an uncontrolled infinite loop.
+
+---
+
+## 19. Execution fabric
+
+INFINITY-11 owns the execution abstraction.
+
+```text
+ExecutionManager
+├── LocalProvider
+├── DockerProvider
+├── E2BProvider
+├── SelfHostedProvider
+└── FutureProvider
+```
+
+The same abstraction principle applies to model, database, storage, browser, and deployment providers.
+
+E2B is therefore an execution adapter, not the architecture center.
+
+---
+
+## 20. Untrusted code boundary
+
+Generated code is untrusted until appropriate execution and verification establish evidence.
+
+```text
+Generated / modified code
+        ↓
+Policy
+        ↓
+Isolated execution
+        ↓
+Tests / diagnostics
+        ↓
+Security checks
+        ↓
+Browser / visual checks where relevant
+        ↓
+Verification
+```
+
+Secrets must not be injected unless required, permitted, scoped, and protected.
+
+---
+
+## 21. Verification engine
+
+Verification is independent from model confidence.
+
+Evidence can include:
+
+- formatting;
+- lint;
+- typecheck;
+- unit tests;
+- integration tests;
+- build;
+- E2E/runtime;
+- browser QA;
+- visual QA;
+- accessibility;
+- security;
+- performance;
+- GitHub CI;
+- deployment health;
+- review decisions.
+
+A verification result can be:
+
+```text
+VERIFIED
+PARTIALLY VERIFIED
+UNVERIFIED
+BLOCKED
+```
+
+---
+
+## 22. Browser and visual QA architecture
+
+```text
+Build
+ ↓
+Run application
+ ↓
+Browser session
+ ↓
+Screenshot + DOM + console + network
+ ↓
+Functional / visual / accessibility evaluation
+ ↓
+Findings
+ ↓
+Repair
+ ↓
+Rebuild
+ ↓
+Recheck
+ ↓
+Verify
+```
+
+Browser providers are adapters. Browser evidence is linked to a project run and relevant code changes.
+
+---
+
+## 23. GitHub engineering lifecycle
+
+```text
+Issue
+ ↓
+Plan
+ ↓
+Branch / Worktree
+ ↓
+Implement
+ ↓
+Test
+ ↓
+Security
+ ↓
+Review
+ ↓
+Pull Request
+ ↓
+CI
+ ↓
+Repair if necessary
+ ↓
+Approval
+ ↓
+Merge
+```
+
+Production-affecting GitHub actions require appropriate policy.
+
+---
+
+## 24. Deployment architecture
+
+```text
+Build
+ ↓
+Validate
+ ↓
+Package
+ ↓
+Approval
+ ↓
+Deployment adapter
+ ↓
+Health check
+ ↓
+Smoke / browser verification
+ ↓
+Observe
+```
+
+Vercel, container hosting, self-hosted infrastructure, or other providers are interchangeable deployment adapters.
+
+---
+
+## 25. Security and permission model
+
+Every sensitive action follows:
+
+```text
+Actor
+ ↓
+Capability request
+ ↓
+Risk classification
+ ↓
+Policy evaluation
+ ↓
+ALLOW / ASK / DENY
+ ↓
+Approval if ASK
+ ↓
+Execution
+ ↓
+Audit
+```
+
+Capabilities include:
+
+```text
+filesystem.read
+filesystem.write
+shell.execute
+network.request
+github.read
+github.write
+database.read
+database.write
+deploy.execute
+secret.use
+browser.control
+```
+
+The system defaults to least privilege.
+
+---
+
+## 26. MCP supply-chain architecture
+
+MCP is an external capability boundary.
 
 ```text
 Discover
@@ -466,978 +847,762 @@ Trust assessment
  ↓
 Permission analysis
  ↓
-Register
+Install
  ↓
-Sandbox / isolate where possible
+Sandbox / constrain
  ↓
-Execute
- ↓
-Observe
+Monitor
  ↓
 Audit
- ↓
-Revoke
 ```
 
-The MCP screen must show requested permissions and recent effects.
+MCP tools do not automatically receive unrestricted project or secret access.
 
 ---
 
-## 15. Sandbox architecture
+# 27. Web screen architecture
+
+The web surface is a set of coordinated screens sharing the same runtime contracts.
 
 ```text
-SandboxProvider
-├── Local
-├── Docker
-├── E2B
-├── Vercel
-├── Daytona
-└── Future
+Command Center
+ ├── Chat
+ ├── AI Workspace
+ ├── Projects
+ │    ├── Code
+ │    ├── Build
+ │    ├── Preview
+ │    ├── Agents
+ │    ├── Teams
+ │    ├── Workflows
+ │    ├── Runs
+ │    ├── Artifacts
+ │    ├── Tests
+ │    ├── Security
+ │    ├── GitHub
+ │    └── Deployments
+ ├── Research
+ ├── Design / Media
+ ├── Global Runs
+ ├── Approvals
+ ├── Usage / Cost
+ └── Settings
 ```
 
-Lifecycle:
+---
+
+## 28. Global application shell
+
+```text
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Workspace │ Search / Command │ Activity │ Notifications │ User          │
+├──────────────┬──────────────────────────────────────┬──────────────────┤
+│ Navigation   │ Primary work                         │ Context          │
+│              │                                      │ Inspector        │
+│ Home         │ Current capability                   │ Files            │
+│ Chat         │                                      │ Models           │
+│ Projects     │                                      │ Tools            │
+│ Code         │                                      │ Brain / Memory   │
+│ Build        │                                      │ Activity         │
+│ Design       │                                      │ Verification     │
+│ Research     │                                      │ Deployment       │
+│ Media        │                                      │                  │
+│ Agents       │                                      │                  │
+│ Workflows    │                                      │                  │
+│ Runs         │                                      │                  │
+│ Deployments  │                                      │                  │
+│ Settings     │                                      │                  │
+└──────────────┴──────────────────────────────────────┴──────────────────┘
+```
+
+The shell must make current workspace/project context obvious.
+
+---
+
+## 29. Command Center screen contract
+
+Purpose: operational overview.
+
+Primary modules:
+
+- project cards;
+- recent work;
+- active runs;
+- pending approvals;
+- agent/workforce status;
+- workflow status;
+- verification alerts;
+- provider health;
+- credential health;
+- deployments;
+- usage/cost;
+- security alerts.
+
+Every card should link to the detailed state that supports its summary.
+
+---
+
+## 30. Chat screen contract
+
+The Chat screen contains:
+
+```text
+Conversation history
+Context controls
+Composer
+Attachments
+Model/agent selector
+Tool/MCP controls
+Streaming status
+Tool activity
+Verification result
+Artifacts
+```
+
+Chat can initiate other product actions subject to policy.
+
+---
+
+## 31. AI Workspace screen contract
+
+The AI Workspace emphasizes controlled execution of AI tasks.
+
+Panels:
+
+- request/task;
+- model/route;
+- credential state;
+- context;
+- tools;
+- agent;
+- execution;
+- approvals;
+- verification;
+- output.
+
+The user should be able to understand why the system selected a route and what evidence resulted.
+
+---
+
+## 32. Projects screen contract
+
+Project overview includes:
+
+- project identity;
+- stack;
+- repository;
+- current branch;
+- active work;
+- recent artifacts;
+- test/verification state;
+- deployments;
+- Project Brain health;
+- security state;
+- activity.
+
+Project navigation preserves context while moving between code, build, agents, workflows, and operations.
+
+---
+
+## 33. Code screen contract
+
+Core regions:
+
+```text
+File tree | Editor | Context / Diagnostics
+
+Bottom / side areas:
+Terminal
+Problems
+Tests
+Diff
+Agent activity
+Verification
+```
+
+The screen should make changes inspectable and reversible through the repository lifecycle.
+
+---
+
+## 34. Build screen contract
+
+The Build screen coordinates application construction.
+
+It exposes:
+
+- requirements;
+- architecture plan;
+- implementation tasks;
+- agents;
+- file changes;
+- build state;
+- test state;
+- preview;
+- browser QA;
+- verification;
+- Git diff;
+- deployment readiness.
+
+The interface should support both generated and manually edited code.
+
+---
+
+## 35. Preview screen contract
+
+Preview is an evidence-aware running application surface.
+
+States:
+
+```text
+BUILDING
+STARTING
+RUNNING
+UNAVAILABLE
+FAILED
+PARTIALLY VERIFIED
+VERIFIED
+```
+
+The preview should not be represented as production-ready merely because a local render exists.
+
+---
+
+## 36. Agents screen contract
+
+The Agents screen exposes:
+
+- catalog;
+- active agents;
+- capabilities;
+- skills;
+- tools;
+- model policy;
+- memory policy;
+- permission policy;
+- budget;
+- execution profile;
+- verification policy;
+- performance history.
+
+Agent installation and activation are policy-aware.
+
+---
+
+## 37. Workforce screen contract
+
+The Workforce screen visualizes:
+
+```text
+Team Lead
+ ↓
+Specialists
+ ↓
+Tasks
+ ↓
+Dependencies
+ ↓
+Outputs
+ ↓
+Synthesis
+ ↓
+Verification
+```
+
+Conflicts and blocked workers must be visible.
+
+---
+
+## 38. Workflow Builder screen contract
+
+The visual editor provides:
+
+- node palette;
+- canvas;
+- connections;
+- configuration panel;
+- trigger configuration;
+- conditions;
+- approvals;
+- retries;
+- versioning;
+- test/run controls;
+- validation;
+- execution preview.
+
+Natural-language generation creates an editable graph rather than an opaque background automation.
+
+---
+
+## 39. Runs screen contract
+
+The universal run viewer shows:
+
+```text
+Run identity
+State
+Timeline
+Inputs
+Context summary
+Route
+Execution steps
+Logs
+Artifacts
+Approvals
+Verification
+Errors
+Recovery
+Cost/usage
+```
+
+Runs remain inspectable after completion.
+
+---
+
+## 40. Approvals screen contract
+
+Approval cards include:
+
+- actor;
+- action;
+- project;
+- target;
+- risk;
+- proposed effect;
+- evidence;
+- expiry;
+- approve/deny controls.
+
+The approval screen is a security boundary, not merely a notification screen.
+
+---
+
+## 41. Artifacts screen contract
+
+Artifact browsing supports:
+
+- preview;
+- metadata;
+- provenance;
+- source run;
+- project;
+- version;
+- verification;
+- related changes.
+
+Artifacts must not lose their origin merely because they are displayed in a different screen.
+
+---
+
+## 42. Research screen contract
+
+Research screens show:
+
+- question;
+- source set;
+- source status;
+- extracted evidence;
+- claims;
+- synthesis;
+- citations;
+- unresolved questions;
+- final report/artifact.
+
+The UI distinguishes sourced evidence from inference.
+
+---
+
+## 43. Media/design screen contract
+
+Media creation surfaces share:
+
+- prompt/request;
+- references;
+- model/route;
+- generation/edit state;
+- variations;
+- artifact history;
+- usage/cost;
+- verification where meaningful.
+
+Specialized image, audio, video, document, and presentation experiences remain part of the same project/artifact system.
+
+---
+
+## 44. Usage and cost screen contract
+
+The Usage screen separates:
+
+```text
+AI / API
+Compute / Sandbox
+Storage
+Deployment
+Platform
+```
+
+Each metric carries its provenance where necessary: observed, provider-reported, estimated, or unknown.
+
+---
+
+## 45. Security screen contract
+
+Security UI aggregates:
+
+- permissions;
+- policies;
+- credentials;
+- secrets state;
+- sandbox state;
+- dependency findings;
+- MCP trust;
+- audit events;
+- deployment risks.
+
+It should link findings to the exact run, project, or resource that produced them.
+
+---
+
+## 46. Settings screen contract
+
+Settings are grouped by domain:
+
+```text
+Workspace
+Identity
+Providers
+Credentials
+Models
+Routing
+Agents
+Skills
+Tools
+MCP
+Execution
+Security
+Permissions
+Notifications
+Appearance
+Accessibility
+Usage
+Storage
+GitHub
+Deployments
+Interoperability
+Advanced
+```
+
+Sensitive settings require explicit handling and never display raw secrets by default.
+
+---
+
+## 47. Responsive screen rules
+
+Every screen follows the same priorities:
+
+1. preserve task identity;
+2. preserve critical status;
+3. preserve approvals;
+4. preserve error/evidence visibility;
+5. collapse secondary context before primary work;
+6. avoid hiding destructive actions in ambiguous gestures.
+
+Desktop uses persistent panels where useful. Tablet uses collapsible panels. Mobile uses stacked views, drawers, sheets, and compact navigation.
+
+---
+
+## 48. PWA architecture
+
+The PWA provides:
+
+- installable application shell;
+- cached static assets where safe;
+- offline shell behavior;
+- reconnect handling;
+- responsive interaction;
+- durable remote-run visibility when connectivity returns.
+
+Offline state must never fabricate successful remote execution.
+
+---
+
+## 49. Notifications and activity architecture
+
+The notification system consumes meaningful events such as:
+
+- approval required;
+- run failed;
+- verification failed;
+- deployment unhealthy;
+- credential invalid;
+- provider degraded;
+- workflow resumed;
+- security finding;
+- artifact ready.
+
+Activity timelines preserve chronological evidence without becoming an unfiltered internal event dump.
+
+---
+
+## 50. Error and recovery UX
+
+The product distinguishes:
+
+```text
+VALIDATION ERROR
+AUTHENTICATION ERROR
+AUTHORIZATION ERROR
+POLICY DENIED
+PROVIDER UNAVAILABLE
+CREDENTIAL INVALID
+RATE LIMITED
+QUOTA EXHAUSTED
+EXECUTION FAILURE
+TIMEOUT
+VERIFICATION FAILURE
+DEPLOYMENT FAILURE
+INTERNAL ERROR
+```
+
+Each state provides an actionable next step when one exists.
+
+---
+
+## 51. Performance architecture
+
+UI performance and execution performance are separate measurements.
+
+The web should:
+
+- stream progress;
+- avoid blocking the main thread;
+- lazy-load heavy views;
+- virtualize large lists/logs;
+- keep editor interaction responsive;
+- render incremental run output;
+- use remote execution for expensive workloads when appropriate.
+
+---
+
+## 52. Accessibility architecture
+
+Accessibility requirements apply to all major screens:
+
+- semantic HTML/controls;
+- keyboard operation;
+- visible focus;
+- screen-reader labeling;
+- status announcements;
+- contrast;
+- touch targets;
+- reduced motion;
+- non-color-only state indicators;
+- error association.
+
+Accessibility checks belong in verification for relevant phases.
+
+---
+
+## 53. Observability architecture
+
+Core identifiers allow correlation:
+
+```text
+workspace_id
+project_id
+conversation_id
+run_id
+workflow_id
+workflow_run_id
+agent_id
+artifact_id
+deployment_id
+event_id
+```
+
+Users should be able to navigate from result → run → logs → artifact → project change → verification.
+
+---
+
+## 54. Data ownership and durability
+
+Durable records must define:
+
+- owner;
+- scope;
+- lifecycle;
+- retention;
+- deletion;
+- migration;
+- idempotency;
+- concurrency.
+
+The architecture avoids hard-coding these semantics to one database vendor.
+
+---
+
+## 55. Free-first deployment modes
+
+### Local / $0 development
+
+```text
+Browser
+ ↓
+Local Web/API
+ ↓
+Local DB / compatible service
+ ↓
+BYOK or local model
+ ↓
+Local/Docker execution
+ ↓
+GitHub
+```
+
+### Free hosted development
+
+```text
+Browser
+ ↓
+Free hosting where available
+ ↓
+Free-tier database where available
+ ↓
+BYOK
+ ↓
+Optional execution provider
+```
+
+### Paid scale
+
+Managed services can be added through adapters without changing core domain contracts.
+
+---
+
+## 56. Interoperability architecture
+
+External developer systems integrate through stable interfaces.
+
+Targets include:
+
+```text
+OpenCode
+Codex
+Claude Code
+Cline
+IDE tooling
+Termux
+GitHub tooling
+future agent protocols
+```
+
+Integration must preserve INFINITY-11 policy, execution, verification, and audit boundaries.
+
+---
+
+## 57. Extension architecture
+
+The extensibility model supports:
+
+```text
+Agents
+Skills
+Tools
+MCP servers
+Workflows
+Templates
+Plugins
+Integrations
+```
+
+Each extension can declare permissions, tools, secrets, model requirements, dependencies, compatibility, security metadata, and evaluation status.
+
+---
+
+## 58. Architectural anti-patterns
+
+The following are prohibited unless explicitly justified and isolated:
+
+- provider-specific inference in browser UI;
+- duplicated orchestration engines;
+- unrestricted shell execution from UI actions;
+- secrets stored in ordinary client state;
+- hard dependency on one sandbox provider;
+- hard dependency on one deployment vendor;
+- model-generated “success” treated as verification;
+- infinite agent retries;
+- hidden background side effects;
+- silent project-context leakage;
+- undocumented contract changes;
+- wholesale copying of competitor source, prompts, proprietary workflows, or architecture.
+
+---
+
+## 59. Current implementation boundary
+
+The architecture is no longer pre-coding-only. Implementation is active.
+
+Verified baseline:
+
+- Phases 1–10 complete;
+- Phase 10 is merged into `main` and its post-merge CI is green;
+- the current web/PWA shell and regression contracts are part of the baseline;
+- later screens may exist as architectural/product boundaries without their full backend runtime being implemented;
+- Phase 11 is the next implementation target.
+
+The architecture specification describes the intended V1 system. It must not be used as proof that every future capability already exists.
+
+---
+
+## 60. Relationship to the other canonical documents
+
+```text
+Detailed Product & Web Specification
+        ↓
+Architecture & Screen Specification
+        ↓
+Final Architecture Blueprint
+        ↓
+V1 Roadmap (Phases 1–110)
+        ↓
+Repository Implementation
+        ↓
+Tests / Security / Runtime Evidence / CI
+```
+
+Product documents define intent and contracts. Repository evidence defines implementation status.
+
+---
+
+## 61. Final architecture invariant
+
+INFINITY-11 should behave as one coherent operating system:
 
 ```text
 CREATE
- ↓
-INITIALIZE
- ↓
-PREPARE
- ↓
-EXECUTE
- ↓
-OBSERVE
- ↓
-TEST
- ↓
-EXPORT
- ↓
-TERMINATE / PERSIST
+   ↕
+ENGINEER
+   ↕
+AUTOMATE
+   ↕
+OPERATE
 ```
 
-E2B is an optional execution provider, not a mandatory product dependency.
-
----
-
-## 16. Project Brain and Context Engine
-
-### Project Brain
+all connected through:
 
 ```text
-Requirements
-Architecture
-Decisions
-Conventions
-Dependencies
-Codebase map
-Known bugs
-Failed approaches
-Successful patterns
-Tests
-Security
-Deployments
-Agent history
-Model performance
-Lessons
-```
-
-### Context Engine
-
-```text
-Conversation
-Repository
-Symbols
-Project Brain
-Skills
-Memory
-Knowledge
-Tools
-MCP
-Policies
-      ↓
-Retrieve → Rank → Compress → Budget → Assemble
-```
-
-### Context Inspector
-
-Shows source, scope, relevance, and inclusion reason while redacting secrets and private reasoning.
-
----
-
-## 17. Codebase intelligence
-
-```text
-Repository
- ↓
-Language detection
- ↓
-Framework detection
- ↓
-Dependency graph
- ↓
-Symbol graph
- ↓
-Architecture inference
- ↓
-Test map
- ↓
-Risk map
- ↓
-Documentation map
- ↓
-Codebase index
-```
-
-The system must support multiple languages, including at minimum Python, Java, JavaScript, TypeScript, Go, Rust, C, C++, C#, PHP, Ruby, Kotlin, Swift, Dart, SQL, Shell, HTML, and CSS where toolchains are available.
-
----
-
-## 18. Verification architecture
-
-```text
-Code / Build
- ↓
-Unit tests
- ↓
-Integration tests
- ↓
-Static analysis
- ↓
-Security checks
- ↓
-Build
- ↓
-Browser / visual QA
- ↓
-Human review when needed
- ↓
-Verification record
-```
-
-A model's textual claim is never sufficient evidence of success.
-
----
-
-## 19. Browser and visual QA
-
-```text
-Preview
- ↓
-Browser automation
- ↓
-Screenshot
- ↓
-DOM
- ↓
-Accessibility
- ↓
-Console
- ↓
-Network
- ↓
-Visual evaluation
- ↓
-Issue
- ↓
-Agent fix
- ↓
-Regression check
-```
-
-This supports the goal of producing genuinely working applications rather than visually plausible prototypes.
-
----
-
-## 20. Security control plane
-
-```text
-Capability request
- ↓
+Identity
 Policy
- ↓
-Risk classification
- ↓
-ALLOW / ASK / DENY
- ↓
+Context
+AI Gateway
+Agents
+Workflows
 Execution
- ↓
-Audit
-```
-
-Capabilities:
-
-```text
-filesystem.read
-filesystem.write
-filesystem.delete
-shell.execute
-network.request
-github.read
-github.write
-database.read
-database.write
-deploy.execute
-secret.use
-browser.control
-mcp.use
-```
-
-High-impact operations should support approval gates.
-
----
-
-## 21. Event bus
-
-Events include:
-
-```text
-github.event
-ci.failed
-deployment.failed
-database.alert
-schedule.triggered
-webhook.received
-user.action
-monitoring.alert
-provider.health.changed
-credential.state.changed
-```
-
-Events can create tasks and invoke agents subject to policy.
-
----
-
-## 22. Workflow engine
-
-```text
-Trigger
- ↓
-Task
- ↓
-Agent / Tool
- ↓
-Condition
- ↓
-Parallel
- ↓
-Approval
- ↓
-Retry / Timeout
- ↓
-Resume
- ↓
-Output
-```
-
-Runs are durable and observable.
-
----
-
-## 23. GitHub lifecycle
-
-```text
-Issue
- ↓
-Research
- ↓
-Plan
- ↓
-Worktree
- ↓
-Implement
- ↓
-Test
- ↓
-Security
- ↓
-Review
- ↓
-PR
- ↓
-CI
- ↓
-Fix
- ↓
-Merge
- ↓
-Deploy
- ↓
-Observe
-```
-
-GitHub is a source-of-truth integration, not merely an export button.
-
----
-
-## 24. Universal deployment architecture
-
-```text
-DeploymentProvider
-├── Vercel
-├── Cloudflare
-├── Netlify
-├── Railway
-├── Render
-├── Docker
-└── Self-hosted
-```
-
-Deployment records:
-
-```text
-project
-environment
-source revision
-build status
-deployment status
-runtime URL
-logs
-rollback/redeploy
-provider
-```
-
----
-
-# 25. Screen architecture
-
-## 25.1 Global shell
-
-```text
-┌──────────────────────────────────────────────────────────────┐
-│ Workspace • Search • Command Palette • Notifications • User │
-├───────────────┬──────────────────────────────┬──────────────┤
-│ Navigation    │ Primary workspace            │ Context      │
-│               │                              │ Inspector    │
-│ Home          │                              │ files        │
-│ Chat          │                              │ models       │
-│ Projects      │                              │ tools        │
-│ Code          │                              │ activity     │
-│ Build         │                              │              │
-│ Design        │                              │              │
-│ Research      │                              │              │
-│ Agents        │                              │              │
-│ ...           │                              │              │
-├───────────────┴──────────────────────────────┴──────────────┤
-│ Streaming / jobs / connection / verification status         │
-└──────────────────────────────────────────────────────────────┘
-```
-
-On mobile, the context panel becomes a sheet/drawer and the navigation becomes a compact command/navigation surface.
-
----
-
-## 25.2 Home / Command Center
-
-Purpose: orient the user around active work.
-
-Regions:
-
-- universal composer;
-- active projects;
-- active agent runs;
-- workflows;
-- provider/model health;
-- recent artifacts;
-- verification warnings;
-- security warnings;
-- usage/cost summary.
-
-Avoid decorative dashboards that hide actionable state.
-
----
-
-## 25.3 Chat
-
-Required:
-
-- multimodal composer;
-- model selection;
-- routing mode;
-- project context;
-- attachments;
-- files;
-- agent invocation;
-- tools;
-- MCP;
-- streaming;
-- stop/cancel;
-- retry;
-- branch/fork;
-- artifact creation;
-- source/citation presentation where relevant.
-
----
-
-## 25.4 Projects
-
-```text
-Project
-├── Overview
-├── Chat
-├── Files
-├── Code
-├── Agents
-├── Skills
-├── Knowledge
-├── Workflows
-├── GitHub
-├── Integrations
-├── Preview
-├── Deployments
-└── Activity
-```
-
----
-
-## 25.5 Code / Engineering workspace
-
-```text
-┌─────────────┬──────────────────────────┬───────────────────┐
-│ Explorer     │ Editor                   │ Agent / Context   │
-│              │                          │                   │
-│ files        │ source                   │ plan              │
-│ branches     │ diff                     │ tool calls        │
-│ search       │ diagnostics              │ changes           │
-├─────────────┴──────────────────────────┴───────────────────┤
-│ Terminal │ Problems │ Tests │ Git │ Logs │ Preview          │
-└─────────────────────────────────────────────────────────────┘
-```
-
-AI changes must be reviewable before application.
-
-File states should include:
-
-```text
-PROPOSED
-APPLIED
-REVERTED
-EXTERNALLY_CHANGED
-CONFLICTED
-```
-
----
-
-## 25.6 Build Studio
-
-```text
-Idea
- ↓
-Requirements
- ↓
-Architecture
- ↓
-Sandbox
- ↓
-Implementation
- ↓
 Verification
- ↓
-Preview
- ↓
+Artifacts
 GitHub
- ↓
-Deploy
-```
-
-The UI always shows current stage, execution status, artifacts, verification evidence, and external effects.
-
----
-
-## 25.7 Design Studio
-
-Capabilities:
-
-- image generation/editing;
-- UI exploration;
-- screenshot analysis;
-- design tokens;
-- visual references;
-- asset generation;
-- design-to-code handoff;
-- versioned design artifacts.
-
----
-
-## 25.8 Media Studio
-
-Operations:
-
-- image;
-- video;
-- audio;
-- speech/voice;
-- music where supported;
-- document generation/transformation.
-
-The model list is capability-filtered.
-
----
-
-## 25.9 Research Workspace
-
-The UI emphasizes evidence:
-
-```text
-Question
- ↓
-Sources
- ↓
-Claims
- ↓
-Cross-checks
- ↓
-Evidence
- ↓
-Synthesis
-```
-
-Expose source lineage, citations, verification state, and uncertainty.
-
----
-
-## 25.10 Agents
-
-Sections:
-
-- catalog;
-- builder;
-- capabilities;
-- skills;
-- model policy;
-- memory policy;
-- tools;
-- permissions;
-- budgets;
-- schedules;
-- evaluations;
-- history.
-
----
-
-## 25.11 Agent Run
-
-Timeline:
-
-```text
-Queued
-→ Context
-→ Routing
-→ Executing
-→ Tool / Sandbox
-→ Approval
-→ Verification
-→ Completed / Failed / Cancelled
-```
-
-Parallel runs use a graph view.
-
----
-
-## 25.12 Skills
-
-Display:
-
-- name;
-- version;
-- publisher;
-- license;
-- dependencies;
-- permissions;
-- compatible agents/harnesses;
-- evaluation;
-- usage;
-- source.
-
----
-
-## 25.13 Models
-
-Model cards:
-
-- provider;
-- model ID;
-- modalities;
-- context capacity;
-- tool support;
-- reasoning support;
-- streaming;
-- price metadata;
-- health;
-- availability;
-- routing eligibility;
-- local/remote indicator.
-
----
-
-## 25.14 Router
-
-Show:
-
-```text
-Request
-→ Requirements
-→ Candidate models
-→ Candidate credentials
-→ Policy
-→ Health
-→ Cost / latency
-→ Selection
-→ Fallback
-```
-
-Users can understand the decision without seeing secrets or private reasoning.
-
----
-
-## 25.15 API Keys / Credentials
-
-Show:
-
-- provider;
-- masked identifier;
-- status;
-- validation state;
-- last used;
-- observed usage;
-- quota signal;
-- cooldown;
-- recent failures.
-
-Raw secrets are never rendered after initial secure entry.
-
----
-
-## 25.16 Provider dashboard
-
-```text
-Provider
-├── Models
-├── Credentials
-├── Health
-├── Usage
-├── Errors
-├── Limits / quota signals
-└── Provider-specific capabilities
-```
-
----
-
-## 25.17 MCP
-
-Show:
-
-- servers;
-- tools;
-- schemas;
-- requested permissions;
-- trust metadata;
-- connection state;
-- recent executions;
-- audit events;
-- revoke controls.
-
----
-
-## 25.18 Integrations
-
-Each integration displays:
-
-```text
-Service
-Connection
-Permissions
-Supported actions
-Data scope
-Recent activity
-Revoke
-```
-
----
-
-## 25.19 GitHub
-
-Views:
-
-- repositories;
-- branches;
-- files;
-- commits;
-- issues;
-- PRs;
-- reviews;
-- CI;
-- agent activity.
-
-Write operations require authorization and are auditable.
-
----
-
-## 25.20 Deployments
-
-Show:
-
-- source revision;
-- environment;
-- build;
-- runtime state;
-- URL;
-- logs;
-- deployment history;
-- rollback/redeploy.
-
----
-
-## 25.21 Library
-
-Artifact browser with:
-
-- project;
-- type;
-- source;
-- date;
-- status;
-- version;
-- lineage.
-
----
-
-## 25.22 Knowledge
-
-Distinguish:
-
-```text
-Source document
-Indexing
-Retrieval
-Claims
-Project association
-Lineage
-```
-
----
-
-## 25.23 Workflows
-
-Graph-first editor with:
-
-- triggers;
-- nodes;
-- conditions;
-- parallel branches;
-- approval nodes;
-- retries;
-- schedules;
-- run history;
-- logs.
-
----
-
-## 25.24 Usage
-
-Show:
-
-- requests;
-- tokens where available;
-- estimated cost;
-- provider;
-- model;
-- credential;
-- latency;
-- success/failure;
-- fallback frequency;
-- sandbox usage;
-- deployment usage where available.
-
-Unknown values must be labeled unknown.
-
----
-
-## 25.25 Security Center
-
-Show:
-
-- credential health;
-- permissions;
-- risky tools;
-- MCP trust state;
-- sandbox policies;
-- approval requirements;
-- audit events;
-- suspicious activity;
-- data retention settings.
-
----
-
-## 25.26 Activity
-
-Unified event stream:
-
-```text
-AI request
-Agent run
-Tool call
-MCP call
-Sandbox action
-GitHub action
 Deployment
-Workflow
-Approval
-Security event
-Credential event
+Observability
+Project Brain
 ```
 
----
-
-## 25.27 Settings
-
-Categories:
-
-- account;
-- workspace;
-- providers;
-- routing;
-- credentials;
-- privacy;
-- security;
-- notifications;
-- appearance;
-- data/export;
-- integrations;
-- automation defaults.
-
----
-
-## 25.28 Command Palette
-
-The command palette is a universal control surface for:
-
-- navigation;
-- project actions;
-- model selection;
-- agent invocation;
-- workflow execution;
-- GitHub actions;
-- sandbox commands;
-- settings;
-- search.
-
-Commands are permission-aware.
-
----
-
-## 26. Responsive behavior
-
-### Desktop
-
-Three-column engineering workspace where appropriate.
-
-### Tablet
-
-Two-column adaptive workspace.
-
-### Mobile
-
-Single primary surface with sheets for context, files, activity, and controls.
-
-### PWA
-
-The PWA should support installation, offline shell behavior, resumable UI state, notifications where permitted, and graceful degradation when network-dependent capabilities are unavailable.
-
----
-
-## 27. Accessibility
-
-Requirements:
-
-- keyboard navigation;
-- focus visibility;
-- semantic labels;
-- reduced-motion mode;
-- screen-reader-compatible status changes;
-- color-independent status indicators;
-- accessible editor and terminal controls;
-- approval dialogs that clearly identify impact.
-
----
-
-## 28. Visual language
-
-The visual system should be premium and technical without excessive decoration.
-
-Use:
-
-- strong hierarchy;
-- consistent status language;
-- restrained animation;
-- contextual density;
-- high-quality empty states;
-- clear destructive-action treatment;
-- visible verification state;
-- visible permission/cost impact;
-- progressive disclosure.
-
----
-
-## 29. Security UX rule
-
-Every potentially consequential action should communicate:
-
-```text
-WHAT will happen?
-WHO / WHICH AGENT will do it?
-WHICH permissions are used?
-WHAT external system is affected?
-WHAT may it cost?
-CAN it be reversed?
-```
-
----
-
-## 30. Free-first UX rule
-
-The UI must distinguish:
-
-```text
-FREE / LOCAL
-BYOK
-OPTIONAL PAID
-ESTIMATED COST
-UNKNOWN COST
-```
-
-Never imply that a managed service is free merely because INFINITY-11's own interface is free.
-
----
-
-## 31. Architecture decision rules
-
-1. No provider-specific inference logic in the UI.
-2. No sandbox-specific assumptions in domain logic.
-3. No database-specific business logic outside persistence adapters.
-4. No deployment-provider-specific assumptions in project models.
-5. No secret material in ordinary logs.
-6. No agent privilege without policy.
-7. No quota claim without evidence.
-8. No successful task without verification evidence where verification is applicable.
-9. No irreversible external action without appropriate approval/policy.
-10. No mandatory paid dependency where a viable free/open alternative exists.
-
----
-
-## 32. Current implementation boundary
-
-This document is intentionally a design specification. **Do not start coding from it yet.**
-
-The immediate objective is to stabilize:
-
-- product definition;
-- competitive gap analysis;
-- architecture;
-- free-first strategy;
-- security model;
-- routing contracts;
-- agent contracts;
-- sandbox/deployment abstractions;
-- screen information architecture.
-
-Implementation begins only after this design baseline is accepted as sufficiently complete.
+The architecture is successful when these systems compose without requiring a user to understand the internal boundaries, while the boundaries remain explicit enough for engineering, security, verification, replacement of vendors, and long-term maintenance.
