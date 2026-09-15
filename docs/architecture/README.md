@@ -1,138 +1,145 @@
-# INFINITY-11 Architecture
+# INFINITY-11 Architecture Documentation
 
-## Canonical baseline
+## Current baseline
 
-The canonical pre-implementation architecture is now:
+Phases 1–10 are complete and verified on `main`. The next implementation boundary is Phase 11 — Advanced Application Builder Foundation.
 
-**`docs/architecture/INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md`**
+## Canonical documents
 
-This file remains the concise architecture index and governing principles. Where this index and the blueprint differ, the blueprint is authoritative until this index is fully consolidated.
+1. `INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md` — canonical architecture baseline.
+2. `INFINITY-11-IMPLEMENTATION-ROADMAP.md` — dependency-oriented implementation sequence.
+3. `../INFINITY-11-V1-ROADMAP.md` — complete 110-phase V1 roadmap and detailed acceptance framework.
+4. `INFINITY-11-PRE-CODING-AUDIT.md` — original architecture gate and assumptions.
+5. `INFINITY-11-MIGRATION-AND-VERSIONING.md` — migration and versioning policy.
 
-## Architectural objective
-
-INFINITY-11 is a modular orchestration platform rather than a provider-specific chat frontend or a Replit clone. It separates presentation, identity, projects, AI access, model routing, credentials, agents, teams, tools, MCP, remote execution, knowledge, workflows, automation, integrations, deployments, security, verification, and observability.
-
-The architecture has six non-negotiable characteristics:
-
-1. **FREE-FIRST:** the initial product must not require a paid INFINITY-11 subscription.
-2. **BYOK-FIRST:** user-controlled AI/provider credentials are first-class.
-3. **REMOTE-EXECUTION-FIRST:** heavy build/test/run work should not depend on the user's device.
-4. **MULTIPLATFORM:** the system must be capable of producing and managing web, mobile, desktop, and backend application targets.
-5. **BEST-POSSIBLE-OUTPUT:** the system must iteratively test, critique, improve, and verify meaningful work rather than stopping at the first acceptable result.
-6. **AUTOMATION-NATIVE:** deterministic workflows, autonomous agents, and hybrid workflows are first-class runtime primitives.
-
-## System layers
+## Architecture planes
 
 ```text
-Web / PWA
-  ↓
-Application API / BFF
-  ↓
-Control Plane
-  ├── Identity & Workspace
-  ├── Project & Conversation
-  ├── AI Gateway
-  ├── Model Registry & Router
-  ├── Credential Manager
-  ├── Agent Workforce / Runtime
-  ├── Tool Runtime
-  ├── MCP Runtime
-  ├── Context / Project Brain
-  ├── Automation / Workflow Engine
-  ├── Security & Policy
-  ├── Verification / Quality Engine
-  └── Observability
-  ↓
-Execution Plane
-  ├── Execution Manager
-  ├── Sandbox Providers
-  ├── Browser / Visual QA
-  ├── Build / Test / Run
-  ├── Artifact / Preview
-  ├── Background Jobs
-  └── Packaging
-  ↓
-Provider / Infrastructure Adapters
-  ├── AI providers / local models
-  ├── GitHub
-  ├── E2B / Vercel Sandbox / Docker / local
-  ├── Supabase / PostgreSQL / future DB providers
-  ├── Vercel / Cloudflare / other deployment targets
-  └── MCP / external integrations
+EXPERIENCE
+    ↓
+CONTROL
+    ↓
+INTELLIGENCE
+    ↓
+EXECUTION
+    ↓
+ADAPTERS
+    ↓
+DATA
 ```
 
-## Core orchestration model
+### Experience
+
+Web/PWA, chat, code, build, design, research, media, agents, projects, Command Center, previews, approvals, artifacts, usage, settings, and future mobile/desktop surfaces.
+
+### Control
+
+Identity, workspace, authorization, security policy, approvals, cost limits, audit, observability, feature configuration, and governance.
+
+### Intelligence
+
+AI Gateway, model registry, routing, credential intelligence, context engine, Project Brain, memory, knowledge, research, evaluation, quality, and performance history.
+
+### Execution
+
+Agents, teams, tasks, tools, MCP, browser, terminal, worktrees, sandboxes, workflows, background jobs, and verification.
+
+### Adapters
+
+AI providers, local models, GitHub, databases, storage, sandbox providers, deployment providers, and external integrations.
+
+### Data
+
+Durable domain state, events, execution state, usage, audit, artifacts, knowledge indexes, and migrations.
+
+## Core invariants
+
+- Provider independence is architectural, not a UI option.
+- Multiple BYOK credentials may coexist for one provider.
+- Model routing considers capability, policy, health, quota signals, cost, latency, and historical performance where available.
+- E2B is an optional sandbox adapter.
+- Supabase is an optional/default development database adapter.
+- Vercel is an optional deployment adapter.
+- Local and self-hosted execution remain supported where feasible.
+- High-impact actions require policy and, where configured, human approval.
+- Untrusted code is executed through controlled boundaries.
+- The browser must not duplicate backend orchestration or security policy.
+- Long-running work must be observable and durable when required.
+- Verification is evidence, not a model assertion.
+
+## Product lifecycle
 
 ```text
-                 ORCHESTRATOR
-                      │
-          ┌───────────┼───────────┐
-          ↓           ↓           ↓
-     DETERMINISTIC  AUTONOMOUS   HYBRID
-       WORKFLOW       AGENTS     WORKFLOW
-          │           │           │
-          └───────────┼───────────┘
-                      ↓
-                  VERIFICATION
+Idea
+→ Requirements
+→ Research
+→ Architecture
+→ Plan
+→ Workforce / Workflow
+→ Model / Credential Routing
+→ Execution
+→ Tests
+→ Security
+→ Browser / Visual QA
+→ Critique
+→ Improvement
+→ Verification
+→ GitHub
+→ Deployment
+→ Observation
+→ Recovery / Maintenance
+→ Project Brain
 ```
 
-Hybrid execution is the preferred architecture for serious production automation.
+## Quality model
 
-## Automation Fabric
+Quality dimensions:
 
-Automation is a first-class runtime with visual editing, natural-language generation, durable state, triggers, agents, tools, MCP, code, browser, GitHub, database, sandbox, approvals, verification, retry, recovery, resume, and audit.
+- correctness;
+- completeness;
+- architecture;
+- maintainability;
+- security;
+- performance;
+- UX;
+- accessibility;
+- compatibility;
+- verification;
+- cost efficiency.
 
-## AI Workforce
+Quality states:
 
-Agents are governed executable workers with identity, goals, skills, tools, model/context/memory policies, permissions, execution profiles, budgets, schedules, workspace, performance history, verification, and approvals. Teams are dynamically composed from project requirements.
+- VERIFIED;
+- PARTIALLY VERIFIED;
+- UNVERIFIED;
+- BLOCKED.
 
-## Execution abstraction
-
-The core owns `ExecutionManager`; external environments implement provider contracts. E2B, Vercel Sandbox, Docker, local/self-hosted runners, and future providers are adapters. No single sandbox is the architecture.
-
-## Verification
+## Security model
 
 ```text
-Request → Plan → Execute → Test → Critique
-       → Security / Performance / UX checks
-       → Improve → Retest → Final quality gate
+Capability request
+→ policy
+→ risk classification
+→ ALLOW / ASK / DENY
+→ execution
+→ audit
 ```
 
-Verification states are `VERIFIED`, `PARTIALLY VERIFIED`, `UNVERIFIED`, and `BLOCKED`. A successful build is not sufficient evidence of high quality.
+Capabilities include filesystem, shell, network, GitHub, database, deployment, secrets, browser, and MCP operations.
 
-## Security
+## Extension model
 
-Privileged capabilities use explicit policy and risk classification:
+The system uses adapters and portable packages for providers, agents, skills, tools, MCP servers, workflows, databases, sandboxes, deployments, and future integrations. Compatibility metadata, permissions, dependencies, security status, and versioning are first-class.
+
+## Engineering policy
+
+Every phase follows the same evidence-first process:
 
 ```text
-Capability request → Identity → Policy → Risk
-→ ALLOW / ASK / DENY → Execute → Audit
+inspect → reproduce/verify → diagnose root cause → implement
+→ format → lint → typecheck → unit → integration → build
+→ E2E/runtime → security → regression → UX/accessibility
+→ documentation → final main CI → close
 ```
 
-Secrets remain behind secure server-side boundaries. Generated code is treated as untrusted until verified.
-
-## Cost ownership
-
-The architecture distinguishes INFINITY-11 platform cost, user BYOK AI cost, user compute/sandbox cost, free-tier resources, and optional managed-service cost. Remote compute is not assumed to be free or unlimited.
-
-## Provider neutrality
-
-Core domains use stable contracts. Provider-specific behavior belongs in adapters for AI, credentials, execution, databases, storage, browsers, deployments, Git, knowledge, notifications, and external integrations.
-
-## Pre-implementation status
-
-```text
-Product thesis       FROZEN
-Core architecture    FROZEN
-Execution model      FROZEN
-AI Workforce         FROZEN
-Automation Fabric    FROZEN
-Security model       FROZEN
-Quality model        FROZEN
-UX information arch. FROZEN
-Provider abstractions FROZEN
-Implementation code  NOT STARTED
-Roadmap              NOT YET GENERATED
-```
-
-The next gate is an evidence-based repository/documentation audit against the canonical blueprint, followed by an acceptance-driven implementation dependency graph and roadmap. No application coding begins before that gate is closed.
+The architecture may evolve when evidence requires it, but changes must be explicit, tested, documented, and compatible with the product's core idea.
