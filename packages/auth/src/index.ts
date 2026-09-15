@@ -99,16 +99,8 @@ export interface AuthorizationContext {
 }
 
 const idPattern = /^[a-z][a-z0-9_]{0,62}$/;
-const strategies: AuthStrategy[] = [
-  'password',
-  'magic-link',
-  'oauth2',
-  'passkey',
-];
-const transports: SessionTransport[] = [
-  'secure-cookie',
-  'authorization-header',
-];
+const strategies: AuthStrategy[] = ['password', 'magic-link', 'oauth2', 'passkey'];
+const transports: SessionTransport[] = ['secure-cookie', 'authorization-header'];
 const permissionPattern = /^[a-z][a-z0-9_.:-]{0,127}$/;
 
 export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
@@ -151,8 +143,7 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
     issues.push({
       code: 'INVALID_SESSION_TTL',
       path: 'session.ttlSeconds',
-      message:
-        'Session TTL must be an integer between 60 seconds and 365 days.',
+      message: 'Session TTL must be an integer between 60 seconds and 365 days.',
     });
   }
   if (
@@ -164,14 +155,10 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
     issues.push({
       code: 'INVALID_IDLE_TIMEOUT',
       path: 'session.idleTimeoutSeconds',
-      message:
-        'Idle timeout must be at least 60 seconds and no greater than the session TTL.',
+      message: 'Idle timeout must be at least 60 seconds and no greater than the session TTL.',
     });
   }
-  if (
-    spec.session.sameSite === 'none' &&
-    spec.session.transport !== 'secure-cookie'
-  ) {
+  if (spec.session.sameSite === 'none' && spec.session.transport !== 'secure-cookie') {
     issues.push({
       code: 'SAMESITE_NONE_REQUIRES_COOKIE',
       path: 'session.sameSite',
@@ -203,10 +190,7 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
         message: `Unsupported authentication strategy: ${String(provider.strategy)}.`,
       });
     }
-    if (
-      provider.strategy === 'oauth2' &&
-      (!provider.issuer || !provider.clientId)
-    ) {
+    if (provider.strategy === 'oauth2' && (!provider.issuer || !provider.clientId)) {
       issues.push({
         code: 'OAUTH_CONFIG_REQUIRED',
         path: `providers.${provider.id}`,
@@ -300,11 +284,7 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
 
   if (spec.passwordPolicy) {
     const policy = spec.passwordPolicy;
-    if (
-      !Number.isInteger(policy.minLength) ||
-      policy.minLength < 8 ||
-      policy.minLength > 256
-    ) {
+    if (!Number.isInteger(policy.minLength) || policy.minLength < 8 || policy.minLength > 256) {
       issues.push({
         code: 'INVALID_PASSWORD_LENGTH',
         path: 'passwordPolicy.minLength',
@@ -313,8 +293,7 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
     }
     if (
       policy.maxFailedAttempts !== undefined &&
-      (!Number.isInteger(policy.maxFailedAttempts) ||
-        policy.maxFailedAttempts < 1)
+      (!Number.isInteger(policy.maxFailedAttempts) || policy.maxFailedAttempts < 1)
     ) {
       issues.push({
         code: 'INVALID_LOCKOUT_ATTEMPTS',
@@ -334,10 +313,7 @@ export function validateAuthSpec(spec: AuthSpec): ValidationIssue[] {
     }
   }
 
-  if (
-    spec.providers.some((provider) => provider.strategy === 'password') &&
-    !spec.passwordPolicy
-  ) {
+  if (spec.providers.some((provider) => provider.strategy === 'password') && !spec.passwordPolicy) {
     issues.push({
       code: 'PASSWORD_POLICY_REQUIRED',
       path: 'passwordPolicy',
@@ -407,9 +383,7 @@ function normalizedPolicies(spec: AuthSpec): PolicyRule[] {
 export function buildAuthPlan(spec: AuthSpec): AuthPlan {
   const issues = validateAuthSpec(spec);
   if (issues.length) {
-    throw new Error(
-      `Invalid auth specification: ${issues.map((issue) => issue.code).join(', ')}`,
-    );
+    throw new Error(`Invalid auth specification: ${issues.map((issue) => issue.code).join(', ')}`);
   }
 
   const canonicalSpec = canonical(spec);
