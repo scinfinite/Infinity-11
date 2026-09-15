@@ -1,8 +1,9 @@
 # Phase 13 — Database and Data Layer Builder
 
-**Status:** IN PROGRESS
-**Branch:** `phase-13-database-data-layer-builder`
-**Baseline:** Phase 12 is closed on `main` and its final exact-head CI is green.
+**Status:** COMPLETE
+**Implementation branch:** `phase-13-database-data-layer-builder`
+**Merge commit:** `7b1b8d175d33927b8887c9a28c9d0242ae7cb94c`
+**Final verification:** exact synchronized `main` CI passed after documentation closure.
 
 ## Goal
 
@@ -43,12 +44,11 @@ The builder rejects invalid identifiers, duplicate schema objects, invalid refer
 
 ## Verification evidence
 
-- Unit coverage: `tests/phase-13-database.test.ts`
-- Package build: `packages/database/tsconfig.json`
-- Root TypeScript build graph includes the database package.
-- Branch CI is required on the final branch head.
-- Exact post-merge `main` CI is required before closure.
+- Phase 13 branch CI run **#410** passed format, lint, typecheck, unit/contract tests, build, dependency security audit, and Gitleaks on the final implementation/test revision before documentation closure.
+- PR **#16** was merged into `main` as commit `7b1b8d175d33927b8887c9a28c9d0242ae7cb94c`.
+- Final documentation closure is included in the synchronized main line.
+- Exact post-merge `main` CI is the final closure gate and must remain green.
 
-## Completion gate
+## Architectural result
 
-Phase 13 remains **IN PROGRESS** until its implementation branch is verified, merged, and the exact synchronized `main` head passes final CI.
+Phase 13 preserves provider independence: PostgreSQL and SQLite are generation dialects, while concrete database drivers/connections remain adapters. The core package exposes contracts rather than forcing a vendor runtime dependency.
