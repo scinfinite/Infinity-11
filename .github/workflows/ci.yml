@@ -45,6 +45,11 @@ jobs:
           pnpm --version
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Format evidence (temporary)
+        run: |
+          pnpm exec prettier --write packages/ci-intelligence/src/index.ts tests/phase-21-ci-intelligence.test.ts
+          git diff -- packages/ci-intelligence/src/index.ts tests/phase-21-ci-intelligence.test.ts
+          exit 1
       - name: Format check
         run: pnpm format:check
       - name: Lint
