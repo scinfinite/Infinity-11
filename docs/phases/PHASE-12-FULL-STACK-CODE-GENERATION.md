@@ -1,6 +1,6 @@
 # Phase 12 — Full-Stack Code Generation
 
-**Status:** IN PROGRESS
+**Status:** COMPLETE
 **Branch:** `phase-12-full-stack-code-generation`
 **Baseline:** Phase 11 merged to `main` at `2e0d5ba17ac213a9cefe07839ac3db1ab9dff672`.
 
@@ -59,4 +59,4 @@ The generator itself does not claim those commands passed; it records the contra
 
 ## Remaining gate
 
-Phase 12 remains **IN PROGRESS** until branch CI, PR review, merge, and post-merge `main` CI all pass. No completion claim is made before those gates close.
+Phase 12 is **COMPLETE**. Final branch CI, PR merge, and post-merge main CI all passed. No implementation work remains in the Phase 12 acceptance boundary.

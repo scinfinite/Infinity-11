@@ -6,7 +6,7 @@
 
 **Phase 11 — Advanced Application Builder Foundation: COMPLETE.** The Phase 11 application specification/foundation is part of the verified baseline.
 
-**Phase 12 — Full-Stack Code Generation: IN PROGRESS.** Deterministic project generation, requirement traceability, generated-project security auditing, and multi-framework coverage are implemented on the Phase 12 branch. Branch CI, merge, and post-merge main CI remain required before closure.
+**Phase 12 — Full-Stack Code Generation: COMPLETE.** Deterministic project generation, requirement traceability, generated-project security auditing, multi-framework coverage, branch CI, merge, and post-merge main CI are verified.
 
 ## Canonical V1 planning baseline
 
@@ -110,7 +110,7 @@ The roadmap table is updated only from repository evidence.
 
 ## Phase 12 evidence
 
-The Phase 12 implementation contract is documented in `PHASE-12-FULL-STACK-CODE-GENERATION.md`. The generator covers deterministic project output, requirements traceability, supported web/backend/full-stack targets, and generated-project security auditing. It remains `IN PROGRESS` until branch CI, merge, and post-merge main CI are verified.
+The Phase 12 implementation contract is documented in `PHASE-12-FULL-STACK-CODE-GENERATION.md`. The generator covers deterministic project output, requirements traceability, supported web/backend/full-stack targets, and generated-project security auditing. Phase 12 is `COMPLETE` after final branch CI, merge, and post-merge main CI verification.
 
 ## Final boundary
 
