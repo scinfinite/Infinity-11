@@ -88,7 +88,6 @@ export interface ScaffoldApproval {
 }
 
 const ID_PATTERN = /^[a-z][a-z0-9-]{1,62}$/;
-const SAFE_PATH = /^(?!\/)(?!.*(?:^|\/)\.\.?\/?)(?!.*(?:^|\/)\.git(?:\/|$))[A-Za-z0-9._/-]+$/;
 const MAX_FILES = 500;
 const MAX_CONTENT = 2_000_000;
 
@@ -157,6 +156,13 @@ function cloneTemplate(template: TemplateDefinition): TemplateDefinition {
   };
 }
 
+function isSafePath(path: string): boolean {
+  if (!path || path.startsWith('/') || path.includes('//')) return false;
+  if (!/^[A-Za-z0-9._/-]+$/.test(path)) return false;
+  const segments = path.split('/');
+  return segments.every((segment) => segment !== '.' && segment !== '..' && segment !== '.git');
+}
+
 function escapeHtml(value: string): string {
   return value.replace(
     /[&<>"']/g,
@@ -182,7 +188,8 @@ function templateFiles(spec: ScaffoldSpec): Array<{ path: string; content: strin
     },
     {
       path: '.gitignore',
-      content: 'node_modules/\ndist/\ncoverage/\n.env\n.env.*\n!.env.example\n__pycache__/\n.venv/\n',
+      content:
+        'node_modules/\ndist/\ncoverage/\n.env\n.env.*\n!.env.example\n__pycache__/\n.venv/\n',
     },
     {
       path: '.env.example',
@@ -422,7 +429,7 @@ export function createScaffoldPlan(spec: ScaffoldSpec): ScaffoldPlan {
 
   const scaffoldFiles = files
     .map((file): ScaffoldFile => {
-      if (!SAFE_PATH.test(file.path) || file.path.startsWith('node_modules/')) {
+      if (!isSafePath(file.path) || file.path.startsWith('node_modules/')) {
         throw new Error(`Unsafe generated path: ${file.path}`);
       }
       if (file.content.length > MAX_CONTENT) {
@@ -432,7 +439,11 @@ export function createScaffoldPlan(spec: ScaffoldSpec): ScaffoldPlan {
     })
     .sort((a, b) => a.path.localeCompare(b.path));
 
-  const parameters = { ...spec, templateVersion: template.version, variables: sortedVariables(spec.variables) };
+  const parameters = {
+    ...spec,
+    templateVersion: template.version,
+    variables: sortedVariables(spec.variables),
+  };
   const parametersChecksum = sha256(canonical(parameters));
   const directories = collectDirectories(scaffoldFiles);
   const checksum = sha256(
@@ -443,7 +454,10 @@ export function createScaffoldPlan(spec: ScaffoldSpec): ScaffoldPlan {
       revision: spec.revision,
       parametersChecksum,
       directories,
-      files: scaffoldFiles.map(({ path, checksum: fileChecksum }) => ({ path, checksum: fileChecksum })),
+      files: scaffoldFiles.map(({ path, checksum: fileChecksum }) => ({
+        path,
+        checksum: fileChecksum,
+      })),
     }),
   );
 
@@ -470,9 +484,7 @@ export async function applyScaffold(
   const validPlan =
     plan.schemaVersion === 1 &&
     Boolean(plan.checksum) &&
-    plan.files.every(
-      (file) => SAFE_PATH.test(file.path) && sha256(file.content) === file.checksum,
-    );
+    plan.files.every((file) => isSafePath(file.path) && sha256(file.content) === file.checksum);
   if (!validPlan) {
     return { status: 'BLOCKED', written: [], skipped: [], diagnostics: ['INVALID_PLAN'] };
   }
