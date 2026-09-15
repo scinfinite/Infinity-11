@@ -2,17 +2,17 @@
 
 ## Current status
 
-INFINITY-11 is in active implementation. **Phases 1–10 are complete, merged into `main`, and verified by CI. Phase 11 is next.**
+INFINITY-11 is in active implementation. **Phases 1–10 are complete, merged into `main`, and verified by CI. Phase 11 — Advanced Application Builder Foundation — is next.**
 
 ## Authoritative documents
 
 | Document | Purpose | Status |
 |---|---|---|
-| `../INFINITY-11-V1-ROADMAP.md` | Complete Phase 1–110 V1 implementation plan | **Authoritative** |
-| `description/INFINITY-11-DETAILED-DESCRIPTION.md` | Detailed product and architectural behavior | Active |
-| `description/INFINITY-11-ARCHITECTURE-AND-SCREENS.md` | System planes, boundaries, flows, and UI contracts | Active |
+| `architecture/INFINITY-11-V1-ROADMAP.md` | Complete Phase 1–110 V1 implementation plan | **Authoritative** |
+| `description/INFINITY-11-DETAILED-DESCRIPTION.md` | Complete product and web experience specification | Active |
+| `description/INFINITY-11-ARCHITECTURE-AND-SCREENS.md` | Architecture planes, boundaries, flows, and screen contracts | Active |
 | `description/INFINITY-11-SHORT-DESCRIPTION-AND-MINDMAP.md` | Product summary and strategic map | Active |
-| `architecture/INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md` | Canonical architecture baseline | Baseline |
+| `architecture/INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md` | Canonical architecture baseline and invariants | Baseline |
 | `architecture/INFINITY-11-PRE-CODING-AUDIT.md` | Original architecture/audit gate | Historical baseline |
 | `architecture/INFINITY-11-IMPLEMENTATION-ROADMAP.md` | Dependency sequence and completion policy | Synchronized |
 | `architecture/INFINITY-11-MIGRATION-AND-VERSIONING.md` | Migration/versioning rules | Active |
@@ -46,11 +46,13 @@ It combines AI chat, multimodal creation, advanced application building, AI agen
 
 ## Current web baseline
 
-Phase 10 delivered the core web/PWA product UX, including responsive application shell/navigation, Command Center, AI Workspace, Projects, Runs, Approvals, Artifacts, Usage, Settings, accessibility behavior, PWA metadata/offline shell behavior, and regression contracts. Surfaces that are not yet backed by runtime services are intentionally represented as boundaries rather than fabricated live functionality.
+Phase 10 delivered the core web/PWA product UX: responsive application shell/navigation, Command Center, AI Workspace, Projects, Runs, Approvals, Artifacts, Usage, Settings, accessibility behavior, PWA metadata/offline shell behavior, and regression contracts. These surfaces establish the control-plane UX for later runtime capabilities. Surfaces not yet backed by later-phase runtime services are intentionally represented as explicit boundaries rather than fabricated live functionality.
 
-## Documentation rule
+## Documentation synchronization rule
 
-Documentation status must follow repository evidence. When a phase changes architecture, update the relevant architecture/description document in the same completion cycle. Do not leave old statements such as "no coding yet" after implementation has started.
+Documentation status follows repository evidence. Product/architecture specifications describe the intended system; they do not prove implementation. Phase status is changed only from accepted implementation and CI evidence. When a phase changes architecture, contracts, or UX, update the relevant documents in the same completion cycle.
+
+Do not alter the root `README.md` as part of documentation synchronization unless explicitly requested.
 
 ## Completion gate
 
