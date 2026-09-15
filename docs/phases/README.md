@@ -2,11 +2,11 @@
 
 ## Current status
 
-**Phases 1–10: COMPLETE, merged into `main`, and verified by CI.**
+**Phases 1–11: COMPLETE, merged into `main`, and verified by CI.**
 
-**Phase 10 — Core Web/PWA Product UX: COMPLETE.** The current web shell, responsive UX, PWA metadata/offline shell behavior, accessibility contracts, and regression coverage are part of the verified baseline.
+**Phase 11 — Advanced Application Builder Foundation: COMPLETE.** The Phase 11 application specification/foundation is part of the verified baseline.
 
-**Phase 11 — Advanced Application Builder Foundation: IN PROGRESS.** The Phase 11 branch and PR #14 are open. The first CI run exposed a formatting failure; the implementation is being hardened and re-verified before merge.
+**Phase 12 — Full-Stack Code Generation: IN PROGRESS.** Deterministic project generation, requirement traceability, generated-project security auditing, and multi-framework coverage are implemented on the Phase 12 branch. Branch CI, merge, and post-merge main CI remain required before closure.
 
 ## Canonical V1 planning baseline
 
@@ -36,8 +36,8 @@ Every capability is an independent numbered phase. There are no hidden `11.1`, `
 08 Project Brain + Context + Knowledge
 09 Verification + Browser/Visual QA
 10 Core Web/PWA Product UX
-11 Advanced Application Builder Foundation   ← IN PROGRESS
-12 Full-Stack Code Generation
+11 Advanced Application Builder Foundation   ← COMPLETE
+12 Full-Stack Code Generation              ← IN PROGRESS
 13 Database and Data Layer Builder
 14 Authentication and Authorization Builder
 15 AI Project Modification Engine
@@ -107,6 +107,10 @@ The roadmap table is updated only from repository evidence.
 - No wholesale copying of competitor source, prompts, proprietary workflows, or architecture.
 - Web is the control/experience surface; runtime owns policy and execution.
 - V1 completion boundary remains Phase 110.
+
+## Phase 12 evidence
+
+The Phase 12 implementation contract is documented in `PHASE-12-FULL-STACK-CODE-GENERATION.md`. The generator covers deterministic project output, requirements traceability, supported web/backend/full-stack targets, and generated-project security auditing. It remains `IN PROGRESS` until branch CI, merge, and post-merge main CI are verified.
 
 ## Final boundary
 
