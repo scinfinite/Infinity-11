@@ -19,6 +19,7 @@
     { "path": "packages/app-builder/tsconfig.json" },
     { "path": "packages/codegen/tsconfig.json" },
     { "path": "packages/database/tsconfig.json" },
+    { "path": "packages/auth/tsconfig.json" },
     { "path": "apps/web/tsconfig.json" },
     { "path": "apps/worker/tsconfig.json" }
   ]

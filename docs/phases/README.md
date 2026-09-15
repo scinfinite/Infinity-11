@@ -10,7 +10,7 @@
 
 **Phase 13 — Database and Data Layer Builder: COMPLETE.** Deterministic PostgreSQL/SQLite schema and seed generation, fail-closed validation, repository/executor/transaction/health contracts, branch verification, merge, and final exact-head main CI are verified.
 
-**Next phase: Phase 14 — Authentication and Authorization Builder.**
+**Phase 14 — Authentication and Authorization Builder: IN PROGRESS.** Provider-independent authentication strategies, session policy, roles/permissions, authorization rules, and security-focused validation are being implemented.
 
 ## Canonical V1 planning baseline
 
@@ -22,10 +22,6 @@ The authoritative detailed V1 implementation plan is:
 - `../architecture/INFINITY-11-IMPLEMENTATION-ROADMAP.md` — dependency-oriented implementation history;
 - `../description/INFINITY-11-DETAILED-DESCRIPTION.md` — detailed product/web specification;
 - `../description/INFINITY-11-ARCHITECTURE-AND-SCREENS.md` — active architecture and screen contract.
-
-## Phase model
-
-Every capability is an independent numbered phase. There are no hidden `11.1`, `11.2`, or similar roadmap phases. A phase may contain internal engineering tasks, but the roadmap identity remains one numbered phase.
 
 ## V1 sequence
 
@@ -43,7 +39,7 @@ Every capability is an independent numbered phase. There are no hidden `11.1`, `
 11 Advanced Application Builder Foundation   ← COMPLETE
 12 Full-Stack Code Generation              ← COMPLETE
 13 Database and Data Layer Builder          ← COMPLETE
-14 Authentication and Authorization Builder
+14 Authentication and Authorization Builder ← IN PROGRESS
 15 AI Project Modification Engine
 16 Application Testing Engine
 17 Browser and Visual QA Engine
@@ -112,9 +108,9 @@ The roadmap table is updated only from repository evidence.
 - Web is the control/experience surface; runtime owns policy and execution.
 - V1 completion boundary remains Phase 110.
 
-## Phase 13 evidence
+## Phase 14 evidence
 
-The Phase 13 implementation contract is documented in `PHASE-13-DATABASE-DATA-LAYER-BUILDER.md`. The builder covers deterministic schema and seed generation, strict validation, migration/checksum metadata, repository contracts, adapter-independent execution boundaries, and explicit database health results. Phase 13 is `COMPLETE` after final branch verification, merge, and post-merge main CI verification.
+The Phase 14 implementation contract is documented in `PHASE-14-AUTHENTICATION-AUTHORIZATION-BUILDER.md`. The builder provides deterministic authentication configuration, session security constraints, role/permission validation, authorization evaluation with deny precedence, and adapter boundaries for hashing, tokens, and sessions.
 
 ## Final boundary
 

@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - phase-12-full-stack-code-generation
+      - phase-14-auth-authorization-builder
       - stage-1-engineering-foundation
       - stage-2-identity-persistence-events
       - stage-3-ai-gateway-providers-credentials
