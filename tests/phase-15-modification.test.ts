@@ -150,13 +150,13 @@ describe('phase 15 AI project modification engine', () => {
 
   it('rejects a plan when the project changes after planning', async () => {
     const store = new MemoryStore({ 'src/app.ts': 'old' });
-    const plan = await buildModificationPlan(
-      { ...request, operations: [{ kind: 'update', path: 'src/app.ts', content: 'new' }] },
-      store,
-      allow,
-    );
+    const staleRequest = {
+      ...request,
+      operations: [{ kind: 'update' as const, path: 'src/app.ts', content: 'new' }],
+    };
+    const plan = await buildModificationPlan(staleRequest, store, allow);
     await store.write('demo', 'src/app.ts', 'concurrent');
-    await expect(applyModificationPlan(request, plan, store)).rejects.toThrow('STALE_PLAN');
+    await expect(applyModificationPlan(staleRequest, plan, store)).rejects.toThrow('STALE_PLAN');
   });
 
   it('rejects a plan when request operations are changed after planning', async () => {
