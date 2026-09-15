@@ -18,6 +18,7 @@
     { "path": "packages/verification/tsconfig.json" },
     { "path": "packages/app-builder/tsconfig.json" },
     { "path": "packages/codegen/tsconfig.json" },
+    { "path": "packages/database/tsconfig.json" },
     { "path": "apps/web/tsconfig.json" },
     { "path": "apps/worker/tsconfig.json" }
   ]
