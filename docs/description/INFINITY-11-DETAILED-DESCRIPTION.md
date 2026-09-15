@@ -1,182 +1,344 @@
 # INFINITY-11 — Detailed Product & Web Specification
 
-> Status: Active implementation specification.
-> Current baseline: Phases 1–10 complete; Phase 11 next.
-> V1 roadmap: `INFINITY-11-V1-ROADMAP.md`, Phases 1–110.
-> Strategy: FREE-FIRST + OPEN-SOURCE-FIRST + BYOK-FIRST.
+> **Status:** Active product specification; implementation is underway.
+> **Verified baseline:** Phases 1–10 are complete, merged into `main`, and verified by CI.
+> **Next phase:** Phase 11 — Advanced Application Builder Foundation.
+> **V1 roadmap:** `docs/architecture/INFINITY-11-V1-ROADMAP.md` — Phases 1–110.
+> **Strategy:** FREE-FIRST + OPEN-SOURCE-FIRST + BYOK-FIRST.
+> **Purpose:** Define the product, complete web experience, major features, modules, user journeys, state semantics, and web/runtime boundary without changing the core INFINITY-11 thesis.
+
+---
 
 ## 1. Product definition
 
-INFINITY-11 is a provider-independent AI engineering, creation, automation, and operations operating system delivered first through a premium responsive web/PWA experience. It combines AI chat, multimodal creation, advanced application building, AI engineering, agent workforces, automation, research, knowledge, Project Brain, execution, verification, GitHub, deployment, observability, security, governance, and extensibility.
+INFINITY-11 is a **provider-independent AI engineering, creation, automation, and operations operating system**. The first-class user experience is a premium responsive web/PWA command surface that connects AI models, credentials, agents, tools, MCP servers, execution environments, repositories, workflows, knowledge, verification, deployment, and operations.
 
-The web product is the primary control and experience surface. Heavy computation should move to controlled remote execution whenever available. The user's device should primarily provide interaction, editing, visualization, orchestration control, and result inspection rather than being forced to perform expensive builds, dependency installation, browser automation, or large test workloads.
+The product is deliberately broader than chat and deliberately deeper than a prompt-to-app demo. A user can move from an idea to requirements, architecture, implementation, tests, verification, GitHub, deployment, operation, diagnosis, and improvement without changing the underlying project identity.
+
+The four permanent product pillars are:
+
+```text
+CREATE     → make applications, interfaces, media, documents and artifacts
+ENGINEER   → build, debug, review, test, secure, optimize and maintain software
+AUTOMATE   → compose deterministic, agentic and hybrid workflows
+OPERATE    → observe, diagnose, repair, verify, release and maintain systems
+```
+
+The web experience makes these pillars feel like one product rather than four disconnected applications.
+
+---
 
 ## 2. Core product promise
 
-> Bring your AI keys. Bring your tools. Bring your repositories. Build, engineer, automate, and operate anything.
+> **Bring your AI keys. Bring your tools. Bring your repositories. Build, engineer, automate, and operate anything.**
 
-The product is not a one-model wrapper, not a demo-only prompt-to-app generator, and not a mandatory paid cloud. Users control AI credentials and can use multiple providers, multiple keys, local models, self-hosted services, optional sandboxes, and optional deployment services.
+INFINITY-11 is not tied to one model, one provider, one sandbox, one database, one deployment platform, or one agent harness.
 
-## 3. Product pillars
+The platform must distinguish:
 
-### CREATE
+1. platform functionality;
+2. user-supplied AI/API costs;
+3. execution and sandbox costs;
+4. storage and data costs;
+5. deployment/hosting costs;
+6. optional managed convenience services.
 
-Applications, interfaces, designs, images, audio, video, documents, presentations, reports, and reusable artifacts.
+“Free-first” means the platform should not require a paid subscription to be useful. It does not mean third-party AI, compute, storage, or deployment resources are unlimited or free.
 
-### ENGINEER
+---
 
-Repository analysis, architecture understanding, coding, debugging, root-cause analysis, code review, refactoring, migrations, tests, security, performance, CI repair, deployment repair, and maintenance.
+## 3. Best-practically-achievable output
 
-### AUTOMATE
+INFINITY-11 optimizes for the **best practically achievable verified output within user requirements, available resources, policies, and constraints**.
 
-Visual workflows, natural-language workflow generation, deterministic execution, autonomous agents, hybrid workflows, schedules, events, approvals, retries, checkpoints, resumability, and bounded self-healing.
-
-### OPERATE
-
-Observe projects and deployments, diagnose failures, perform policy-approved actions, verify results, manage releases, recover from failures, and maintain project intelligence.
-
-## 4. Best-practically-achievable output
-
-INFINITY-11 must not stop at a plausible first output when additional work can materially improve it.
+The default lifecycle is:
 
 ```text
 Understand
-→ Research
-→ Specify
-→ Architect
-→ Plan
-→ Workforce / Workflow
-→ Model / Credential Route
-→ Execute
-→ Test
-→ Critique
-→ Improve
-→ Verify
-→ Deliver
-→ Observe
-→ Maintain
+  ↓
+Research
+  ↓
+Specify
+  ↓
+Architect
+  ↓
+Plan
+  ↓
+Workforce / Workflow
+  ↓
+Model / Credential Route
+  ↓
+Execute
+  ↓
+Test
+  ↓
+Critique
+  ↓
+Improve
+  ↓
+Verify
+  ↓
+Deliver
+  ↓
+Observe
+  ↓
+Recover / Maintain
+  ↓
+Project Brain
 ```
 
-Quality dimensions are correctness, completeness, architecture, maintainability, security, performance, UX, accessibility, compatibility, verification, and cost efficiency.
+The system must continue improvement when additional work can materially improve the result and the user/policy permits that work.
 
-Quality states are VERIFIED, PARTIALLY VERIFIED, UNVERIFIED, and BLOCKED.
+Quality dimensions:
 
-## 5. Web product role
+- correctness;
+- completeness;
+- architecture;
+- maintainability;
+- security;
+- performance;
+- UX;
+- accessibility;
+- compatibility;
+- verification;
+- cost efficiency.
 
-The web application is the unified command surface for every major capability. It must not become a second orchestration engine. Browser code owns presentation, interaction, local UI state, streaming presentation, navigation, and user controls. Server/runtime systems own policy, execution, routing, durable state, security decisions, workflow execution, and verification.
+Quality states:
 
-The web must make long-running work observable without requiring the user to keep a page open. Runs, jobs, workflow executions, builds, browser checks, deployments, and approvals have durable server-side identities and states.
+- `VERIFIED` — evidence satisfies the accepted verification contract;
+- `PARTIALLY VERIFIED` — some required evidence exists but the complete contract is not satisfied;
+- `UNVERIFIED` — output exists without sufficient verification evidence;
+- `BLOCKED` — completion cannot safely proceed because of a dependency, policy, resource, or environment constraint.
 
-## 6. Web application shell
+---
 
-The global shell consists of:
+## 4. Web product role
+
+The web application is the primary human control and visualization surface.
+
+The browser owns:
+
+- presentation;
+- navigation;
+- interaction;
+- local UI state;
+- streaming presentation;
+- editing controls;
+- visual previews;
+- client-side validation that is safe to duplicate;
+- user approval interaction.
+
+Backend/runtime systems own:
+
+- authentication and authorization;
+- policy decisions;
+- credential use;
+- model routing;
+- durable execution;
+- orchestration;
+- sandboxing;
+- workflow execution;
+- security controls;
+- verification;
+- durable state;
+- audit;
+- background processing.
+
+The web must **not become a second orchestration engine**. It may visualize plans and state, but it does not secretly reimplement the agent runtime, workflow runtime, routing engine, or security policy.
+
+Long-running operations have durable server-side identities so the user can navigate away and return later.
+
+---
+
+# 5. Global web application shell
+
+The global shell is the consistent frame around every capability.
 
 ```text
-┌────────────────────────────────────────────────────────────────────┐
-│ Workspace │ Search / Command Palette │ Activity │ Notifications │ User │
-├───────────────┬──────────────────────────────────────┬─────────────┤
-│ Primary nav   │ Main workspace                       │ Context     │
-│               │                                      │ inspector   │
-│ Home          │ Chat / Code / Build / Design /       │ Files       │
-│ Chat          │ Research / Media / Agents / Projects │ Models      │
-│ Projects      │ / Workflows / Operations             │ Tools       │
-│ Code          │                                      │ Activity    │
-│ Build         │                                      │ Verification│
-│ Design        │                                      │             │
-│ Research      │                                      │             │
-│ Media         │                                      │             │
-│ Agents        │                                      │             │
-│ Workflows     │                                      │             │
-│ Runs          │                                      │             │
-│ Deployments   │                                      │             │
-│ Settings      │                                      │             │
-└───────────────┴──────────────────────────────────────┴─────────────┘
+┌───────────────────────────────────────────────────────────────────────────┐
+│ Workspace │ Search / Command Palette │ Activity │ Notifications │ Profile │
+├───────────────┬───────────────────────────────────────┬───────────────────┤
+│ Primary Nav   │ Primary Work Area                     │ Context Inspector │
+│               │                                       │                   │
+│ Home          │ Chat / Code / Build / Design         │ Files             │
+│ Chat          │ Research / Media / Agents            │ Models            │
+│ Projects      │ Workflows / Runs / Operations        │ Tools             │
+│ Code          │                                       │ Memory            │
+│ Build         │                                       │ Project Brain      │
+│ Design        │                                       │ Activity          │
+│ Research      │                                       │ Verification      │
+│ Media         │                                       │ Deployment        │
+│ Agents        │                                       │                   │
+│ Workflows     │                                       │                   │
+│ Runs          │                                       │                   │
+│ Deployments   │                                       │                   │
+│ Settings      │                                       │                   │
+└───────────────┴───────────────────────────────────────┴───────────────────┘
 ```
 
-The exact navigation may evolve, but the conceptual separation remains: primary work, contextual intelligence, and system controls.
+The exact navigation labels may evolve, but these conceptual responsibilities remain stable:
 
-## 7. Responsive web behavior
+- **primary navigation** gets the user to a capability;
+- **primary work area** performs the work;
+- **context inspector** explains the state, evidence, resources, and controls surrounding the work.
 
-Desktop supports a three-region workspace: navigation, primary content, and contextual inspector. Tablet collapses secondary context and navigation where necessary. Mobile uses compact navigation, bottom sheets/drawers, stacked panels, touch-friendly controls, and preserved access to run status and approvals.
+---
 
-Responsive behavior must cover:
+## 6. Responsive behavior
 
-- navigation;
-- command palette;
-- chat composer;
-- code editor;
-- project tree;
-- workflow canvas;
-- agent panels;
-- logs;
-- tables;
-- artifacts;
-- previews;
-- approvals;
-- settings;
-- usage;
-- deployment status.
+### Desktop
 
-Keyboard focus, visible focus, reduced motion, semantic controls, readable contrast, touch targets, and screen-reader labeling are product requirements.
+Desktop uses a three-region workspace when useful: navigation, primary work, and context. Panels can resize or collapse without destroying the current task.
 
-## 8. Home / Command Center
+### Tablet
 
-Purpose: give the user an immediate operational view.
+Tablet prioritizes primary work and collapses secondary context into drawers/sheets. Navigation becomes compact while preserving direct access to projects, runs, approvals, and active work.
 
-It should show active projects, recent conversations, running jobs, agent runs, workflow runs, pending approvals, artifacts, verification warnings, provider health, credential health, usage, cost, and important system alerts.
+### Mobile
 
-The Command Center must distinguish information from actions. A warning should identify what is wrong and what action is available. Empty states should explain how to start useful work.
+Mobile uses stacked views, bottom navigation or compact navigation, drawers, bottom sheets, touch-friendly controls, and simplified inspectors. Long-running work remains observable and approvals remain actionable.
 
-## 9. Universal composer
+### PWA
 
-The primary composer is multimodal and context-aware.
+The installed PWA uses the same product identity and responsive behavior. Offline behavior is limited to capabilities that can safely operate without the backend. Cached shell behavior must never imply that a remote run succeeded while disconnected.
 
-It supports:
+---
+
+## 7. Accessibility and interaction contract
+
+Accessibility is a product requirement, not a final polish pass.
+
+The web must support:
+
+- semantic controls;
+- keyboard navigation;
+- visible focus;
+- logical focus order;
+- readable contrast;
+- screen-reader labels;
+- reduced motion;
+- touch target sizing;
+- error association;
+- status announcements where appropriate;
+- non-color-only state communication;
+- responsive text and layout.
+
+Destructive or high-impact actions must have explicit affordances and appropriate confirmation/approval behavior.
+
+---
+
+# 8. Home / Command Center
+
+The Command Center is the operational home of INFINITY-11.
+
+It summarizes:
+
+- active projects;
+- recent conversations;
+- active agent runs;
+- workflow runs;
+- background jobs;
+- pending approvals;
+- recent artifacts;
+- verification failures;
+- provider health;
+- credential health;
+- usage and cost;
+- deployments;
+- security alerts;
+- important system events.
+
+A Command Center card must distinguish **information** from **action**. A warning should answer:
+
+```text
+What happened?
+Why does it matter?
+What evidence exists?
+What can I do next?
+Is approval required?
+```
+
+Empty states explain how to begin useful work instead of merely stating that no data exists.
+
+---
+
+# 9. Universal multimodal composer
+
+The composer is the common entry point for intent.
+
+It supports, subject to provider and runtime capability:
 
 - text;
-- image attachments;
-- audio attachments;
-- video attachments;
+- images;
+- audio;
+- video;
 - documents;
+- code;
 - repository/project context;
 - model selection;
-- routing mode;
+- automatic routing;
 - agent selection;
 - tools;
 - MCP;
 - workflow invocation;
-- generated artifacts;
+- artifact generation;
+- structured output;
 - cancellation;
 - retry;
 - regeneration;
-- structured outputs.
+- verification requests.
 
-The composer must expose capability limitations honestly. If a selected provider cannot perform a requested modality, the UI should offer a valid alternative or explain the constraint.
+The composer must communicate capability constraints honestly. If the selected route cannot perform the requested operation, the user receives an alternative route or a clear explanation.
 
-## 10. Chat workspace
+---
 
-Chat is not isolated from the rest of the system. A conversation can invoke agents, inspect files, create artifacts, run code, start workflows, research sources, modify a project, and request verification subject to policy.
+# 10. Chat workspace
 
-A response can include:
+Chat is the general conversational surface, but it is connected to the entire operating system.
 
-- text;
-- code;
-- files;
-- images;
-- audio;
-- video;
-- structured data;
-- application previews;
-- test reports;
-- verification records;
-- research citations;
-- workflow results.
+A conversation may, subject to policy:
 
-Streaming state must include connecting, generating, tool use, waiting for approval, waiting for execution, verifying, complete, failed, and cancelled states where relevant.
+- inspect project files;
+- search symbols;
+- read Project Brain;
+- use skills;
+- call tools;
+- invoke MCP;
+- execute code in a sandbox;
+- create or modify artifacts;
+- start an agent run;
+- start a workflow;
+- request research;
+- modify a project;
+- run tests;
+- request browser QA;
+- prepare GitHub changes;
+- request deployment;
+- inspect operational failures.
 
-## 11. Model and BYOK interface
+The conversation timeline distinguishes:
 
-Users can manage multiple providers and multiple credentials per provider.
+```text
+CONNECTING
+GENERATING
+TOOL USE
+WAITING FOR APPROVAL
+WAITING FOR EXECUTION
+VERIFYING
+COMPLETED
+FAILED
+CANCELLED
+```
+
+Tool activity is observable, but private model chain-of-thought is not exposed.
+
+---
+
+# 11. Model and BYOK workspace
+
+The model workspace is where users manage provider-independent AI access.
+
+The conceptual hierarchy is:
 
 ```text
 Provider
@@ -190,21 +352,58 @@ Provider
     └── Model Y
 ```
 
-The web must never display raw secrets after secure entry. It may show masked identifiers, provider, credential status, last validation, usage signals, cooldown, and health.
+Users can see safe metadata such as:
 
-Routing modes include manual, automatic, quality-first, speed-first, cost-first, free-only, local-only, provider-preferred, capability-first, and custom policy.
+- provider;
+- masked credential identifier;
+- credential health;
+- last validation;
+- model availability;
+- cooldown state;
+- observed usage signals;
+- policy eligibility.
 
-Routing explanation may show eligibility, capability match, health, quota signal, cost signal, latency history, policy restrictions, and fallback reason. It must not expose private chain-of-thought.
+Raw credentials must not be displayed after secure entry.
 
-## 12. AI workspace
+Routing modes include:
 
-The AI workspace is a unified place to select a model or agent, choose project context, attach resources, inspect route decisions, observe tool execution, approve privileged actions, and inspect verification.
+- manual;
+- automatic;
+- quality-first;
+- speed-first;
+- cost-first;
+- free-only;
+- local-only;
+- provider-preferred;
+- capability-first;
+- custom policy.
 
-A context inspector should show which project files, symbols, knowledge items, memories, skills, policies, and tools were included, why they were relevant, and whether information was omitted due to budget or policy.
+---
 
-## 13. Projects workspace
+# 12. AI Workspace and context inspector
 
-A project is the durable container for application, engineering, knowledge, automation, and operational state.
+The AI Workspace unifies model/agent selection, project context, tools, routing, execution, approvals, and verification.
+
+The context inspector should show high-level evidence about what was supplied to the task:
+
+- relevant files;
+- symbols;
+- Project Brain entries;
+- knowledge items;
+- memories;
+- skills;
+- policies;
+- tools;
+- MCP capabilities;
+- omitted context caused by budget or policy.
+
+It should explain relevance without exposing private chain-of-thought.
+
+---
+
+# 13. Projects workspace
+
+A project is the durable unit connecting software, knowledge, automation, agents, and operations.
 
 ```text
 Project
@@ -230,17 +429,21 @@ Project
 └── Activity
 ```
 
-Project switching must preserve isolation of context, permissions, secrets, and execution state.
+Project isolation applies to context, permissions, secrets, execution, artifacts, and operational state.
 
-## 14. Advanced application builder web experience
+---
 
-The Build workspace is the central app-builder surface.
+# 14. Advanced application builder
+
+The Build workspace is the central application creation surface.
+
+The intended lifecycle is:
 
 ```text
 Idea
 → Requirements
 → Architecture
-→ Stack selection
+→ Stack
 → Scaffold
 → Frontend
 → Backend
@@ -260,75 +463,148 @@ Idea
 → Observe
 ```
 
-The builder should support both greenfield creation and existing-project modification.
+The builder supports both:
 
-### Builder interface
+1. **greenfield projects** — generate a new application from requirements;
+2. **existing projects** — inspect and safely modify an existing repository.
 
-The interface should expose:
+The target is serious multi-service applications, not only toy landing pages.
 
-- project file tree;
-- editor;
-- terminal/output;
-- live preview;
-- application logs;
-- agent activity;
+---
+
+## 14.1 Builder layout
+
+The builder can expose:
+
+- project/file tree;
+- code editor;
+- command/terminal output;
 - task plan;
-- build/test status;
-- browser QA status;
+- agent activity;
+- live preview;
+- build state;
+- test state;
+- browser QA;
 - verification report;
 - change summary;
-- approval requests;
 - Git diff;
-- GitHub state;
-- deployment state.
+- GitHub status;
+- deployment status;
+- approval requests;
+- application logs.
 
-### Natural-language modification
+The interface should make it possible to move from generated output to inspected source and evidence.
 
-Users can request changes such as adding features, fixing bugs, changing design, adding authentication, adding APIs, changing database schema, improving responsive behavior, optimizing performance, or migrating dependencies. Before modifying an existing project, the system should inspect relevant code and project knowledge.
+---
 
-## 15. Code workspace
+## 14.2 Natural-language modification
 
-The Code workspace provides repository navigation, editing, search, symbol-aware navigation, diff inspection, agent collaboration, terminal output, diagnostics, tests, and verification.
+Users may request:
 
-The web editor must not pretend that code is valid merely because a model generated it. Diagnostics and verification status remain visible.
+- add a feature;
+- fix a bug;
+- redesign a page;
+- add authentication;
+- add or modify APIs;
+- change database schema;
+- add storage;
+- add background jobs;
+- improve responsiveness;
+- improve accessibility;
+- optimize performance;
+- migrate dependencies;
+- refactor a module;
+- add tests;
+- repair CI;
+- prepare deployment.
 
-## 16. Build and execution workspace
+Before modifying an existing project, the system should inspect relevant code, dependencies, tests, Project Brain, architecture decisions, and known failure history.
 
-Users can start builds, commands, tests, services, browser sessions, and sandbox jobs. Heavy work is delegated to the ExecutionManager.
+The UI must expose what changed and what verification was performed.
+
+---
+
+# 15. Code workspace
+
+The Code workspace is a developer-grade repository surface.
+
+Core capabilities include:
+
+- file tree;
+- code editor;
+- repository search;
+- symbol navigation;
+- references;
+- diagnostics;
+- diff view;
+- change history;
+- terminal/output;
+- tests;
+- agent assistance;
+- review findings;
+- security findings;
+- performance findings;
+- verification evidence.
+
+The editor must not label generated code as correct merely because generation completed.
+
+---
+
+# 16. Build and execution workspace
+
+Build operations are represented as durable runs and delegated through the execution abstraction.
 
 ```text
-Web/PWA
- ↓
+Web / PWA
+   ↓
 Control API
- ↓
+   ↓
 ExecutionManager
- ├── Local
- ├── Docker
- ├── E2B
- ├── Self-hosted
- └── Future providers
- ↓
+   ├── Local
+   ├── Docker
+   ├── E2B
+   ├── Self-hosted
+   └── Future execution adapters
+   ↓
 Build / Test / Run / Browser QA
 ```
 
-Execution output includes status, timestamps, logs, artifacts, resource information where available, and verification results.
+The web shows:
 
-## 17. Application preview
+- run identifier;
+- status;
+- timestamps;
+- logs;
+- outputs;
+- artifacts;
+- resource information where available;
+- verification status;
+- failure reason;
+- retry/recovery controls where allowed.
 
-The Preview surface displays the running application and its verification state. It must distinguish:
+---
 
-- running;
+# 17. Preview workspace
+
+Preview renders the application and its evidence state.
+
+It must distinguish:
+
 - building;
+- starting;
+- running;
 - unavailable;
 - failed;
 - partially verified;
 - verified.
 
-The preview should support desktop and mobile viewport checks and connect browser QA results back to the relevant project run.
+Preview supports viewport-oriented inspection and links failures back to browser QA and relevant runs.
 
-## 18. Browser and visual QA web experience
+---
 
-The browser QA surface shows:
+# 18. Browser and visual QA
+
+The Browser QA surface displays:
 
 - target URL;
 - browser/session state;
@@ -342,47 +618,68 @@ The browser QA surface shows:
 - linked code changes;
 - verification state.
 
-A visual defect can enter an improvement loop:
+The improvement loop is:
 
 ```text
 Detect
 → Explain
 → Repair
 → Rebuild
-→ Reopen browser
+→ Reopen
 → Recheck
 → Verify
 ```
 
-## 19. Agents workspace
+Visual evidence is evidence, not a replacement for functional testing.
 
-The Agents workspace shows installed agents, available agents, active runs, capabilities, skills, tools, model policy, memory policy, permissions, budget, and performance history.
+---
 
-Agents are governed executable workers, not just personalities.
+# 19. Agents workspace
+
+Agents are executable workers governed by explicit policies.
+
+An agent package contains:
 
 ```text
-Agent
-├── identity
-├── role
-├── capabilities
-├── skills
-├── tools
-├── model policy
-├── context policy
-├── memory policy
-├── permission policy
-├── execution profile
-├── verification policy
-├── budget policy
-└── history
+identity
+role
+capabilities
+skills
+tools
+model_policy
+context_policy
+memory_policy
+permission_policy
+execution_profile
+verification_policy
+budget_policy
+history
 ```
 
-## 20. Workforce workspace
+The Agents screen should show:
+
+- installed agents;
+- active agents;
+- capabilities;
+- assigned tools;
+- skills;
+- model policy;
+- permission policy;
+- budget;
+- current run;
+- verification status;
+- historical performance.
+
+Agents are not merely personas or prompt presets.
+
+---
+
+# 20. Workforce workspace
 
 The Workforce surface visualizes a project team.
 
 ```text
-Team Lead
+Team Lead / Orchestrator
 ├── Architect
 ├── Frontend
 ├── Backend
@@ -394,15 +691,28 @@ Team Lead
 └── Research
 ```
 
-Users can inspect assignments, dependencies, progress, outputs, blocked workers, approvals, and verification.
+The workforce may change dynamically based on task requirements.
 
-Parallel work must remain dependency-aware. The UI must not hide conflicts or merge contradictory outputs without an explicit synthesis step.
+The UI exposes:
 
-## 21. Workflow builder
+- assignments;
+- dependencies;
+- progress;
+- outputs;
+- blocked workers;
+- conflicts;
+- approvals;
+- verification.
 
-The web workflow builder supports a visual canvas and natural-language generation.
+Parallel work must remain dependency-aware. Contradictory results require explicit synthesis or review.
 
-Node types include:
+---
+
+# 21. Workflow builder
+
+Automation is a first-class product surface rather than a hidden agent capability.
+
+The visual workflow model includes:
 
 ```text
 TRIGGER
@@ -429,182 +739,55 @@ RETRY
 RECOVER
 ```
 
-The canvas must make execution order, dependencies, conditions, retries, approvals, and failure paths visible.
+Users can create workflows visually or through natural language.
 
-## 22. Workflow run interface
+Natural language should compile into a visible, editable workflow graph. The graph is the source of user-visible automation structure.
 
-A workflow run displays a timeline/graph of nodes and their states.
+---
 
-States include queued, running, waiting, approval-required, retrying, recovering, completed, failed, cancelled, timed-out, and policy-denied.
+# 22. Automation run workspace
 
-Durable execution means closing the browser must not destroy the run.
+Every workflow run has durable state.
 
-## 23. Approvals
+The UI displays:
 
-Approvals are explicit user decisions for privileged actions.
-
-Examples:
-
-- create PR: ASK;
-- merge PR: ASK;
-- production deploy: ASK;
-- secret use: ASK where policy requires;
-- delete database: DENY;
-- read repository: ALLOW;
-- run tests: ALLOW.
-
-Approval UI must identify actor, requested capability, target, reason, scope, expiration, and resulting action. Approvals must be auditable.
-
-## 24. Runs and activity
-
-Runs unify AI, agents, workflows, builds, browser sessions, research jobs, deployments, and verification.
-
-Each run should expose:
-
-- identifier;
-- project;
-- actor;
-- agent/model/provider where relevant;
-- start/end time;
-- state;
-- inputs/outputs metadata;
-- tools used;
+- trigger;
+- workflow version;
+- current node;
+- completed nodes;
+- pending nodes;
+- retries;
 - approvals;
 - logs;
-- artifacts;
+- outputs;
+- failures;
+- recovery state;
 - verification;
-- errors;
-- cost/usage where available.
+- final result.
 
-## 25. Artifacts
+Durable workflows can resume after transient failures where the underlying operation is safely resumable.
 
-Artifacts include generated files, applications, images, videos, audio, reports, test results, security reports, builds, packages, and deployment outputs.
+---
 
-Artifact metadata includes project, source run, revision, type, size, created time, verification state, and retention policy.
+# 23. Approvals and privileged actions
 
-## 26. Multimodal web workspace
+The Approvals workspace is the human-in-the-loop boundary.
 
-### Image
+A request includes:
 
-Generation, editing, variations, enhancement, background removal, design assets, UI concepts, diagrams, and image analysis.
+- requesting actor;
+- project;
+- action;
+- target;
+- risk classification;
+- reason;
+- affected resources;
+- proposed changes;
+- evidence;
+- expiry;
+- decision.
 
-### Audio
-
-Speech-to-text, text-to-speech, transcription, voice workflows, audio analysis, and generated audio artifacts.
-
-### Video
-
-Generation workflows, editing workflows, analysis, subtitles, dubbing, storyboards, and video artifacts.
-
-### Documents
-
-PDF, DOCX, PPTX, spreadsheets, reports, structured exports, parsing, analysis, and generation.
-
-All modalities are capability-driven and provider-independent.
-
-## 27. Research workspace
-
-Research is a first-class workspace rather than only a chat mode.
-
-It supports source discovery, source collection, evidence extraction, comparison, synthesis, citation, document analysis, repository research, technical research, and fact checking.
-
-The UI should distinguish source-backed facts from model-generated interpretation.
-
-## 28. Knowledge workspace
-
-Users can inspect knowledge sources, indexes, retrieval results, documents, project references, and knowledge relationships.
-
-Knowledge objects may include source, title, location, content type, permissions, freshness, confidence, extracted entities, and relationships.
-
-## 29. Project Brain workspace
-
-Project Brain is durable project intelligence.
-
-```text
-Requirements
-Architecture
-Decisions
-Conventions
-Dependencies
-Codebase map
-Known bugs
-Failed approaches
-Successful patterns
-Tests
-Security findings
-Deployments
-Agent history
-Model performance
-Lessons learned
-```
-
-The web UI should let users inspect, confirm, correct, and govern important project facts.
-
-## 30. Memory
-
-Memory is separated into user/workspace/project/agent scopes as appropriate. Sensitive information must not be silently promoted into broad memory. Secret values must never become normal memory content.
-
-## 31. Codebase intelligence web experience
-
-Repository analysis should expose:
-
-- detected languages;
-- frameworks;
-- dependencies;
-- modules;
-- symbols;
-- relationships;
-- architecture hypotheses;
-- test coverage map;
-- security risks;
-- documentation gaps;
-- high-risk areas.
-
-The system must support multiple languages, including Java, Python, JavaScript, TypeScript, Go, Rust, C, C++, C#, PHP, Ruby, Kotlin, Swift, Dart, SQL, Shell, HTML, and CSS where compatible toolchains exist.
-
-## 32. Debugging workspace
-
-The debugging surface combines source, logs, stack traces, CI output, browser console, network failures, dependency state, configuration, and runtime information.
-
-Required reasoning sequence:
-
-```text
-Inspect
-→ Reproduce
-→ Diagnose
-→ Identify root cause
-→ Inspect related code
-→ Minimal fix
-→ Test/build
-→ Inspect output
-→ Regression check
-```
-
-The system should explain evidence and confidence rather than invent certainty.
-
-## 33. Code review workspace
-
-Reviews show changed files, findings, severity, evidence, suggested fixes, test impact, security impact, maintainability impact, and final verification.
-
-The reviewer should consider correctness, architecture, security, performance, readability, compatibility, tests, and regression risk.
-
-## 34. Security workspace
-
-Security UI covers:
-
-- permissions;
-- secrets;
-- sandbox status;
-- network access;
-- tool capabilities;
-- MCP trust;
-- dependency vulnerabilities;
-- code findings;
-- audit events;
-- approvals;
-- policy decisions.
-
-The core action policy is:
+The policy model is:
 
 ```text
 ALLOW
@@ -612,265 +795,1037 @@ ASK
 DENY
 ```
 
-## 35. Settings
-
-Settings should include:
-
-- profile;
-- workspace;
-- providers;
-- credentials;
-- model routing;
-- execution providers;
-- GitHub;
-- deployment providers;
-- MCP;
-- integrations;
-- security policy;
-- notifications;
-- appearance;
-- accessibility;
-- PWA behavior;
-- usage and cost.
-
-Sensitive settings require appropriate re-authentication or approval controls.
-
-## 36. Usage and cost
-
-The UI distinguishes:
+Typical defaults:
 
 ```text
-AI/API cost
-Compute/sandbox cost
-Storage cost
-Deployment cost
-INFINITY-11 platform cost
-Unknown cost
+Read repository                 ALLOW
+Run tests                       ALLOW
+Modify isolated sandbox         ALLOW
+Create branch                   ALLOW / ASK by policy
+Create pull request             ASK
+Merge pull request              ASK
+Production deployment           ASK
+Use privileged secret           ASK
+Delete production data          DENY by default
 ```
 
-Observed usage should be separated from provider-reported quotas. Unknown information remains unknown rather than being guessed.
+The exact policy is configurable within safe limits.
 
-## 37. GitHub workspace
+---
 
-GitHub is first-class.
+# 24. Runs and activity
+
+Runs are the universal operational record for asynchronous work.
+
+A run can represent:
+
+- model generation;
+- agent execution;
+- workflow execution;
+- build;
+- test;
+- browser QA;
+- deployment;
+- repair;
+- migration;
+- research;
+- background job.
+
+The Runs workspace supports filtering by project, type, actor, state, model, provider, time, and outcome.
+
+---
+
+# 25. Artifacts
+
+Artifacts are durable outputs of work.
+
+Examples:
+
+- code patches;
+- source files;
+- application builds;
+- screenshots;
+- videos;
+- audio;
+- documents;
+- presentations;
+- test reports;
+- security reports;
+- research reports;
+- workflow outputs;
+- deployment records.
+
+Artifacts carry provenance where practical:
+
+```text
+Artifact
+→ source run
+→ project
+→ agent / user
+→ model / provider when relevant
+→ inputs
+→ verification
+→ version
+```
+
+---
+
+# 26. Multimodal creation
+
+The product includes specialized creation surfaces while preserving a unified artifact model.
+
+## Image Studio
+
+Supports prompt-based generation, editing, variation, composition, reference inputs, transparent backgrounds where supported, and project-aware assets.
+
+## Audio and Voice Studio
+
+Supports generation/transformation workflows where the selected provider permits them. Voice features must communicate consent, provenance, provider limitations, and applicable policy.
+
+## Video Studio
+
+Supports storyboard-oriented creation, generation, editing, asset composition, and verification of output properties where technically supported.
+
+## Document and Presentation Studio
+
+Supports structured documents, reports, presentations, exports, revisions, and evidence-linked source material.
+
+## Unified Media Workspace
+
+All media surfaces share:
+
+- project context;
+- model/provider routing;
+- artifacts;
+- versioning;
+- permissions;
+- usage/cost accounting;
+- verification;
+- search;
+- Project Brain references.
+
+---
+
+# 27. Research workspace
+
+Research is a first-class workflow rather than an ordinary chat mode.
+
+The Research UI exposes:
+
+- research question;
+- sources;
+- source status;
+- claims;
+- extracted evidence;
+- synthesis;
+- citations;
+- unresolved questions;
+- confidence/verification state;
+- final artifact.
+
+The system must distinguish sourced facts from model-generated inference and must not invent citations.
+
+External data collection must respect applicable copyright, licensing, access, privacy, and provider terms.
+
+---
+
+# 28. Knowledge workspace
+
+Knowledge stores durable project or workspace information.
+
+Sources may include:
+
+- uploaded documents;
+- project files;
+- approved external sources;
+- research results;
+- architecture documents;
+- decisions;
+- run outputs;
+- lessons learned.
+
+Knowledge items are indexed and retrievable through the Context Intelligence layer.
+
+---
+
+# 29. Project Brain
+
+Project Brain is the durable intelligence layer for a project.
+
+It contains structured knowledge such as:
+
+```text
+requirements
+architecture
+architecture decisions
+coding conventions
+dependencies
+codebase map
+test map
+known bugs
+failed approaches
+successful patterns
+security findings
+performance findings
+deployments
+agent history
+model performance
+lessons learned
+operational incidents
+```
+
+The Project Brain must be evidence-aware. A failed approach should not become a recommendation without context; a successful approach should retain the conditions under which it worked.
+
+---
+
+# 30. Context Intelligence
+
+Context is assembled from multiple sources:
+
+```text
+Conversation
++ Repository
++ Symbols
++ Project Brain
++ Skills
++ Memory
++ Knowledge
++ Tools
++ Policies
+        ↓
+Retrieve
+        ↓
+Rank
+        ↓
+Compress
+        ↓
+Budget
+        ↓
+Assemble
+```
+
+The context inspector should make this process understandable without exposing private reasoning.
+
+Context budget decisions are observable as metadata such as included, omitted, summarized, or blocked resources.
+
+---
+
+# 31. Memory
+
+Memory has different scopes and must not be treated as an undifferentiated prompt history.
+
+Conceptual scopes:
+
+- conversation;
+- project;
+- workspace;
+- agent;
+- skill/tool;
+- system policy.
+
+Memory should record useful durable information while respecting privacy, retention, permissions, and user controls.
+
+Project Brain is the structured engineering intelligence layer; memory can contain broader interaction knowledge.
+
+---
+
+# 32. Codebase intelligence
+
+For software projects, the system should progressively build:
+
+```text
+Language detection
+→ Framework detection
+→ Dependency graph
+→ Symbol graph
+→ Architecture inference
+→ Test map
+→ Risk map
+→ Documentation map
+→ Codebase index
+```
+
+This intelligence feeds debugging, review, modification, migration, testing, and architecture decisions.
+
+The UI should make discovered structure inspectable rather than presenting an opaque score.
+
+---
+
+# 33. Debugging and root-cause analysis
+
+The debugging experience follows an evidence-first loop:
+
+```text
+Collect evidence
+→ Reproduce
+→ Narrow scope
+→ Trace execution
+→ Identify root cause
+→ Propose minimal fix
+→ Implement
+→ Test
+→ Regression check
+→ Verify
+```
+
+Evidence can include:
+
+- stack traces;
+- logs;
+- failing tests;
+- diagnostics;
+- code paths;
+- dependency versions;
+- environment information;
+- browser console/network evidence;
+- Git history;
+- previous Project Brain incidents.
+
+The system must distinguish symptom, contributing factor, root cause, and fix evidence.
+
+---
+
+# 34. Code review and refactoring
+
+Review surfaces findings by category:
+
+- correctness;
+- architecture;
+- security;
+- performance;
+- maintainability;
+- test coverage;
+- API compatibility;
+- dependency risk;
+- accessibility where UI is involved.
+
+Refactoring must preserve behavior unless behavior change is explicitly requested.
+
+Suggested changes should be linked to files, symbols, tests, and verification evidence.
+
+---
+
+# 35. Security workspace
+
+Security is visible throughout the product.
+
+The Security surface covers:
+
+- permission policies;
+- credentials;
+- secrets;
+- sandbox status;
+- dependency findings;
+- MCP trust;
+- action audit;
+- authentication state;
+- deployment security;
+- project risks.
+
+Security actions should be classified by impact and should not bypass the central policy layer.
+
+---
+
+# 36. Settings and control center
+
+Settings are grouped by responsibility rather than one undifferentiated list.
+
+```text
+Workspace
+Identity
+Providers
+Credentials
+Models
+Routing
+Agents
+Skills
+Tools
+MCP
+Execution
+Security
+Permissions
+Notifications
+Appearance
+Accessibility
+Usage
+Storage
+GitHub
+Deployments
+Interoperability
+Advanced
+```
+
+Sensitive settings require stronger affordances and should avoid exposing secrets.
+
+---
+
+# 37. Usage and cost workspace
+
+Usage reporting separates:
+
+- AI model usage;
+- provider/API usage;
+- sandbox/compute usage;
+- storage usage;
+- deployment usage;
+- platform usage where relevant.
+
+Each value has a provenance state where necessary:
+
+```text
+OBSERVED
+PROVIDER_REPORTED
+ESTIMATED
+UNKNOWN
+```
+
+Unknown cost must remain unknown rather than being fabricated.
+
+Users can inspect cost by project, provider, credential, model, agent, workflow, and time range where data permits.
+
+---
+
+# 38. GitHub workspace
+
+GitHub integration follows the engineering lifecycle:
 
 ```text
 Issue
-→ Research
 → Plan
-→ Worktree
+→ Worktree / Branch
 → Implement
 → Test
 → Security
 → Review
-→ PR
+→ Pull Request
 → CI
-→ Fix
+→ Repair
 → Merge
+```
+
+The web surface shows repository, branch, changes, checks, pull requests, and deployment relationships.
+
+High-impact repository actions are policy-controlled.
+
+---
+
+# 39. Deployment workspace
+
+Deployments are adapter-backed.
+
+The conceptual flow is:
+
+```text
+Build
+→ Validate
+→ Package
+→ Approval if required
 → Deploy
+→ Health check
+→ Browser / smoke verification
 → Observe
 ```
 
-The UI exposes repository, branches, commits, diffs, PRs, issues, CI checks, reviews, and deployment links according to permissions.
+Vercel or another platform may be an adapter. It is not the core architecture.
 
-## 38. Deployment workspace
+---
 
-Deployment supports provider adapters rather than a single required host.
+# 40. Operations workspace
 
-```text
-DeploymentProvider
-├── Vercel
-├── Cloudflare
-├── Netlify
-├── Docker
-├── Self-hosted
-└── Future providers
-```
+Operations brings deployed systems into the same lifecycle as code.
 
-The interface shows environment, revision, build state, deployment state, runtime endpoint, logs, health, rollback, and redeploy options.
+It provides:
 
-## 39. Operations workspace
+- service health;
+- deployments;
+- incidents;
+- logs;
+- metrics where available;
+- alerts;
+- recent changes;
+- run history;
+- recovery actions;
+- verification;
+- rollback/release controls.
 
-Operations combines deployments, health checks, alerts, logs, incidents, repairs, verification, and release history.
+Autonomous repair is bounded by policy and approval requirements.
 
-```text
-Observe
-→ Detect
-→ Diagnose
-→ Repair
-→ Verify
-→ Record
-```
+---
 
-Autonomous repair is always bounded by policy.
+# 41. Notifications and activity
 
-## 40. PWA behavior
+Notifications are meaningful operational events, not a generic stream of every internal event.
 
-The web product is installable as a PWA where supported. The shell should remain useful during temporary network loss, but offline functionality must not pretend that server-only capabilities are available.
+Examples:
 
-Offline states must clearly distinguish cached UI from live server functionality.
-
-## 41. Web notifications and long-running work
-
-Notifications may report:
-
-- run completed;
-- run failed;
 - approval required;
-- workflow recovered;
-- CI failed;
-- deployment failed;
-- security finding;
+- build failed;
+- verification failed;
+- deployment unhealthy;
+- credential invalid;
 - provider degraded;
-- credential cooldown;
-- verification completed.
+- workflow resumed;
+- security finding discovered;
+- artifact ready.
 
-Notifications should link directly to the relevant run or object.
+Users can inspect the underlying run or event from a notification.
 
-## 42. Web search and command palette
+---
 
-A universal search can locate projects, files, symbols, conversations, agents, workflows, runs, artifacts, knowledge, deployments, and settings.
+# 42. Search and command palette
 
-A command palette provides fast actions while respecting permissions. Commands must not bypass policy.
+Global search spans permitted:
 
-## 43. Error and empty-state design
+- projects;
+- files;
+- symbols;
+- conversations;
+- runs;
+- artifacts;
+- agents;
+- workflows;
+- knowledge;
+- deployments;
+- settings.
 
-Every major web surface must support:
+The command palette exposes actions appropriate to the user's permissions and current context.
 
-- loading;
-- empty;
-- success;
-- warning;
-- unavailable;
-- unauthorized;
-- forbidden;
-- rate limited;
-- provider failure;
-- execution failure;
-- validation failure;
-- network failure;
-- retrying;
-- cancelled;
-- policy denied.
+It must not surface actions that the policy engine would reject as executable choices without clearly indicating the required permission/approval state.
 
-Errors should identify the responsible layer when known and provide safe next actions.
+---
 
-## 44. Security boundary for the web
+# 43. Loading, empty, error, and recovery states
 
-The browser must not contain long-lived provider secrets, privileged policy bypasses, unrestricted shell execution, or direct access to internal databases.
+Every major screen defines explicit states.
 
-Server/runtime boundaries enforce:
+### Loading
+
+Show what is loading and preserve the user's existing context where possible.
+
+### Empty
+
+Explain why the surface is empty and provide a useful next action.
+
+### Unavailable
+
+Explain whether the issue is capability, provider, credential, permission, connectivity, or dependency related.
+
+### Error
+
+Show actionable error information and a path to retry, diagnose, or recover.
+
+### Partial success
+
+Show which work succeeded and which work remains incomplete.
+
+### Recovery
+
+When a run is resumable, expose recovery state rather than pretending it restarted from the beginning.
+
+---
+
+# 44. Web security boundary
+
+The browser must never receive secrets unnecessarily.
+
+Sensitive operations use server-side policy enforcement and controlled credentials.
+
+The web must not:
+
+- execute arbitrary privileged commands solely because UI code requested them;
+- bypass policy checks;
+- embed raw provider keys in normal client state;
+- fabricate successful backend state;
+- treat client-side validation as authorization;
+- make irreversible operations appear equivalent to preview operations.
+
+---
+
+# 45. Performance requirements
+
+The web must remain responsive while remote work is running.
+
+Principles include:
+
+- stream useful progress;
+- virtualize large lists where necessary;
+- lazy-load heavy surfaces;
+- avoid unnecessary rerenders;
+- preserve editor responsiveness;
+- keep large logs incremental;
+- avoid blocking the main thread with heavy computation;
+- use remote execution for expensive work when appropriate.
+
+Performance measurements must distinguish UI latency from backend/execution latency.
+
+---
+
+# 46. Observability contract
+
+The UI should correlate major actions with durable identifiers:
 
 ```text
-Identity
-→ Authorization
-→ Policy
-→ Risk
-→ Approval
-→ Execution
+workspace_id
+project_id
+conversation_id
+run_id
+workflow_id
+workflow_run_id
+agent_id
+artifact_id
+deployment_id
+event_id
+```
+
+Where appropriate, users can navigate from a result to the run, from the run to logs, from logs to artifacts, and from artifacts to the project change that produced them.
+
+---
+
+# 47. Verification contract
+
+The product treats verification as a first-class result.
+
+A verification record may include:
+
+- test results;
+- build results;
+- lint/typecheck results;
+- security findings;
+- browser QA;
+- visual QA;
+- accessibility results;
+- performance checks;
+- GitHub CI results;
+- deployment health;
+- reviewer decisions.
+
+A model saying “done” is not verification evidence.
+
+---
+
+# 48. Web information hierarchy
+
+The product should preserve a consistent hierarchy:
+
+```text
+Intent
+ ↓
+Work
+ ↓
+Context
+ ↓
+Execution
+ ↓
+Evidence
+ ↓
+Decision / Approval
+ ↓
+Result
+ ↓
+History / Memory
+```
+
+This prevents the UI from becoming a collection of disconnected dashboards.
+
+---
+
+# 49. Interoperability
+
+INFINITY-11 is designed to work with and around existing developer tools.
+
+Target interoperability includes:
+
+- OpenCode;
+- Codex;
+- Claude Code;
+- Cline;
+- IDE/developer tools;
+- Termux;
+- GitHub tooling;
+- future agent/skill protocols.
+
+The architecture uses adapters and stable contracts rather than assuming one external harness is authoritative.
+
+---
+
+# 50. Skills, tools, and MCP
+
+Skills are reusable capability packages. A conceptual skill package contains:
+
+```text
+SKILL.md
+metadata
+references
+scripts
+examples
+tests
+adapters
+```
+
+Tools expose controlled actions.
+
+MCP integrations are treated as a supply-chain and permission problem, not merely an installation button.
+
+The user-facing lifecycle is:
+
+```text
+Discover
+→ Inspect
+→ Trust assessment
+→ Permission analysis
+→ Install
+→ Sandbox / constrain
+→ Monitor
 → Audit
 ```
 
-## 45. Web performance
+---
 
-The web should use route-level code splitting, lazy loading for heavy surfaces, efficient streaming, bounded polling/subscriptions, virtualization for long logs/lists, cached project metadata, and resilient reconnection.
+# 51. Marketplace and extension model
 
-The product must remain usable on mobile devices and constrained networks.
+The eventual marketplace can contain:
 
-## 46. Web accessibility
+- agents;
+- skills;
+- teams;
+- tools;
+- MCP servers;
+- workflows;
+- templates;
+- plugins;
+- integrations.
 
-Accessibility includes semantic HTML, keyboard navigation, focus management, labels, announcements for dynamic status, accessible dialogs, contrast, reduced motion, touch targets, readable typography, and screen-reader-compatible state changes.
+Published items should carry metadata for:
 
-Accessibility must be tested rather than inferred from visual appearance.
+- publisher;
+- version;
+- permissions;
+- tools;
+- secrets;
+- model requirements;
+- dependencies;
+- compatibility;
+- security information;
+- evaluation status.
 
-## 47. Web observability
+Marketplace availability must not weaken the security model.
 
-Web events should capture useful operational telemetry without leaking secrets or private content.
+---
 
-Important signals include page performance, API latency, streaming failures, reconnects, client errors, navigation errors, PWA failures, and interaction failures.
+# 52. Application targets
 
-## 48. Extension model exposed by the web
-
-The UI should allow discovery and management of agents, skills, tools, MCP servers, workflows, templates, plugins, providers, deployment adapters, and integrations.
-
-Installing an extension must not automatically grant its requested permissions.
-
-## 49. Marketplace web experience
-
-Marketplace surfaces include discovery, search, categories, version, publisher, compatibility, license, dependencies, permissions, security status, evaluation status, changelog, installation, update, disable, and removal.
-
-Private/internal registries can use the same contract.
-
-## 50. Interoperability
-
-The web can connect workflows and project state to OpenCode, Codex, Claude Code, Cline, IDE tooling, Termux, and future harnesses through adapters and portable contracts. Interoperability does not mean copying their implementation.
-
-## 51. Mobile and desktop relationship
-
-The responsive web/PWA is the primary interface. Native mobile and desktop applications are later V1 targets that share the same backend contracts and project model.
+The web product controls creation of multiple application classes:
 
 ```text
-Shared Project Specification
-        ↓
-Shared Services / APIs
-        ↓
-Web / PWA
+Web
 Mobile
 Desktop
+Backend / Services
+APIs
+Workers / Jobs
+Shared packages
 ```
 
-## 52. Data and state model
+The same Project Brain, Git lifecycle, testing, verification, and deployment abstractions should be reusable across targets.
 
-Core entities include Workspace, Project, Conversation, Artifact, Provider, Credential, Model, Route Decision, Agent, Skill, Tool, MCP Server, Task, Run, Workflow, Workflow Run, Sandbox, Repository, Deployment, Knowledge Source, Memory, Evaluation, Audit Event, Usage Record, and Approval.
+---
 
-Durable state belongs to server-side domain services. The browser may cache safe presentation state but must not become the source of truth for execution.
+# 53. Data and state model
 
-## 53. Verification contract
-
-A web action is complete only when relevant evidence exists.
+Major product entities include:
 
 ```text
-Change
-→ Unit
-→ Integration
-→ Build
-→ Runtime
-→ Browser QA
-→ Accessibility
-→ Security
-→ Regression
-→ Evidence
+Workspace
+Project
+Conversation
+Message
+Artifact
+Provider
+Credential
+Model
+RouteDecision
+Agent
+Skill
+Tool
+MCPServer
+Task
+AgentRun
+Workflow
+WorkflowRun
+Execution
+Sandbox
+Repository
+Deployment
+KnowledgeSource
+KnowledgeItem
+Memory
+Evaluation
+Verification
+AuditEvent
+UsageRecord
 ```
 
-The UI should display verification evidence and its scope.
+The exact storage technology can evolve. Domain contracts should not depend on a single vendor.
 
-## 54. Architecture invariants
+---
 
-- Provider independence.
-- Multiple credentials per provider.
-- BYOK-first.
-- Free-first.
-- Open-source-first.
-- Local/self-hosted capable.
-- Sandbox-provider independence.
-- Database-provider independence.
-- Deployment-provider independence.
-- Policy-controlled privileged actions.
-- Durable observable execution.
-- Evidence-first verification.
-- No private chain-of-thought exposure.
-- No hidden quota assumptions.
-- No fabricated backend functionality in the web UI.
-- No duplicate browser orchestration.
+# 54. State semantics
 
-## 55. Phase relationship
+Long-running states must be explicit.
 
-The detailed web product is implemented progressively across the 110-phase V1 roadmap. Phases 1–10 establish the current baseline. Phase 11 begins the advanced application builder. Later phases add multimodal creation, advanced workforce behavior, automation, research, engineering intelligence, model intelligence, security, governance, scale, interoperability, and final production hardening.
+Generic run lifecycle:
 
-The roadmap is a planning contract; actual implementation status must always be verified from repository state, tests, builds, and CI.
+```text
+CREATED
+→ QUEUED
+→ PREPARING
+→ ROUTING
+→ RUNNING
+→ WAITING / PAUSED
+→ VERIFYING
+→ COMPLETED
+```
 
-## 56. Final V1 definition
+Terminal or exceptional states include:
 
-V1 is complete only after Phase 110 closes the roadmap and the full system passes the final integration, regression, security, performance, compatibility, documentation, and production verification gates.
+```text
+FAILED
+CANCELLED
+TIMED_OUT
+BUDGET_EXCEEDED
+POLICY_DENIED
+BLOCKED
+PARTIALLY_VERIFIED
+```
 
-After V1, maintenance, security fixes, provider updates, compatibility work, reliability improvements, and future-version features continue without moving the V1 completion boundary.
+The exact state machine for each domain can specialize this contract, but state transitions must be deterministic and observable.
+
+---
+
+# 55. Error semantics
+
+Errors are classified rather than displayed as arbitrary provider strings.
+
+Useful classes include:
+
+- validation;
+- authentication;
+- authorization;
+- policy denial;
+- provider unavailable;
+- credential invalid;
+- rate limited;
+- quota exhausted;
+- execution failure;
+- dependency failure;
+- timeout;
+- verification failure;
+- artifact failure;
+- deployment failure;
+- unknown/internal failure.
+
+The UI should show a human explanation while preserving machine-readable classification for recovery and automation.
+
+---
+
+# 56. Provider independence in the web
+
+Provider names are user-visible metadata, not architectural boundaries.
+
+The UI may display:
+
+```text
+OpenAI
+Anthropic
+Google
+local model
+self-hosted endpoint
+other provider
+```
+
+but product behavior is expressed in capability terms such as:
+
+- text generation;
+- vision;
+- image generation;
+- audio;
+- video;
+- tool calling;
+- structured output;
+- embeddings;
+- reasoning;
+- context capacity.
+
+If a provider lacks a capability, the router chooses an eligible alternative or explains the limitation.
+
+---
+
+# 57. Execution abstraction
+
+The web should not know whether a build is running locally, in Docker, E2B, a self-hosted worker, or another execution environment except where that information is useful to the user.
+
+```text
+ExecutionManager
+├── LocalProvider
+├── DockerProvider
+├── E2BProvider
+├── SelfHostedProvider
+└── FutureProvider
+```
+
+This preserves the option to move heavy workloads away from mobile/low-power devices.
+
+---
+
+# 58. Mobile and desktop relationship
+
+Mobile is a first-class control surface, not a reduced product idea.
+
+The web/PWA experience must support:
+
+- monitoring;
+- chat;
+- approvals;
+- run inspection;
+- artifact review;
+- project navigation;
+- workflow monitoring;
+- deployment status;
+- lightweight editing;
+- command/control.
+
+Desktop can provide a deeper development environment where local filesystem, terminals, editors, or local runtimes are appropriate.
+
+The underlying project and run identities remain portable.
+
+---
+
+# 59. Web extensibility
+
+New product surfaces should compose shared primitives:
+
+```text
+Command Center
+Composer
+Context Inspector
+Run Viewer
+Artifact Viewer
+Approval Panel
+Verification Panel
+Activity Timeline
+Provider/Model Selector
+Project Navigator
+```
+
+This avoids every feature inventing a separate status and interaction language.
+
+---
+
+# 60. Product invariants
+
+The following are non-negotiable:
+
+1. INFINITY-11 remains provider-independent.
+2. BYOK remains first-class.
+3. Multiple credentials per provider remain supported.
+4. Local/self-hosted paths remain valid where technically feasible.
+5. No single sandbox provider becomes the architecture.
+6. No single database becomes the architecture.
+7. No single deployment vendor becomes the architecture.
+8. Agents remain governed executable workers.
+9. Deterministic and agentic automation remain first-class.
+10. Privileged actions remain policy-controlled.
+11. Untrusted code remains isolated.
+12. Verification evidence remains separate from model claims.
+13. Long-running work remains durable and observable.
+14. The browser does not become a second orchestration engine.
+15. Secrets remain protected.
+16. Cost and quota information is never fabricated.
+17. Competitor research informs patterns but does not authorize wholesale copying.
+18. Existing completed work is preserved unless an evidence-based correction is required.
+19. Documentation reflects actual implementation status.
+20. V1 completion remains Phase 110.
+
+---
+
+# 61. Current implementation boundary
+
+As of the current verified baseline:
+
+- Phases 1–10 are complete.
+- Phase 10 established the core web/PWA product UX.
+- The web shell, Command Center, AI Workspace, Projects, Runs, Approvals, Artifacts, Usage, Settings, responsive behavior, accessibility contracts, PWA metadata/offline shell behavior, and regression contracts form the current web baseline.
+- Some surfaces intentionally represent backend boundaries that are not yet fully wired to later-phase runtime capabilities.
+- Such surfaces must not be mistaken for completed backend functionality.
+- Phase 11 is the next implementation target: Advanced Application Builder Foundation.
+
+The product specification describes the complete V1 target; it is not evidence that every described feature is already implemented.
+
+---
+
+# 62. Relationship to the architecture specification
+
+`docs/description/INFINITY-11-ARCHITECTURE-AND-SCREENS.md` defines system architecture, planes, domain boundaries, execution semantics, security, and screen contracts.
+
+This document defines the **product and web experience in detail**.
+
+They must remain complementary:
+
+```text
+Detailed Product & Web Specification
+        ↕
+Architecture & Screen Specification
+        ↕
+Canonical Architecture Blueprint
+        ↕
+V1 Phase Roadmap
+        ↕
+Repository Implementation + Tests + CI
+```
+
+The repository and CI remain the source of truth for implementation status.
+
+---
+
+# 63. V1 definition
+
+INFINITY-11 V1 is complete only when Phase 110 closes the roadmap.
+
+V1 must provide a coherent system in which a user can:
+
+```text
+Enter intent
+→ build context
+→ choose or route AI
+→ delegate to agents/workflows
+→ execute safely
+→ inspect evidence
+→ improve the result
+→ verify it
+→ create artifacts
+→ manage GitHub
+→ deploy
+→ observe
+→ recover
+→ retain project intelligence
+```
+
+The web is the command center through which this lifecycle becomes understandable and controllable.
+
+---
+
+# 64. Final web principle
+
+The final experience should feel like one **AI operating system for creation, engineering, automation, and operations**, not a pile of unrelated AI tools.
+
+Every major surface should answer five questions:
+
+```text
+What am I doing?
+What context is being used?
+What is the system doing now?
+What evidence do we have?
+What can I safely do next?
+```
+
+That principle is the stable UX expression of the INFINITY-11 core idea.
