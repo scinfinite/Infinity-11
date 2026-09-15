@@ -1,0 +1,18 @@
+name: Phase 17 format debug
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  format-debug:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22.14.0
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec prettier --write packages/visual-qa/src/index.ts
+      - run: git diff -- packages/visual-qa/src/index.ts
