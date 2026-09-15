@@ -2,15 +2,17 @@
 
 ## Current baseline
 
-Phases 1–10 are complete and verified on `main`. The next implementation boundary is Phase 11 — Advanced Application Builder Foundation.
+**Phases 1–10 are complete, merged into `main`, and verified by CI. Phase 11 — Advanced Application Builder Foundation — is next.**
 
 ## Canonical documents
 
 1. `INFINITY-11-FINAL-PRE-IMPLEMENTATION-BLUEPRINT.md` — canonical architecture baseline.
-2. `INFINITY-11-IMPLEMENTATION-ROADMAP.md` — dependency-oriented implementation sequence.
-3. `../INFINITY-11-V1-ROADMAP.md` — complete 110-phase V1 roadmap and detailed acceptance framework.
+2. `INFINITY-11-V1-ROADMAP.md` — complete 110-phase V1 roadmap and detailed acceptance framework.
+3. `INFINITY-11-IMPLEMENTATION-ROADMAP.md` — dependency-oriented implementation sequence.
 4. `INFINITY-11-PRE-CODING-AUDIT.md` — original architecture gate and assumptions.
 5. `INFINITY-11-MIGRATION-AND-VERSIONING.md` — migration and versioning policy.
+6. `../description/INFINITY-11-DETAILED-DESCRIPTION.md` — complete product and web experience specification.
+7. `../description/INFINITY-11-ARCHITECTURE-AND-SCREENS.md` — active architecture and screen contract.
 
 ## Architecture planes
 
@@ -42,22 +44,22 @@ AI Gateway, model registry, routing, credential intelligence, context engine, Pr
 
 ### Execution
 
-Agents, teams, tasks, tools, MCP, browser, terminal, worktrees, sandboxes, workflows, background jobs, and verification.
+Agents, teams, tasks, tools, MCP, browser, terminal, worktrees, sandboxes, workflows, background jobs, builds, tests, and verification.
 
 ### Adapters
 
-AI providers, local models, GitHub, databases, storage, sandbox providers, deployment providers, and external integrations.
+AI providers, local models, GitHub, databases, storage, sandbox providers, deployment providers, browser providers, and external integrations.
 
 ### Data
 
-Durable domain state, events, execution state, usage, audit, artifacts, knowledge indexes, and migrations.
+Durable domain state, events, execution state, usage, audit, artifacts, knowledge indexes, project intelligence, and migrations.
 
 ## Core invariants
 
 - Provider independence is architectural, not a UI option.
-- Multiple BYOK credentials may coexist for one provider.
-- Model routing considers capability, policy, health, quota signals, cost, latency, and historical performance where available.
-- E2B is an optional sandbox adapter.
+- BYOK is first-class and multiple credentials may coexist for one provider.
+- Routing considers capability, policy, health, quota signals, cost, latency, and historical performance where available.
+- E2B is an optional execution/sandbox adapter.
 - Supabase is an optional/default development database adapter.
 - Vercel is an optional deployment adapter.
 - Local and self-hosted execution remain supported where feasible.
@@ -66,6 +68,7 @@ Durable domain state, events, execution state, usage, audit, artifacts, knowledg
 - The browser must not duplicate backend orchestration or security policy.
 - Long-running work must be observable and durable when required.
 - Verification is evidence, not a model assertion.
+- CREATE, ENGINEER, AUTOMATE, and OPERATE remain the four product pillars.
 
 ## Product lifecycle
 
@@ -78,68 +81,34 @@ Idea
 → Workforce / Workflow
 → Model / Credential Routing
 → Execution
-→ Tests
-→ Security
-→ Browser / Visual QA
+→ Test
 → Critique
-→ Improvement
-→ Verification
-→ GitHub
-→ Deployment
-→ Observation
-→ Recovery / Maintenance
+→ Improve
+→ Verify
+→ Deliver
+→ Observe
+→ Recover / Maintain
 → Project Brain
 ```
 
-## Quality model
-
-Quality dimensions:
-
-- correctness;
-- completeness;
-- architecture;
-- maintainability;
-- security;
-- performance;
-- UX;
-- accessibility;
-- compatibility;
-- verification;
-- cost efficiency.
-
-Quality states:
-
-- VERIFIED;
-- PARTIALLY VERIFIED;
-- UNVERIFIED;
-- BLOCKED.
-
-## Security model
+## Documentation hierarchy
 
 ```text
-Capability request
-→ policy
-→ risk classification
-→ ALLOW / ASK / DENY
-→ execution
-→ audit
+Product & Web Specification
+        ↓
+Architecture & Screen Specification
+        ↓
+Canonical Architecture Blueprint
+        ↓
+V1 Roadmap — Phases 1–110
+        ↓
+Repository Implementation
+        ↓
+Tests + Runtime Evidence + CI
 ```
 
-Capabilities include filesystem, shell, network, GitHub, database, deployment, secrets, browser, and MCP operations.
+Product and architecture documents define the intended system and contracts. Repository implementation and verification evidence determine what is actually complete.
 
-## Extension model
+## Status discipline
 
-The system uses adapters and portable packages for providers, agents, skills, tools, MCP servers, workflows, databases, sandboxes, deployments, and future integrations. Compatibility metadata, permissions, dependencies, security status, and versioning are first-class.
-
-## Engineering policy
-
-Every phase follows the same evidence-first process:
-
-```text
-inspect → reproduce/verify → diagnose root cause → implement
-→ format → lint → typecheck → unit → integration → build
-→ E2E/runtime → security → regression → UX/accessibility
-→ documentation → final main CI → close
-```
-
-The architecture may evolve when evidence requires it, but changes must be explicit, tested, documented, and compatible with the product's core idea.
+Do not infer implementation completion from documentation alone. A phase closes only after the accepted implementation boundary is verified, regression-tested, documented, and supported by final CI evidence.
