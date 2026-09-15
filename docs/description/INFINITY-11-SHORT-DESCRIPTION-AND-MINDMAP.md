@@ -1,208 +1,146 @@
 # INFINITY-11 — Product Summary & Strategic Mindmap
 
-> **Status:** Research-aligned product definition
-> **Implementation status:** No coding yet
+> **Status:** Active implementation program
+> **Current completion:** Phases 1–10 complete and verified on `main`
+> **Next phase:** Phase 11 — Advanced Application Builder Foundation
+> **V1 roadmap:** `INFINITY-11-V1-ROADMAP.md`, Phases 1–110
 > **Strategy:** FREE-FIRST + OPEN-SOURCE-FIRST + BYOK-FIRST
 
 ## 1. One-line definition
 
-**INFINITY-11 is a provider-agnostic AI engineering operating system and multimodal application builder that turns user intent into observable, secure, verifiable work across models, credentials, agents, tools, sandboxes, repositories, workflows, and deployment environments.**
+**INFINITY-11 is a provider-independent AI engineering, creation, automation, and operations operating system that turns user intent into safe, observable, verifiable work across models, credentials, agents, tools, sandboxes, repositories, workflows, applications, and deployment environments.**
 
----
-
-## 2. What INFINITY-11 is
-
-INFINITY-11 combines:
+## 2. Product pillars
 
 ```text
-AI APPLICATION BUILDER
-+
-AI ENGINEERING WORKSPACE
-+
-AI WORKFORCE
-+
-MODEL / CREDENTIAL INTELLIGENCE
-+
-AUTOMATION CONTROL PLANE
+CREATE
+  AI applications, interfaces, images, audio, video, documents, presentations
+
+ENGINEER
+  code, debug, review, test, secure, optimize, migrate, deploy
+
+AUTOMATE
+  deterministic workflows, agentic workflows, schedules, events, approvals, recovery
+
+OPERATE
+  observe, diagnose, repair, verify, release, maintain, improve
 ```
-
-It is designed to compete with the strongest patterns seen across Replit, Ideavo, E2B, ECC, Agency Agents, OpenCode, Claude Code, Codex, GitHub, Supabase, Vercel, Cursor, and related systems without copying their implementation or proprietary material.
-
----
 
 ## 3. North-star promise
 
 > **Bring your AI keys. Bring your tools. Bring your repositories. Build anything.**
 
----
+The platform must not require one AI provider, one sandbox, one database, or one deployment vendor.
 
-## 4. North-star execution loop
+## 4. Current implementation boundary
+
+Phases 1–10 establish the engineering foundation, identity/persistence/events, AI gateway and credentials, model registry/routing/failover, execution fabric, agent runtime/workforce, automation fabric, Project Brain/context/knowledge, verification/browser QA, and core web/PWA product UX.
+
+Phase 10 is merged into `main` and its post-merge CI has been verified. The web shell includes responsive navigation, Command Center, AI Workspace, Projects, Runs, Approvals, Artifacts, Usage, Settings, accessibility behavior, PWA metadata, offline shell behavior, and deterministic regression contracts. UI surfaces that lack backend wiring are explicitly boundaries rather than fabricated functionality.
+
+## 5. V1 target
+
+V1 is completed only after Phase 110. The complete roadmap deliberately separates major capabilities into individual numbered phases rather than hiding work inside nested phase numbers.
+
+The V1 target includes:
+
+- BYOK multi-provider AI;
+- multiple credentials per provider;
+- local and self-hosted model paths;
+- capability-aware model routing;
+- health, quota, cost, latency, and performance-aware routing;
+- bounded failover;
+- chat and multimodal interaction;
+- advanced AI application builder;
+- full-stack application generation;
+- databases, APIs, authentication, authorization, storage and background jobs;
+- safe modification of existing projects;
+- automated testing and verification;
+- browser and visual QA;
+- application critique and improvement loops;
+- GitHub-native engineering lifecycle;
+- CI/CD intelligence;
+- deployment adapters;
+- production application operations;
+- web, mobile, and desktop targets;
+- image, audio, video, document and presentation creation;
+- advanced agents and dynamic AI workforces;
+- reusable skills and tools;
+- MCP integrations with supply-chain controls;
+- visual and AI-generated workflow automation;
+- durable execution, retry, resume and recovery;
+- research and knowledge intelligence;
+- Project Brain and context intelligence;
+- codebase intelligence and deep debugging;
+- code review, refactoring, migrations, security and performance engineering;
+- autonomous project operations under policy;
+- model evaluation and output-quality optimization;
+- controlled self-improvement;
+- marketplace, publishing and plugin ecosystem;
+- security, permissions, secrets, sandboxing, governance and audit;
+- observability, reliability and scalability;
+- CLI, SDK and interoperability with OpenCode, Codex, Claude Code, Cline, IDE tools and Termux;
+- distribution, releases, backup, recovery and analytics;
+- final production certification.
+
+## 6. Strategic competitive map
 
 ```text
-IDEA
- ↓
-UNDERSTAND
- ↓
-RESEARCH
- ↓
-SPECIFY
- ↓
-ARCHITECT
- ↓
-PLAN
- ↓
-AGENT TEAM
- ↓
-MODEL / CREDENTIAL ROUTER
- ↓
-SANDBOX
- ↓
-CODE / CREATE
- ↓
-RUN
- ↓
-TEST
- ↓
-VISUAL VERIFY
- ↓
-SECURITY VERIFY
- ↓
-REVIEW
- ↓
-GITHUB
- ↓
-PREVIEW
- ↓
-DEPLOY
- ↓
-OBSERVE
- ↓
-FIX
- ↓
-ITERATE
-```
-
----
-
-## 5. Strategic competitive map
-
-```text
-REPLIT
-  → connected app lifecycle
-
-IDEAVO
-  → BYOK / provider flexibility
-
-E2B
-  → isolated execution
-
-ECC
-  → engineering harness / skills / orchestration
-
-AGENCY AGENTS
-  → specialist agents / teams / runbooks
-
-OPENCODE
-  → provider independence / local models
-
-CLAUDE CODE
-  → skills / subagents / hooks / MCP / verification
-
-CODEX
-  → persistent parallel agents / worktrees / background work
-
-GITHUB
-  → repository-native engineering lifecycle
-
-SUPABASE
-  → practical Postgres/Auth/Storage foundation
-
-VERCEL
-  → deployment / AI infrastructure / sandbox concepts
-
-CURSOR
-  → developer-grade agent UX / long-running automation
-
+Replit       → connected idea-to-build-to-deploy lifecycle
+Ideavo       → BYOK / provider flexibility
+E2B          → isolated execution
+ECC          → engineering harness patterns
+Agency       → specialist agents and teams
+OpenCode     → provider independence and local models
+Claude Code  → skills, subagents, hooks, MCP, verification
+Codex        → persistent parallel agent work
+GitHub       → repository-native engineering lifecycle
+Supabase     → practical Postgres/Auth/Storage foundation
+Vercel       → deployment and execution infrastructure patterns
+Cursor       → developer-grade agent UX
                     ↓
-
              INFINITY-11
-                    ↓
-      unified provider-neutral control plane
 ```
 
----
+Research is used to extract and generalize engineering patterns. It is not permission to copy source code, prompts, proprietary implementation, or architecture wholesale.
 
-## 6. KEEP / ADAPT / IMPROVE / INVENT / REJECT
+## 7. INFINITY-11 differentiators
 
-### KEEP
+### Multi-Key Intelligence
 
-- prompt-to-app;
-- browser IDE;
-- live preview;
-- agents;
-- skills;
-- MCP;
-- GitHub;
-- sandboxed execution;
-- workflows;
-- deployment;
-- usage/audit;
-- PWA.
+One provider may contain many credentials. Credentials have independent health, rate-limit, quota and policy state and may participate in routing independently.
 
-### ADAPT
+### AI Intelligence Gateway
 
-- Replit lifecycle → provider-neutral lifecycle;
-- ECC harness concepts → INFINITY runtime;
-- Agency personas → governed executable workers;
-- Claude skills → universal portable skills;
-- Codex worktrees → universal workspace isolation;
-- E2B sandbox → SandboxProvider;
-- Supabase backend → DatabaseProvider;
-- Vercel deployment → DeploymentProvider.
+```text
+Request
+→ Intent / task
+→ Capability requirements
+→ Policy
+→ Candidate models
+→ Credential eligibility
+→ Provider health
+→ Quota signal
+→ Cost / latency
+→ Historical performance
+→ Route
+→ Bounded fallback
+→ Verification
+```
 
-### IMPROVE
+### AI Workforce
 
-- model routing;
-- multi-key failover;
-- agent teams;
-- verification;
-- codebase intelligence;
-- memory;
-- observability;
-- security;
-- workflow resumability;
-- cost control;
-- explainability.
+Agents are executable workers with identity, role, capabilities, skills, tools, model policy, context policy, memory policy, permissions, execution profile, verification policy, budget, workspace, schedule and history.
 
-### INVENT — INFINITY-11 MOAT
+### Project Brain
 
-1. Multi-Key Intelligence.
-2. AI Intelligence Gateway.
-3. AI Workforce.
-4. Project Brain.
-5. Adaptive Model Router.
-6. Universal Agent Package.
-7. Universal Sandbox Manager.
-8. Universal Deployment Manager.
-9. Verification Engine.
-10. Explainability Layer.
+Every project can accumulate structured requirements, architecture, decisions, conventions, dependencies, codebase maps, known bugs, failed approaches, successful patterns, tests, security findings, deployments, agent history, model performance and lessons learned.
 
-### REJECT
+### Verification Engine
 
-- mandatory paid gateway;
-- mandatory proprietary model;
-- mandatory E2B;
-- mandatory paid Supabase;
-- mandatory Vercel;
-- fake quota precision;
-- unlimited privileged autonomy;
-- opaque routing;
-- provider-specific UI logic;
-- copying competitor code/prompts/architecture.
+The system treats tests, builds, static analysis, security, browser QA, visual QA, accessibility and review as evidence. A model statement that something works is not itself verification.
 
----
-
-## 7. FREE-FIRST architecture
+## 8. Free-first model
 
 ```text
 OPEN SOURCE / LOCAL
@@ -214,370 +152,169 @@ OPTIONAL MANAGED SERVICE
 PAID SCALE
 ```
 
-The goal is **$0 mandatory spend for development and meaningful early operation**.
+Paid services may improve convenience or scale but must not become hidden architectural requirements.
+
+The product must distinguish platform cost, AI/API cost, compute/sandbox cost, storage cost, and deployment cost. Unknown cost or quota is represented as unknown rather than invented.
+
+## 9. Security model
+
+```text
+Agent / User action
+        ↓
+Capability request
+        ↓
+Policy
+        ↓
+Risk classification
+        ↓
+ALLOW / ASK / DENY
+        ↓
+Execution
+        ↓
+Audit
+```
 
 Examples:
 
-- local models where hardware allows;
-- local PostgreSQL or Supabase Free;
-- local Docker sandbox;
-- user-provided API keys;
-- GitHub for source control;
-- optional E2B for isolated cloud execution;
-- optional Vercel/Cloudflare/other deployment;
-- open-source browser/testing/security tooling.
+- read repository: ALLOW when policy permits;
+- run tests: ALLOW when policy permits;
+- create branch: ALLOW/ASK according to workspace policy;
+- create PR: ASK by default;
+- merge PR: ASK;
+- production deployment: ASK;
+- delete production data: DENY by default;
+- use secret: ASK and audit.
 
-Supabase currently documents a Free plan with 500 MB database, 1 GB storage, 5 GB egress, 50,000 MAU, and two active projects. citeturn0search1turn0search3
+## 10. Quality lifecycle
 
-OpenCode demonstrates a provider-neutral architecture supporting 75+ providers and local models. citeturn0search0turn0search4
+```text
+UNDERSTAND
+→ RESEARCH
+→ SPECIFY
+→ ARCHITECT
+→ PLAN
+→ WORKFORCE / WORKFLOW
+→ ROUTE
+→ EXECUTE
+→ TEST
+→ CRITIQUE
+→ IMPROVE
+→ VERIFY
+→ DELIVER
+→ OBSERVE
+→ MAINTAIN
+```
 
----
+Quality states:
 
-## 8. Technical mindmap
+- VERIFIED
+- PARTIALLY VERIFIED
+- UNVERIFIED
+- BLOCKED
+
+Quality dimensions:
+
+- correctness;
+- completeness;
+- architecture;
+- maintainability;
+- security;
+- performance;
+- UX;
+- accessibility;
+- compatibility;
+- verification;
+- cost efficiency.
+
+## 11. Architecture mindmap
 
 ```text
 INFINITY-11
-│
-├── EXPERIENCE
-│   ├── Web
-│   ├── PWA
+├── Experience
+│   ├── Web / PWA
 │   ├── Chat
-│   ├── Code IDE
-│   ├── Build Studio
-│   ├── Design Studio
-│   ├── Media Studio
+│   ├── Code
+│   ├── Build
+│   ├── Design
 │   ├── Research
+│   ├── Media
 │   ├── Agents
 │   ├── Projects
-│   ├── Library
-│   ├── Command Palette
-│   └── Context Inspector
-│
-├── CONTROL PLANE
+│   └── Command Center
+├── Control Plane
 │   ├── Identity
 │   ├── Workspace
-│   ├── Authorization
 │   ├── Policy
+│   ├── Permissions
 │   ├── Security
-│   ├── Cost Controls
+│   ├── Cost
 │   ├── Approvals
 │   ├── Audit
 │   └── Observability
-│
-├── AI INTELLIGENCE
+├── Intelligence Plane
 │   ├── AI Gateway
-│   ├── Intent Classification
+│   ├── Model Registry
+│   ├── Router
 │   ├── Context Engine
 │   ├── Project Brain
 │   ├── Knowledge
 │   ├── Memory
-│   ├── Model Registry
-│   ├── Model Performance
 │   ├── Evaluation
-│   └── Explainability
-│
-├── PROVIDERS & BYOK
-│   ├── Multiple Providers
-│   ├── Multiple Credentials / Provider
-│   ├── Credential Health
-│   ├── Quota Confidence
-│   ├── Rate Limits
-│   ├── Provider Health
-│   ├── Manual Routing
-│   ├── Auto Routing
-│   ├── Free-only Routing
-│   ├── Local-only Routing
-│   └── Bounded Failover
-│
-├── MULTIMODAL
-│   ├── Text
-│   ├── Vision
-│   ├── Image Generation
-│   ├── Image Editing
-│   ├── Audio
-│   ├── Speech
-│   ├── Video
-│   ├── Documents
-│   └── Embeddings
-│
-├── AI WORKFORCE
-│   ├── Agent Registry
-│   ├── Agent Runtime
-│   ├── Planner
-│   ├── Specialist Agents
+│   └── Quality Engine
+├── Execution Plane
+│   ├── Agents
 │   ├── Teams
-│   ├── Parallel Tasks
-│   ├── Schedules
-│   ├── Background Work
-│   ├── Budgets
-│   ├── Permissions
-│   ├── Memory Policies
-│   └── Performance History
-│
-├── SKILLS
-│   ├── SKILL.md
-│   ├── Metadata
-│   ├── References
-│   ├── Scripts
-│   ├── Examples
-│   ├── Tests
-│   └── Harness Adapters
-│
-├── TOOLS & MCP
-│   ├── Tool Registry
-│   ├── Schemas
-│   ├── MCP Servers
-│   ├── Trust Assessment
-│   ├── Permission Gates
-│   ├── Timeouts
-│   ├── Retry
-│   └── Audit
-│
-├── EXECUTION
-│   ├── SandboxProvider
-│   │   ├── Local
-│   │   ├── Docker
-│   │   ├── E2B
-│   │   └── Future
+│   ├── Tools
+│   ├── MCP
 │   ├── Browser
 │   ├── Terminal
+│   ├── Sandboxes
 │   ├── Worktrees
-│   └── Artifact Export
-│
-├── BUILD & ENGINEERING
-│   ├── Codebase Intelligence
-│   ├── File Explorer
-│   ├── Editor
-│   ├── Diff Review
-│   ├── Terminal
-│   ├── Tests
-│   ├── Diagnostics
-│   ├── Preview
-│   ├── Git
-│   └── Evidence-first Debugging
-│
-├── VERIFICATION
-│   ├── Unit Tests
-│   ├── Integration Tests
-│   ├── Static Analysis
-│   ├── Security
-│   ├── Build
-│   ├── Browser QA
-│   ├── Visual QA
-│   └── Human Review
-│
-├── KNOWLEDGE & MEMORY
-│   ├── Project Knowledge
-│   ├── Source Lineage
-│   ├── Retrieval
-│   ├── Memory
-│   ├── Context Assembly
-│   └── Context Inspection
-│
-├── GITHUB
-│   ├── Repositories
-│   ├── Branches
-│   ├── Worktrees
-│   ├── Commits
-│   ├── Issues
-│   ├── Pull Requests
-│   ├── Reviews
-│   └── CI
-│
-├── AUTOMATION
-│   ├── Workflows
-│   ├── Triggers
-│   ├── Conditions
-│   ├── Parallel
-│   ├── Approvals
-│   ├── Schedules
-│   ├── Webhooks
-│   ├── Background Jobs
-│   ├── Retry
-│   ├── Resume
-│   └── Events
-│
-├── DATA
-│   ├── PostgreSQL
-│   ├── Supabase Adapter
-│   ├── Object Storage
-│   ├── Usage
-│   ├── Audit
-│   ├── Execution State
-│   └── Export
-│
-├── DEPLOYMENT
-│   ├── Vercel
-│   ├── Cloudflare
-│   ├── Netlify
-│   ├── Railway
-│   ├── Render
-│   ├── Docker
-│   └── Self-hosted
-│
-└── EXTENSIBILITY
-    ├── Provider Adapters
-    ├── Sandbox Adapters
-    ├── Database Adapters
-    ├── Deployment Adapters
-    ├── Agents
-    ├── Skills
-    ├── Tools
-    ├── MCP
-    ├── Integrations
-    └── Marketplace
+│   └── Workflows
+├── Adapter Plane
+│   ├── AI providers
+│   ├── Local models
+│   ├── GitHub
+│   ├── Databases
+│   ├── Storage
+│   ├── Sandboxes
+│   └── Deployment providers
+└── Data Plane
+    ├── domain state
+    ├── events
+    ├── usage
+    ├── audit
+    ├── execution state
+    ├── knowledge indexes
+    └── artifacts
 ```
 
----
+## 12. Phase completion rule
 
-## 9. Core execution equation
+Every phase follows:
 
 ```text
-USER INTENT
-    ↓
-CONTEXT
-    ↓
-POLICY
-    ↓
-ROUTING
-    ↓
-AGENT / MODEL
-    ↓
-TOOLS / SANDBOX
-    ↓
-VERIFICATION
-    ↓
-ARTIFACT
-    ↓
-GITHUB / DEPLOYMENT
-    ↓
-OBSERVATION
-    ↓
-PROJECT BRAIN
+inspect
+→ reproduce / verify
+→ diagnose root cause
+→ implement
+→ format
+→ lint
+→ typecheck
+→ unit
+→ integration
+→ build
+→ E2E / runtime
+→ security
+→ regression
+→ UX / accessibility
+→ documentation
+→ final CI
+→ close
 ```
 
----
+Never mark a phase complete from a mock, screenshot, passing happy-path command, or model assertion alone.
 
-## 10. Security equation
+## 13. Final V1 boundary
 
-```text
-CAPABILITY REQUEST
- ↓
-POLICY
- ↓
-RISK
- ↓
-ALLOW / ASK / DENY
- ↓
-EXECUTE
- ↓
-AUDIT
-```
-
----
-
-## 11. Routing equation
-
-```text
-TASK
- ↓
-CAPABILITY
- ↓
-ELIGIBLE MODELS
- ↓
-ELIGIBLE CREDENTIALS
- ↓
-HEALTH
- ↓
-QUOTA SIGNAL
- ↓
-COST
- ↓
-LATENCY
- ↓
-HISTORICAL SUCCESS
- ↓
-ROUTE
- ↓
-FALLBACK IF REQUIRED
-```
-
----
-
-## 12. Verification equation
-
-```text
-CHANGE
- ↓
-TEST
- ↓
-BUILD
- ↓
-STATIC ANALYSIS
- ↓
-SECURITY
- ↓
-BROWSER / VISUAL QA
- ↓
-REVIEW
- ↓
-VERIFIED RESULT
-```
-
----
-
-## 13. Agent equation
-
-```text
-AGENT
-=
-IDENTITY
-+
-SKILLS
-+
-TOOLS
-+
-MODEL POLICY
-+
-CONTEXT POLICY
-+
-MEMORY
-+
-PERMISSIONS
-+
-BUDGET
-+
-WORKSPACE
-+
-VERIFICATION
-+
-HISTORY
-```
-
----
-
-## 14. Architectural principles
-
-1. **BYOK-first.**
-2. **Provider-agnostic.**
-3. **Capability-aware.**
-4. **Credential-aware.**
-5. **Policy-driven.**
-6. **Evidence-oriented.**
-7. **Secure by boundary.**
-8. **Observable.**
-9. **Verifiable.**
-10. **Free-first.**
-11. **Open-source-first.**
-12. **Portable.**
-13. **Human-controlled for high-impact actions.**
-14. **No vendor lock-in by architecture.**
-15. **No coding until the design baseline is sufficiently stable.**
-
----
-
-## 15. Current state
-
-**Research and architecture phase only.**
-
-No application implementation should begin yet. The next work should be continued at the documentation/design level until the product contracts, free-first architecture, competitive gap analysis, security boundaries, routing model, agent model, and UI information architecture are stable.
+Phase 110 closes the initial V1 roadmap. After that, new work becomes maintenance, provider updates, security fixes, reliability work, and future-version product development rather than an endlessly moving completion target.
