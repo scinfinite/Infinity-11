@@ -26,8 +26,13 @@ GitHub is an external adapter, not a privileged orchestration layer. The package
 
 ## Verification
 
-The phase acceptance gate is the repository's standard format, lint, typecheck, unit/contract tests, build, dependency security audit, Gitleaks, regression, documentation, PR merge, and final synchronized `main` CI verification.
+- Implementation PR #31 merged into `main` as `8440ad17551370cba72440e122d8bb5b00560654`.
+- The first post-merge main CI run #513 caught formatter drift in `packages/github/src/index.ts`; the issue was reproduced from the CI diff and corrected using the exact Prettier output.
+- Formatter remediation PR #33 merged into `main` as `e5866d3996afd877e6e444a670cb114cd2d0aaed`.
+- Remediation PR CI #520 passed format, lint, typecheck, tests, build, dependency security audit, and Gitleaks.
+- Final synchronized post-merge `main` CI run #522 passed all required gates.
+- The temporary formatter-evidence CI step used to capture exact output was removed before merge; the repository workflow is restored to its canonical form.
 
 ## Completion rule
 
-Phase 20 is complete only after implementation and documentation are merged and final `main` CI passes all required gates. No provider-specific credential or network implementation is required by this phase; those remain replaceable adapter concerns.
+Phase 20 is fully closed: implementation, regression coverage, documentation, remediation, merge, and synchronized post-merge `main` CI are all verified. No provider-specific credential or network implementation is required by this phase; those remain replaceable adapter concerns.
