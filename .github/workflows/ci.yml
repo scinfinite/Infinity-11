@@ -13,6 +13,7 @@ on:
       - stage-7-automation-fabric
       - stage-8-project-brain-context-knowledge
       - stage-9-verification-browser-visual-qa
+      - stage-10-core-web-pwa-ux
   pull_request:
     branches:
       - main
