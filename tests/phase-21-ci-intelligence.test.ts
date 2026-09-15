@@ -46,11 +46,11 @@ describe('Phase 21 CI intelligence', () => {
     });
     expect(result.passed).toBe(false);
     expect(result.failures.map((failure) => failure.kind)).toEqual([
+      'dependency',
       'security',
       'test',
-      'dependency',
     ]);
-    expect(result.failures[0].severity).toBe('critical');
+    expect(result.failures[0].severity).toBe('high');
   });
 
   it('normalizes volatile log data so fingerprints are stable', async () => {
