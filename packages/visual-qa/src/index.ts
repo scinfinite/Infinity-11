@@ -42,7 +42,10 @@ export interface BrowserAdapter {
 }
 
 export interface VisualDiffAdapter {
-  compare(actualHash: string, baseline: VisualBaseline): Promise<{ match: boolean; difference: number }>;
+  compare(
+    actualHash: string,
+    baseline: VisualBaseline,
+  ): Promise<{ match: boolean; difference: number }>;
 }
 
 export interface QaPolicy {
@@ -90,7 +93,11 @@ function canonicalTargets(targets: BrowserTarget[]): string {
 function isHttpUrl(value: string): boolean {
   try {
     const url = new URL(value);
-    return (url.protocol === 'http:' || url.protocol === 'https:') && !url.username && !url.password;
+    return (
+      (url.protocol === 'http:' || url.protocol === 'https:') &&
+      !url.username &&
+      !url.password
+    );
   } catch {
     return false;
   }
@@ -132,7 +139,9 @@ export function validateQaTargets(targets: BrowserTarget[]): string[] {
     }
     if (
       target.waitForMs !== undefined &&
-      (!Number.isInteger(target.waitForMs) || target.waitForMs < 0 || target.waitForMs > maxWaitMs)
+      (!Number.isInteger(target.waitForMs) ||
+        target.waitForMs < 0 ||
+        target.waitForMs > maxWaitMs)
     ) {
       issues.push(`INVALID_WAIT:${index}`);
     }
@@ -164,7 +173,14 @@ export async function buildQaPlan(
     projectId,
     revision,
     targets: orderedTargets,
-    checksum: hash(JSON.stringify({ projectId, revision, id, targets: canonicalTargets(targets) })),
+    checksum: hash(
+      JSON.stringify({
+        projectId,
+        revision,
+        id,
+        targets: canonicalTargets(targets),
+      }),
+    ),
     policy: decision,
   };
 }
@@ -184,7 +200,9 @@ export async function runQaPlan(
     let visualMatch: boolean | undefined;
     let visualDifference: number | undefined;
     if (baseline) {
-      if (baseline.targetId !== target.id) throw new Error(`BASELINE_TARGET_MISMATCH:${target.id}`);
+      if (baseline.targetId !== target.id) {
+        throw new Error(`BASELINE_TARGET_MISMATCH:${target.id}`);
+      }
       const diff = await visualDiff.compare(observation.screenshotHash, baseline);
       if (!Number.isFinite(diff.difference) || diff.difference < 0) {
         throw new Error(`INVALID_VISUAL_DIFF:${target.id}`);
