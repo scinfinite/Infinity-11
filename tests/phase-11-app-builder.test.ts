@@ -32,7 +32,16 @@ describe('Phase 11 application builder foundation', () => {
 
   it('rejects framework and language mismatches', () => {
     const invalid = { ...validSpec, language: 'java' as const };
-    expect(validateApplicationSpec(invalid).map((issue) => issue.code)).toContain('FRAMEWORK_LANGUAGE_MISMATCH');
+    expect(validateApplicationSpec(invalid).map((issue) => issue.code)).toContain(
+      'FRAMEWORK_LANGUAGE_MISMATCH',
+    );
+  });
+
+  it('fails closed for unsupported runtime framework values', () => {
+    const invalid = { ...validSpec, framework: 'not-a-framework' as never };
+    expect(validateApplicationSpec(invalid).map((issue) => issue.code)).toContain(
+      'APP_FRAMEWORK_UNSUPPORTED',
+    );
   });
 
   it('rejects duplicate requirement identifiers', () => {
@@ -40,7 +49,9 @@ describe('Phase 11 application builder foundation', () => {
       ...validSpec,
       requirements: [validSpec.requirements[0], { ...validSpec.requirements[0] }],
     };
-    expect(validateApplicationSpec(invalid).map((issue) => issue.code)).toContain('DUPLICATE_REQUIREMENT_ID');
+    expect(validateApplicationSpec(invalid).map((issue) => issue.code)).toContain(
+      'DUPLICATE_REQUIREMENT_ID',
+    );
   });
 
   it('normalizes identifiers, lists, and text without changing semantics', () => {
@@ -57,16 +68,34 @@ describe('Phase 11 application builder foundation', () => {
   });
 
   it('creates a deterministic project plan with traceable requirements', () => {
-    const plan = createProjectPlan(validSpec);
-    expect(plan.specId).toBe('task-board');
-    expect(plan.directories).toContain('src/components');
-    expect(plan.directories).toContain('src/api');
-    expect(plan.files.map((file) => file.path)).toContain('docs/requirements.md');
-    expect(plan.commands).toEqual(['install', 'dev', 'build', 'test', 'lint']);
-    expect(plan.verification.length).toBeGreaterThanOrEqual(4);
+    const first = createProjectPlan(validSpec);
+    const second = createProjectPlan(validSpec);
+    expect(second).toEqual(first);
+    expect(first.specId).toBe('task-board');
+    expect(first.directories).toContain('src/components');
+    expect(first.directories).toContain('src/api');
+    expect(first.files.map((file) => file.path)).toContain('docs/requirements.md');
+    expect(first.files.map((file) => file.path)).toContain('src/app.ts');
+    expect(first.commands).toEqual(['install', 'dev', 'build', 'test', 'lint']);
+    expect(first.verification.length).toBeGreaterThanOrEqual(4);
+  });
+
+  it('preserves language-specific source extensions in project plans', () => {
+    const javaSpec: ApplicationSpec = {
+      ...validSpec,
+      id: 'java-service',
+      language: 'java',
+      framework: 'spring-boot',
+    };
+    const plan = createProjectPlan(javaSpec);
+    expect(plan.files.map((file) => file.path)).toContain('src/app.java');
+    expect(plan.files.map((file) => file.path)).toContain('src/api/index.java');
+    expect(plan.files.map((file) => file.path)).toContain('tests/smoke.test.java');
   });
 
   it('fails closed for an invalid specification', () => {
-    expect(() => createProjectPlan({ ...validSpec, requirements: [] })).toThrow(/APP_REQUIREMENTS_REQUIRED/);
+    expect(() => createProjectPlan({ ...validSpec, requirements: [] })).toThrow(
+      /APP_REQUIREMENTS_REQUIRED/,
+    );
   });
 });
