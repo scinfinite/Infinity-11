@@ -2,9 +2,9 @@
 
 ## Current status
 
-**Phases 1–18: COMPLETE, merged into `main`, and verified by CI.**
+**Phases 1–19: COMPLETE, merged into `main`, and verified by CI.**
 
-**Phase 18 — Application Improvement Engine: COMPLETE.** Evidence-driven improvement planning, deterministic prioritization, policy-controlled application, revision/evidence binding, and adapter-based mutation are implemented and verified.
+**Phase 19 — Application Templates and Scaffolding: COMPLETE.** Deterministic template registration, compatibility validation, revision/version binding, safe scaffold planning, checksum evidence, policy-controlled application, explicit ASK approval, conflict handling, and adapter-only mutation are implemented and verified.
 
 ## V1 sequence
 
@@ -26,8 +26,8 @@
 15 AI Project Modification Engine           ← COMPLETE
 16 Application Testing Engine               ← COMPLETE
 17 Browser and Visual QA Engine              ← COMPLETE
-18 Application Improvement Engine           ← COMPLETE
-19 Application Templates and Scaffolding
+18 Application Improvement Engine            ← COMPLETE
+19 Application Templates and Scaffolding     ← COMPLETE
 20–26 GitHub, CI/CD, deployment, operations, mobile, desktop
 27–31 Multimodal creation
 32–42 advanced agents and automation
@@ -77,8 +77,12 @@ Phase 17 implementation PR #24 merged into `main` as `b48ca3f133a84a655e2ca09411
 
 ## Phase 18 evidence
 
-Phase 18 implementation PR #26 merged into `main` as `3ba4987b89d9f86dbc1292d31db3fe876aea9c2d`; implementation CI #491 passed all required gates. The implementation provides evidence validation, deterministic improvement candidates and ranking, ALLOW/ASK/DENY policy, revision and evidence binding, explicit approval, adapter-based application, and regression coverage.
+Phase 18 implementation PR #26 merged into `main` as `3ba4987b89d9f86dbc1292d31db3fe876aea9c2d`; implementation CI #491 passed all required gates. Documentation closure and final synchronized main CI completed the phase before Phase 19 began.
+
+## Phase 19 evidence
+
+Phase 19 implementation PR #28 merged into `main` as `61217b031eda49ab3e4512a8c57bffc9b580fa05`. Implementation verification run #505 passed format, lint, typecheck, all 126 tests across 27 test files, build, dependency security audit, and Gitleaks. The dedicated phase document is `docs/phases/PHASE-19-APPLICATION-TEMPLATES.md`.
 
 ## Next verified phase
 
-Phase 19 — Application Templates and Scaffolding.
+Phase 20 — GitHub, CI/CD, deployment, and operations sequence.
