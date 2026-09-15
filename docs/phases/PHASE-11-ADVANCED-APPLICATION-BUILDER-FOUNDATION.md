@@ -1,9 +1,10 @@
 # Phase 11 — Advanced Application Builder Foundation
 
-**Status:** IMPLEMENTATION IN PROGRESS
-**Canonical branch:** `phase-11-advanced-application-builder`
-**Base:** `main` at `129ca181cb8214e3c5d073e6a17056eaed01ce26`
-**CI verification:** PENDING — final phase CI is required before completion
+**Status:** IMPLEMENTATION IN PROGRESS  
+**Canonical branch:** `phase-11-advanced-application-builder`  
+**Base:** `main` at `f255523b4be3749afd48ccaba0d451020e54cf84`  
+**Current head:** `91a72febeac139138abfcf5d0470cbc0ec028d56`  
+**CI verification:** FAILED on initial phase head; fix cycle in progress
 
 ## Objective
 
@@ -29,12 +30,13 @@ The application builder is a domain capability. It must not move orchestration o
 - Explicit targets, languages, and framework compatibility.
 - Requirement IDs and acceptance criteria for traceability.
 - Deterministic normalization of user/project specification data.
-- Fail-closed specification validation.
+- Fail-closed runtime validation, including unsupported language/framework/target values.
 - Deterministic project-plan generation.
+- Language-aware source-file extensions instead of silently planning TypeScript files for every language.
 - Initial directory/file planning for web and full-stack applications.
 - Verification requirements embedded in the generated plan.
 - Root TypeScript project registration.
-- Automated contract tests covering valid input, invalid combinations, duplicates, normalization, planning, and fail-closed behavior.
+- Automated contract tests covering valid input, invalid combinations, duplicates, normalization, deterministic planning, runtime fail-closed behavior, and Java planning.
 
 ## Supported foundation languages
 
@@ -43,6 +45,14 @@ The contract includes TypeScript, JavaScript, Python, Java, Go, Rust, C#, Kotlin
 ## Supported foundation frameworks
 
 React, Next.js, Vue, Svelte, Express, FastAPI, Spring Boot, and Gin are represented as framework contracts. Unsupported combinations fail validation rather than silently producing an invalid project.
+
+## Verification evidence so far
+
+- The initial PR was created against the verified Phase 1–10 `main` baseline.
+- Initial PR CI ran automatically and exposed a formatting failure before deeper checks could execute.
+- Secret scanning passed on the initial head.
+- The first implementation audit found two correctness gaps beyond formatting: runtime-invalid framework values could throw instead of failing closed, and the planner always emitted `.ts` source paths despite advertising nine languages.
+- The current fix cycle hardens both boundaries and expands regression coverage.
 
 ## Acceptance criteria
 
@@ -54,7 +64,9 @@ React, Next.js, Vue, Svelte, Express, FastAPI, Spring Boot, and Gin are represen
 - [x] Project structure remains traceable to the specification.
 - [x] Existing TypeScript project references include the new package.
 - [x] Phase-specific automated tests exist.
-- [ ] Full formatting/lint/typecheck/test/build/security CI is green on the phase branch.
+- [x] Language-aware planner behavior is covered for Java.
+- [x] Runtime-invalid framework values fail closed instead of throwing unexpectedly.
+- [ ] Full formatting/lint/typecheck/test/build/security CI is green on the final phase head.
 - [ ] Final regression verification against Phases 1–10 is complete.
 - [ ] Phase documentation and roadmap status are updated after accepted CI evidence.
 - [ ] Phase branch is merged to `main`.
