@@ -42,7 +42,8 @@ class MemoryStore implements ProjectStore {
     this.currentRevision += 1;
   }
 
-  async revision(_projectId: string): Promise<number> {
+  async revision(projectId: string): Promise<number> {
+    void projectId;
     return this.currentRevision;
   }
 }
@@ -78,8 +79,14 @@ describe('phase 15 AI project modification engine', () => {
   it('creates a deterministic plan and rejects stale project revisions', async () => {
     const store = new MemoryStore({ 'src/app.ts': 'export const greeting = "hello";\n' });
     const plan = await buildModificationPlan(request, store, allow);
+    const reversed = await buildModificationPlan(
+      { ...request, operations: [...request.operations].reverse() },
+      store,
+      allow,
+    );
     expect(plan.policy).toBe('allow');
     expect(plan.changedFiles).toEqual(['README.md', 'src/app.ts']);
+    expect(plan.checksum).toBe(reversed.checksum);
     expect(plan.checksum).toMatch(/^[0-9a-f]{8}$/);
     expect(summarizeModification(plan)).toContain('UPDATE src/app.ts');
 
@@ -115,19 +122,16 @@ describe('phase 15 AI project modification engine', () => {
 
   it('applies approved create, update, delete, and rename operations', async () => {
     const store = new MemoryStore({ 'src/app.ts': 'old', 'obsolete.txt': 'remove me' });
-    const plan = await buildModificationPlan(
-      {
-        ...request,
-        operations: [
-          { kind: 'update', path: 'src/app.ts', content: 'new' },
-          { kind: 'create', path: 'README.md', content: '# Demo' },
-          { kind: 'delete', path: 'obsolete.txt' },
-        ],
-      },
-      store,
-      allow,
-    );
-    const result = await applyModificationPlan(request, plan, store);
+    const appliedRequest = {
+      ...request,
+      operations: [
+        { kind: 'update' as const, path: 'src/app.ts', content: 'new' },
+        { kind: 'create' as const, path: 'README.md', content: '# Demo' },
+        { kind: 'delete' as const, path: 'obsolete.txt' },
+      ],
+    };
+    const plan = await buildModificationPlan(appliedRequest, store, allow);
+    const result = await applyModificationPlan(appliedRequest, plan, store);
     expect(result.applied).toBe(true);
     expect(await store.read('demo', 'src/app.ts')).toMatchObject({ content: 'new' });
     expect(await store.read('demo', 'README.md')).toMatchObject({ content: '# Demo' });
@@ -155,14 +159,24 @@ describe('phase 15 AI project modification engine', () => {
     await expect(applyModificationPlan(request, plan, store)).rejects.toThrow('STALE_PLAN');
   });
 
-  it('does not silently claim success when a store write fails', async () => {
+  it('rejects a plan when request operations are changed after planning', async () => {
     const store = new MemoryStore({ 'src/app.ts': 'old' });
     const plan = await buildModificationPlan(
       { ...request, operations: [{ kind: 'update', path: 'src/app.ts', content: 'new' }] },
       store,
       allow,
     );
+    await expect(applyModificationPlan(request, plan, store)).rejects.toThrow('PLAN_MISMATCH');
+  });
+
+  it('does not silently claim success when a store write fails', async () => {
+    const store = new MemoryStore({ 'src/app.ts': 'old' });
+    const appliedRequest = {
+      ...request,
+      operations: [{ kind: 'update' as const, path: 'src/app.ts', content: 'new' }],
+    };
+    const plan = await buildModificationPlan(appliedRequest, store, allow);
     store.failOnWrite = true;
-    await expect(applyModificationPlan(request, plan, store)).rejects.toThrow('WRITE_FAILED');
+    await expect(applyModificationPlan(appliedRequest, plan, store)).rejects.toThrow('WRITE_FAILED');
   });
 });
