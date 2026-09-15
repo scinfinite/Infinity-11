@@ -4,7 +4,7 @@
 
 **Phases 1–17: COMPLETE, merged into `main`, and verified by CI.**
 
-**Phase 17 — Browser and Visual QA Engine: COMPLETE.** Deterministic browser-target planning, policy-controlled navigation, screenshot comparison, actual page-content assertions, console/network/accessibility evidence, baseline binding, and visual regression reporting are implemented and verified.
+**Phase 18 — Application Improvement Engine: IN PROGRESS.** Evidence-driven improvement planning, deterministic prioritization, policy-controlled application, revision/evidence binding, and adapter-based mutation are being implemented.
 
 ## V1 sequence
 
@@ -26,7 +26,7 @@
 15 AI Project Modification Engine           ← COMPLETE
 16 Application Testing Engine               ← COMPLETE
 17 Browser and Visual QA Engine              ← COMPLETE
-18 Application Improvement Engine
+18 Application Improvement Engine           ← IN PROGRESS
 19 Application Templates and Scaffolding
 20–26 GitHub, CI/CD, deployment, operations, mobile, desktop
 27–31 Multimodal creation
@@ -73,8 +73,12 @@ Phase 16 implementation PR #22 merged into `main` as `f61b2d88c4746569c09bf0ad72
 
 ## Phase 17 evidence
 
-Phase 17 implementation PR #24 merged into `main` as `b48ca3f133a84a655e2ca0941173f1a853647729`; implementation branch CI #485 passed all required gates. The implementation provides safe HTTP(S) target validation, deterministic plans, ALLOW/ASK/DENY enforcement, explicit approval, browser observation adapters, screenshot baseline comparison, body-content assertions, console/network/accessibility evidence, baseline binding, and explicit visual regression diagnostics. A temporary formatter audit was removed before closure.
+Phase 17 implementation PR #24 merged into `main` as `b48ca3f133a84a655e2ca0941173f1a853647729`; documentation closure PR #25 merged as `cb6424d52e83581400b1413a2d2d74763c453b48`; final synchronized main CI #488 passed.
+
+## Phase 18 scope
+
+Phase 18 turns verified testing/visual/security/reliability/performance/accessibility/UX evidence into deterministic improvement candidates. It ranks work, enforces ALLOW/ASK/DENY, binds plans to the exact project revision and evidence set, and delegates actual mutation to an adapter.
 
 ## Next verified phase
 
-Phase 18 — Application Improvement Engine.
+Phase 19 — Application Templates and Scaffolding.

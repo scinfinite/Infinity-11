@@ -1,0 +1,10 @@
+{
+  "name": "@infinity-11/improvement",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic, evidence-driven application improvement planning contracts for INFINITY-11.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  }
+}
